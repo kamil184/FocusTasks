@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+option java_package = "com.kamil184.focustasks";
+option java_multiple_files = true;
+
+message TimerPreferences {
+  int32 length = 1;
+  TimerState state = 2;
+  int32 timeRemaining = 3;
+
+  enum TimerState {
+    Stopped = 0;
+    Paused = 1;
+    Running = 2;
+  }
+}

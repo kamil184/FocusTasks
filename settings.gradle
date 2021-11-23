@@ -1,0 +1,2 @@
+rootProject.name = "Focus Tasks"
+include ':app'

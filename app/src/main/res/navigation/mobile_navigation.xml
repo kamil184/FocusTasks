@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_timer">
+
+    <fragment
+        android:id="@+id/navigation_timer"
+        android:name="com.kamil184.focustasks.ui.timer.TimerFragment"
+        android:label="@string/title_timer"
+        tools:layout="@layout/fragment_timer" />
+
+    <fragment
+        android:id="@+id/navigation_tasks"
+        android:name="com.kamil184.focustasks.ui.tasks.TasksFragment"
+        android:label="@string/title_tasks"
+        tools:layout="@layout/fragment_tasks" />
+
+    <fragment
+        android:id="@+id/navigation_calendar"
+        android:name="com.kamil184.focustasks.ui.calendar.CalendarFragment"
+        android:label="@string/title_calendar"
+        tools:layout="@layout/fragment_calendar" />
+
+    <fragment
+        android:id="@+id/navigation_settings"
+        android:name="com.kamil184.focustasks.ui.settings.SettingsFragment"
+        android:label="@string/title_settings"
+        tools:layout="@layout/fragment_settings" />
+</navigation>
