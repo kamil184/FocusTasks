@@ -3,7 +3,6 @@ package com.kamil184.focustasks.ui.timer
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kamil184.focustasks.manager.TimerManager
 import com.kamil184.focustasks.model.Timer
@@ -20,13 +19,12 @@ class TimerViewModel(application: Application) : AndroidViewModel(application) {
 
     init {
         Log.d("TimerViewModel", "init")
-        if (_timer == null)
-            viewModelScope.launch(Dispatchers.IO) {
-                timerManager.timerFlow.collect {
-                    Log.d("TimerViewModel", "collect")
-                    _timer = it
-                }
+        viewModelScope.launch(Dispatchers.IO) {
+            timerManager.timerFlow.collect {
+                Log.d("TimerViewModel", "collect")
+                _timer = it
             }
+        }
     }
 
 
