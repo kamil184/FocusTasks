@@ -7,13 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import com.kamil184.focustasks.databinding.FragmentTimerBinding
-import com.kamil184.focustasks.manager.TimerManager
+import com.kamil184.focustasks.model.Timer
 import com.kamil184.focustasks.model.TimerState
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class TimerFragment : Fragment() {
 
@@ -21,32 +19,17 @@ class TimerFragment : Fragment() {
     private var _binding: FragmentTimerBinding? = null
     private val binding get() = _binding!!
 
-    private var timer: CountDownTimer? = null
+    private var countDownTimer: CountDownTimer? = null
+    private val timerObserver = Observer<Timer> { timer ->
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View? {
-        viewModel =
-            ViewModelProvider(this).get(TimerViewModel::class.java)
-
-        _binding = FragmentTimerBinding.inflate(inflater, container, false)
-
-        binding.timer = viewModel.timer
-        binding.lifecycleOwner = this
-
-        Log.d("Timer", "onCreateView: ${logText()}")
-
-        viewModel.timer.state.observe(viewLifecycleOwner, {
-            Log.d("Timer", "timer state observe: ${logText()}")
+        timer.state.observe(viewLifecycleOwner, {
             when (it) {
                 TimerState.Running ->
-                    timer = object : CountDownTimer(viewModel.timer.timeRemaining.value!!.toLong(), 10) {
+                    countDownTimer = object : CountDownTimer(timer.timeRemaining.value!!.toLong(), 10) {
                         override fun onFinish() {
-                            lifecycleScope.launch(Dispatchers.IO) {
-                                viewModel.onTimerFinished()
-                            }
+                            viewModel.onTimerFinished()
                         }
 
                         override fun onTick(millisUntilFinished: Long) {
@@ -54,55 +37,50 @@ class TimerFragment : Fragment() {
                         }
                     }.start()
 
-                TimerState.Paused -> timer?.cancel()
+                TimerState.Paused -> countDownTimer?.cancel()
 
                 TimerState.Stopped -> {
-                    timer?.cancel()
+                    countDownTimer?.cancel()
                     viewModel.onTimerFinished()
                 }
-
             }
         })
-        return binding.root
     }
 
-    override fun onStart() {
-        super.onStart()
-        Log.d("Timer", "onStart: ${logText()}")
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View {
+        viewModel =
+            ViewModelProvider(this).get(TimerViewModel::class.java)
+        _binding = FragmentTimerBinding.inflate(inflater, container, false)
+
+        viewModel.timer.observe(viewLifecycleOwner, timerObserver)
+
+        return binding.root
     }
 
     override fun onResume() {
         super.onResume()
-        Log.d("Timer", "onResume: ${logText()}")
+        viewModel.timer.observe(viewLifecycleOwner, timerObserver)
         //TODO: remove background timer, hide notification
     }
 
     override fun onPause() {
         super.onPause()
-        Log.d("Timer", "onPause: ${logText()}")
-
-        if (viewModel.timer.state.value == TimerState.Running) {
-            timer?.cancel()
+        viewModel.saveTimerState()
+        if (viewModel.timer.value!!.state.value == TimerState.Running) {
+            countDownTimer?.cancel()
+            viewModel.timer.removeObserver(timerObserver) //иначе успеет создаться countDownTimer
             //TODO: start background timer and show notification
-        } else if (viewModel.timer.state.value == TimerState.Paused) {
+        } else if (viewModel.timer.value!!.state.value == TimerState.Paused) {
             //TODO: show notification
         }
-
-        lifecycleScope.launch(Dispatchers.IO) {
-            viewModel.saveTimerState()
-        }
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Log.d("Timer", "onStop: ${logText()}")
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        Log.d("Timer", "onDestroyView: ${logText()}")
         _binding = null
     }
-
-    fun logText():String = "binding: ${binding.timer.hashCode()} vm: ${viewModel.timer.hashCode()}"
 }

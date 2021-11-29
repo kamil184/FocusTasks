@@ -3,10 +3,12 @@ package com.kamil184.focustasks.ui.timer
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.kamil184.focustasks.manager.TimerManager
 import com.kamil184.focustasks.model.Timer
 import com.kamil184.focustasks.model.TimerState
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -14,36 +16,28 @@ import kotlinx.coroutines.launch
 class TimerViewModel(application: Application) : AndroidViewModel(application) {
 
     private val timerManager: TimerManager = TimerManager(application)
-    private var _timer: Timer? = null
-    val timer get() = _timer!!
+    val timer = MutableLiveData<Timer>()
 
     init {
-        Log.d("TimerViewModel", "init")
         viewModelScope.launch(Dispatchers.IO) {
             timerManager.timerFlow.collect {
-                Log.d("TimerViewModel", "collect")
-                _timer = it
+                timer.postValue(it)
             }
         }
     }
 
-
-    override fun onCleared() {
-        super.onCleared()
-        Log.d("TimerViewModel", "onCleared")
-    }
-
     fun saveTimerState() = viewModelScope.launch(Dispatchers.IO) {
-        timerManager.updateTimerState(timer)
+        timerManager.updateTimerState(timer.value!!)
     }
 
     fun onTimerFinished() {
-        if (timer.state.value != TimerState.Stopped) timer.state.postValue(TimerState.Stopped)
+        if (timer.value?.state?.value != TimerState.Stopped) timer.value?.state?.postValue(
+            TimerState.Stopped)
 
-        timer.timeRemaining.postValue(timer.length.value)
+        timer.value?.timeRemaining?.postValue(timer.value?.length?.value)
     }
 
     fun updateTimeRemaining(millisUntilFinished: Long) =
-        timer.timeRemaining.postValue(millisUntilFinished.toInt())
+        timer.value?.timeRemaining?.postValue(millisUntilFinished.toInt())
 
 }

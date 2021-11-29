@@ -13,11 +13,6 @@ data class Timer(
         state = MutableLiveData(TimerState.values()[state!!.ordinal]),
         timeRemaining = MutableLiveData(timeRemaining)
     )
-    constructor() : this(
-        length = MutableLiveData(0),
-        state = MutableLiveData(TimerState.Stopped),
-        timeRemaining = MutableLiveData(0)
-    )
 
     fun startTimer() = state.postValue(TimerState.Running)
 
@@ -25,9 +20,9 @@ data class Timer(
 
     fun pauseTimer() = state.postValue(TimerState.Paused)
 
-    /*override fun toString(): String {
+    override fun toString(): String {
         return "Timer(length=${length.value}, state=${state.value}, timeRemaining=${timeRemaining.value})"
-    }*/
+    }
 }
 
 enum class TimerState {
