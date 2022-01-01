@@ -8,9 +8,9 @@ import androidx.lifecycle.viewModelScope
 import com.kamil184.focustasks.manager.TimerManager
 import com.kamil184.focustasks.model.Timer
 import com.kamil184.focustasks.model.TimerState
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.launch
 
 class TimerViewModel(application: Application) : AndroidViewModel(application) {
@@ -18,16 +18,14 @@ class TimerViewModel(application: Application) : AndroidViewModel(application) {
     private val timerManager: TimerManager = TimerManager(application)
     val timer = MutableLiveData<Timer>()
 
-    init {
-        viewModelScope.launch(Dispatchers.IO) {
-            timerManager.timerFlow.collect {
-                timer.postValue(it)
-            }
+    fun fetchTimer() = viewModelScope.launch(Dispatchers.IO) {
+        timerManager.timerFlow.collect {
+            timer.postValue(it)
         }
     }
 
-    fun saveTimerState() = viewModelScope.launch(Dispatchers.IO) {
-        timerManager.updateTimerState(timer.value!!)
+    fun saveTimer() = viewModelScope.launch(Dispatchers.IO) {
+        timerManager.saveTimer(timer.value!!)
     }
 
     fun onTimerFinished() {

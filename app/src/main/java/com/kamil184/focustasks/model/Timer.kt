@@ -14,11 +14,7 @@ data class Timer(
         timeRemaining = MutableLiveData(timeRemaining)
     )
 
-    fun startTimer() = state.postValue(TimerState.Running)
-
-    fun stopTimer() = state.postValue(TimerState.Stopped)
-
-    fun pauseTimer() = state.postValue(TimerState.Paused)
+    fun changeState(timerState: TimerState) = state.postValue(timerState)
 
     override fun toString(): String {
         return "Timer(length=${length.value}, state=${state.value}, timeRemaining=${timeRemaining.value})"

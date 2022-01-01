@@ -1,12 +1,14 @@
 package com.kamil184.focustasks.manager
 
 import android.content.Context
+import android.util.Log
 import androidx.datastore.core.CorruptionException
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.Serializer
 import androidx.datastore.dataStore
 import com.google.protobuf.InvalidProtocolBufferException
 import com.kamil184.focustasks.TimerPreferences
+import com.kamil184.focustasks.model.NonLiveDataTimer
 import com.kamil184.focustasks.model.Timer
 import kotlinx.coroutines.flow.map
 import java.io.InputStream
@@ -26,7 +28,15 @@ class TimerManager(private val context: Context) {
         )
     }
 
-    suspend fun updateTimerState(timer: Timer) {
+    val nonLiveDataTimerFlow = context.timerProtoDataStore.data.map {
+        NonLiveDataTimer(
+            length = it.length,
+            state = it.state,
+            timeRemaining = it.timeRemaining
+        )
+    }
+
+    suspend fun saveTimer(timer: Timer) {
         context.timerProtoDataStore.updateData {
             it.toBuilder()
                 .setLength(timer.length.value!!)
@@ -34,6 +44,18 @@ class TimerManager(private val context: Context) {
                 .setTimeRemaining(timer.timeRemaining.value!!)
                 .build()
         }
+        Log.d("TimerManager", "saved $timer")
+    }
+
+    suspend fun saveTimer(timer: NonLiveDataTimer) {
+        context.timerProtoDataStore.updateData {
+            it.toBuilder()
+                .setLength(timer.length)
+                .setState(TimerPreferences.TimerState.values()[timer.state.ordinal])
+                .setTimeRemaining(timer.timeRemaining)
+                .build()
+        }
+        Log.d("TimerManager", "saved $timer")
     }
 }
 

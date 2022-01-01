@@ -1,5 +1,7 @@
 package com.kamil184.focustasks.ui.timer
 
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
@@ -9,9 +11,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.kamil184.focustasks.databinding.FragmentTimerBinding
 import com.kamil184.focustasks.model.Timer
 import com.kamil184.focustasks.model.TimerState
+import com.kamil184.focustasks.service.TimerService
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class TimerFragment : Fragment() {
 
@@ -26,16 +33,19 @@ class TimerFragment : Fragment() {
 
         timer.state.observe(viewLifecycleOwner, {
             when (it) {
-                TimerState.Running ->
-                    countDownTimer = object : CountDownTimer(timer.timeRemaining.value!!.toLong(), 10) {
-                        override fun onFinish() {
-                            viewModel.onTimerFinished()
-                        }
+                TimerState.Running -> {
+                    countDownTimer?.cancel()
+                    countDownTimer =
+                        object : CountDownTimer(timer.timeRemaining.value!!.toLong(), 10) {
+                            override fun onFinish() {
+                                viewModel.onTimerFinished()
+                            }
 
-                        override fun onTick(millisUntilFinished: Long) {
-                            viewModel.updateTimeRemaining(millisUntilFinished)
-                        }
-                    }.start()
+                            override fun onTick(millisUntilFinished: Long) {
+                                viewModel.updateTimeRemaining(millisUntilFinished)
+                            }
+                        }.start()
+                }
 
                 TimerState.Paused -> countDownTimer?.cancel()
 
@@ -55,28 +65,38 @@ class TimerFragment : Fragment() {
         viewModel =
             ViewModelProvider(this).get(TimerViewModel::class.java)
         _binding = FragmentTimerBinding.inflate(inflater, container, false)
-
-        viewModel.timer.observe(viewLifecycleOwner, timerObserver)
-
         return binding.root
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onStart() {
+        super.onStart()
         viewModel.timer.observe(viewLifecycleOwner, timerObserver)
-        //TODO: remove background timer, hide notification
+        removeBackgroundTimer()
+        viewModel.fetchTimer()
     }
 
     override fun onPause() {
         super.onPause()
-        viewModel.saveTimerState()
-        if (viewModel.timer.value!!.state.value == TimerState.Running) {
+        viewModel.saveTimer()
+        if (viewModel.timer.value?.state?.value == TimerState.Running) {
             countDownTimer?.cancel()
-            viewModel.timer.removeObserver(timerObserver) //иначе успеет создаться countDownTimer
-            //TODO: start background timer and show notification
-        } else if (viewModel.timer.value!!.state.value == TimerState.Paused) {
-            //TODO: show notification
+            viewModel.timer.removeObserver(timerObserver) //иначе успеет создаться countDownTimer при следующем запуске
+            startBackgroundTimer()
         }
+    }
+
+    private fun startBackgroundTimer() {
+        val timerServiceIntent = Intent(requireContext(), TimerService::class.java)
+        timerServiceIntent.action = TimerService.ACTION_START
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            requireContext().startForegroundService(timerServiceIntent)
+        } else requireContext().startService(timerServiceIntent)
+    }
+
+    private fun removeBackgroundTimer() {
+        val timerServiceIntent = Intent(requireContext(), TimerService::class.java)
+        requireContext().stopService(timerServiceIntent)
     }
 
     override fun onDestroyView() {

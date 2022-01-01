@@ -8,4 +8,8 @@
     <string name="resume">Продолжить</string>
     <string name="stop">Стоп</string>
     <string name="pause">Пауза</string>
+    <string name="timer_ready_to_start">Таймер готов к старту</string>
+    <string name="timer_paused">Таймер приостановлен</string>
+    <string name="timer_running">Таймер выполняется</string>
+    <string name="close">Закрыть</string>
 </resources>
