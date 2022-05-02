@@ -4,21 +4,16 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import com.kamil184.focustasks.databinding.FragmentTimerBinding
 import com.kamil184.focustasks.model.Timer
 import com.kamil184.focustasks.model.TimerState
 import com.kamil184.focustasks.service.TimerService
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class TimerFragment : Fragment() {
 
@@ -31,7 +26,7 @@ class TimerFragment : Fragment() {
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-        timer.state.observe(viewLifecycleOwner, {
+        timer.state.observe(viewLifecycleOwner) {
             when (it) {
                 TimerState.Running -> {
                     countDownTimer?.cancel()
@@ -54,7 +49,7 @@ class TimerFragment : Fragment() {
                     viewModel.onTimerFinished()
                 }
             }
-        })
+        }
     }
 
     override fun onCreateView(

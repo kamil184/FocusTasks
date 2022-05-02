@@ -2,8 +2,8 @@
 <resources>
     <style name="TimerProgressBar" parent="Widget.MaterialComponents.CircularProgressIndicator">
         <item name="trackColor">@color/timerProgressBarTrackColor</item>
-        <item name="trackThickness">8dp</item>
-        <item name="trackCornerRadius">4dp</item>
-        <!--видно засечки на trackCornerRadius-->
+        <item name="trackThickness">4dp</item>
+        <item name="trackCornerRadius">2dp</item>
+        <!--TODO: видно засечки на trackCornerRadius-->
     </style>
 </resources>

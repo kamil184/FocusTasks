@@ -35,6 +35,7 @@
             tools:max="10"
             tools:progress="4"/>
 
+        <!--TODO: текст сделать тоньше-->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

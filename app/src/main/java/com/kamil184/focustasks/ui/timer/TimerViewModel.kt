@@ -1,7 +1,6 @@
 package com.kamil184.focustasks.ui.timer
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -10,7 +9,6 @@ import com.kamil184.focustasks.model.Timer
 import com.kamil184.focustasks.model.TimerState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.launch
 
 class TimerViewModel(application: Application) : AndroidViewModel(application) {
@@ -25,7 +23,9 @@ class TimerViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun saveTimer() = viewModelScope.launch(Dispatchers.IO) {
-        timerManager.saveTimer(timer.value!!)
+        timer.value?.let {
+            timerManager.saveTimer(it)
+        }
     }
 
     fun onTimerFinished() {
