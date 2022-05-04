@@ -26,7 +26,7 @@
             android:indeterminate="false"
             android:max="@{viewModel.timer.length}"
             android:progress="@{viewModel.timer.length - viewModel.timer.timeRemaining}"
-            style="@style/TimerProgressBar"
+            style="@style/Widget.App.TimerProgressBar"
             app:indicatorSize="@dimen/timer_size_big"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

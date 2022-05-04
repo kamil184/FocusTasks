@@ -12,4 +12,5 @@
     <string name="timer_paused">Таймер приостановлен</string>
     <string name="timer_running">Таймер выполняется</string>
     <string name="close">Закрыть</string>
+    <string name="create">+ Создать</string>
 </resources>
