@@ -21,13 +21,12 @@
 
         <com.google.android.material.progressindicator.CircularProgressIndicator
             android:id="@+id/timer_progress"
+            style="@style/Widget.App.TimerProgressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:indeterminate="false"
             android:max="@{viewModel.timer.length}"
             android:progress="@{viewModel.timer.length - viewModel.timer.timeRemaining}"
-            style="@style/Widget.App.TimerProgressBar"
-            app:indicatorSize="@dimen/timer_size_big"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -40,8 +39,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text='@{viewModel.timer.timeRemaining/60000 + ":" + (viewModel.timer.timeRemaining%60000/1000 > 9 ? viewModel.timer.timeRemaining%60000/1000 : "0" + viewModel.timer.timeRemaining%60000/1000)}'
-            android:textColor="@color/design_default_color_primary"
-            android:textSize="72sp"
+            android:textAppearance="@style/TextAppearance.App.Timer"
+            android:textColor="?colorPrimary"
             app:layout_constraintBottom_toBottomOf="@id/timer_progress"
             app:layout_constraintEnd_toEndOf="@id/timer_progress"
             app:layout_constraintStart_toStartOf="@id/timer_progress"
@@ -55,31 +54,31 @@
             android:layout_marginStart="36dp"
             android:layout_marginEnd="36dp"
             android:layout_marginBottom="36dp"
+            android:minHeight="56dp"
             android:onClick="@{() -> viewModel.timer.changeState(TimerState.Running)}"
-            android:visibility="@{viewModel.timer.state == TimerState.Running ? View.GONE : View.VISIBLE}"
             android:text="@{viewModel.timer.state == TimerState.Stopped ? @string/start : @string/resume}"
+            android:visibility="@{viewModel.timer.state == TimerState.Running ? View.GONE : View.VISIBLE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            tools:visibility="gone"
-            android:minHeight="56dp"/>
+            tools:visibility="gone" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/stop_button"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            style="@style/Widget.Material3.Button.OutlinedButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="36dp"
             android:layout_marginEnd="18dp"
             android:layout_marginBottom="36dp"
+            android:minHeight="56dp"
             android:onClick="@{() -> viewModel.timer.changeState(TimerState.Stopped)}"
             android:text="@string/stop"
             android:visibility="@{viewModel.timer.state != TimerState.Running ? View.GONE : View.VISIBLE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/pause_button"
             app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toStartOf="parent"
-            android:minHeight="56dp"/>
+            app:layout_constraintStart_toStartOf="parent" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/pause_button"
@@ -87,13 +86,13 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="36dp"
             android:layout_marginBottom="36dp"
+            android:minHeight="56dp"
             android:onClick="@{() -> viewModel.timer.changeState(TimerState.Paused)}"
             android:text="@string/pause"
             android:visibility="@{viewModel.timer.state != TimerState.Running ? View.GONE : View.VISIBLE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/stop_button"
-            android:minHeight="56dp"/>
+            app:layout_constraintStart_toEndOf="@id/stop_button" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

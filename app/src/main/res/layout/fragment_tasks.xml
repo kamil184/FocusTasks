@@ -14,13 +14,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:tabIndicatorAnimationMode="elastic"
-        app:tabIndicatorFullWidth="false"
         app:tabMode="scrollable"
-        app:tabPaddingBottom="-12dp"
         app:tabPaddingEnd="18dp"
         app:tabPaddingStart="18dp"
-        app:tabRippleColor="@null"
-        app:tabTextAppearance="@style/TextAppearance.App.Tab">
+        app:tabRippleColor="@null">
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
@@ -34,72 +31,20 @@
 
     </com.google.android.material.tabs.TabLayout>
 
-    <com.google.android.material.divider.MaterialDivider
-        android:id="@+id/tasks_tab_layout_divider"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/tasks_view_pager"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tasks_tab_layout" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/tasks_recycler_tasks"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tasks_tab_layout_divider" />
-
-    <com.google.android.material.divider.MaterialDivider
-        android:id="@+id/tasks_recycler_divider"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tasks_recycler_tasks" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/tasks_completed_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tasks_recycler_divider">
-
-        <TextView
-            android:id="@+id/tasks_completed_tasks_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-            tools:text="Выполненные (1)"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
-
-        <ImageView
-            android:id="@+id/tasks_completed_tasks_expand_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_expand_more_24"
-            app:tint="?android:textColorPrimary"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/tasks_recycler_completed_tasks"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tasks_completed_layout" />
+        app:layout_constraintTop_toBottomOf="@+id/tasks_tab_layout"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        app:layout_constraintEnd_toEndOf="parent"
+        android:id="@+id/tasks_fab"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_add_24"
         android:layout_width="wrap_content"
-        android:layout_margin="16dp"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/ic_add_24"/>
+        android:layout_margin="16dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

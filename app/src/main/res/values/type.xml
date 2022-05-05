@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="TextAppearance.App.Timer" parent="TextAppearance.Material3.DisplayLarge">
+        <item name="android:textSize">72sp</item>
+    </style>
+</resources>
