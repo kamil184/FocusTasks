@@ -13,20 +13,22 @@ class TasksFragment : Fragment() {
     private lateinit var tasksViewModel: TasksViewModel
     private var _binding: FragmentTasksBinding? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+        savedInstanceState: Bundle?,
+    ): View {
         tasksViewModel =
             ViewModelProvider(this).get(TasksViewModel::class.java)
 
         _binding = FragmentTasksBinding.inflate(inflater, container, false)
 
+        binding.tasksFab.setOnClickListener {
+            val taskCreateBottomSheet = TaskCreateBottomSheet()
+            taskCreateBottomSheet.show(parentFragmentManager, TaskCreateBottomSheet.TAG)
+        }
         return binding.root
     }
 

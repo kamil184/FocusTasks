@@ -1,0 +1,18 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/option_1"
+        android:icon="@drawable/ic_priority_high_3"
+        android:title="@string/high" />
+    <item
+        android:id="@+id/option_2"
+        android:icon="@drawable/ic_priority_high_2"
+        android:title="@string/medium" />
+    <item
+        android:id="@+id/option_3"
+        android:icon="@drawable/ic_priority_high_1"
+        android:title="@string/low" />
+    <item
+        android:id="@+id/option_4"
+        android:icon="@drawable/ic_priority_high_0"
+        android:title="@string/none" />
+</menu>

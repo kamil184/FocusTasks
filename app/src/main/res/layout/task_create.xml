@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/task_create_bottom_sheet"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <!--TODO: поставить кнопку действия не перенос строки, а actionDone, при этом допускать множество линий-->
+    <EditText
+        android:id="@+id/task_create_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:hint="@string/new_task"
+        android:imeOptions="actionDone"
+        android:importantForAutofill="no"
+        android:inputType="textCapSentences|textMultiLine"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:paddingTop="24dp"
+        android:paddingBottom="12dp"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/task_create_description_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:hint="@string/description"
+        android:imeOptions="actionDone"
+        android:importantForAutofill="no"
+        android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+        android:inputType="textCapSentences|textMultiLine"
+        android:padding="12dp"
+        android:paddingStart="24dp"
+        app:layout_constraintTop_toBottomOf="@+id/task_create_edit_text" />
+
+    <!--TODO: заменить Button на IconButton, когда его выпустят-->
+    <Button
+        android:id="@+id/task_create_calendar_button"
+        style="@style/Widget.Material3.Button.TextButton"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="4dp"
+        android:drawableLeft="@drawable/ic_event_available_24"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/task_create_description_edit_text" />
+
+    <Button
+        android:id="@+id/task_create_priority_button"
+        style="@style/Widget.Material3.Button.TextButton"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:drawableLeft="@drawable/ic_priority_high_0"
+        app:layout_constraintTop_toTopOf="@+id/task_create_calendar_button"
+        app:layout_constraintStart_toEndOf="@+id/task_create_calendar_button" />
+
+    <Button
+        android:id="@+id/task_create_project_button"
+        style="@style/Widget.Material3.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:drawableLeft="@drawable/ic_inventory_24"
+        android:text="Проект"
+        android:textColor="?android:attr/textColorSecondary"
+        app:layout_constraintStart_toEndOf="@+id/task_create_priority_button"
+        app:layout_constraintTop_toTopOf="@+id/task_create_calendar_button" />
+
+    <Button
+        android:id="@+id/task_create_enter_button"
+        style="@style/Widget.Material3.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginEnd="4dp"
+        android:paddingHorizontal="24dp"
+        android:text="@string/save"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/task_create_calendar_button"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

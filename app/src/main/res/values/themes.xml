@@ -29,5 +29,11 @@
         <item name="colorPrimaryInverse">@color/md_theme_light_primaryInverse</item>
         <item name="android:shadowColor">@color/md_theme_light_shadow</item>
         <item name="trackColor">@color/light_track_color</item>
+
+        <item name="bottomSheetDialogTheme">@style/ThemeOverlay.FocusTasks.BottomSheetDialog</item>
+    </style>
+
+    <style name="ThemeOverlay.FocusTasks.BottomSheetDialog" parent="ThemeOverlay.MaterialComponents.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/ModalBottomSheetDialog</item>
     </style>
 </resources>

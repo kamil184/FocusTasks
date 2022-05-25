@@ -13,4 +13,11 @@
     <string name="timer_running">Таймер выполняется</string>
     <string name="close">Закрыть</string>
     <string name="create">+ Создать</string>
+    <string name="new_task">Новая задача</string>
+    <string name="save">Сохранить</string>
+    <string name="high">Высокий</string>
+    <string name="medium">Средний</string>
+    <string name="low">Низкий</string>
+    <string name="none">Нет</string>
+    <string name="description">Описание</string>
 </resources>

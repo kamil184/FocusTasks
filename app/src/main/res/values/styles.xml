@@ -7,4 +7,9 @@
         <item name="trackColor">?attr/trackColor</item>
         <!--TODO: видно засечки на trackCornerRadius-->
     </style>
+
+    <style name="ModalBottomSheetDialog" parent="Widget.MaterialComponents.BottomSheet.Modal">
+        <item name="backgroundTint">@android:color/white</item>
+        <item name="background">@android:color/white</item>
+    </style>
 </resources>
