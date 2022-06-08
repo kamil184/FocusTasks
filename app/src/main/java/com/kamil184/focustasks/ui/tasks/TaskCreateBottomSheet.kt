@@ -1,71 +1,47 @@
 package com.kamil184.focustasks.ui.tasks
 
 import android.annotation.SuppressLint
-import android.app.Activity
-import android.app.Application
-import android.content.DialogInterface
 import android.graphics.drawable.InsetDrawable
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.util.TypedValue
 import android.view.*
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.widget.PopupMenu
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.kamil184.focustasks.R
 import com.kamil184.focustasks.databinding.TaskCreateBinding
+import com.kamil184.focustasks.ui.dialogs.DatePickerDialog
 import com.kamil184.focustasks.util.dpToPx
 
 class TaskCreateBottomSheet : BottomSheetDialogFragment() {
     private var _binding: TaskCreateBinding? = null
     private val binding get() = _binding!!
 
-    private var first = true // shows if the keyboard is opened for the first time
-    private lateinit var activityRootView: ConstraintLayout
-    private var lastHeightDiff = 0 //onGlobalLayoutListener is used to track changes in layout height.
-    // If the previous value is equal to the current one, then we will not consider this case.
-
-    private val onGlobalLayoutListener =
-        ViewTreeObserver.OnGlobalLayoutListener { // determines if the keyboard opens or not
-            val heightDiff = activityRootView.rootView.height - activityRootView.height
-            if (!first) {
-                if (heightDiff < dpToPx(context, 200) && heightDiff != lastHeightDiff) {
-                    dialog?.dismiss()
-                }
-            } else{
-                first = false
-                binding.taskCreateEditText.requestFocus()
-            }
-            lastHeightDiff = heightDiff
-        }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
+    ): View {
         _binding = TaskCreateBinding.inflate(inflater, container, false)
 
         binding.taskCreatePriorityButton.setOnClickListener {
             showPriorityPopup(it)
         }
+
+        binding.taskCreateCalendarButton.setOnClickListener {
+            val datePickerDialog = DatePickerDialog()
+            datePickerDialog.show(parentFragmentManager, DatePickerDialog.TAG)
+        }
         dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
-        activityRootView = requireActivity().findViewById(R.id.container)
-
-        activityRootView.viewTreeObserver.addOnGlobalLayoutListener(onGlobalLayoutListener)
         return binding.root
     }
 
-    override fun onStart() {
-        super.onStart()
+    override fun onResume() {
+        super.onResume()
         binding.taskCreateEditText.requestFocus()
-        first = true
-        Log.d(TAG, "onStart Callback first: $first")
     }
 
     @SuppressLint("RestrictedApi")
@@ -112,9 +88,6 @@ class TaskCreateBottomSheet : BottomSheetDialogFragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        Log.d(TAG, "onDestroyView")
         _binding = null
-        first = true
-        activityRootView.viewTreeObserver.removeOnGlobalLayoutListener(onGlobalLayoutListener)
     }
 }
