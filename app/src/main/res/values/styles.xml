@@ -4,7 +4,7 @@
         <item name="trackThickness">4dp</item>
         <item name="trackCornerRadius">2dp</item>
         <item name="indicatorSize">@dimen/timer_size_big</item>
-        <item name="trackColor">?attr/trackColor</item>
+        <item name="trackColor">?attr/colorSecondaryContainer</item>
         <!--TODO: видно засечки на trackCornerRadius-->
     </style>
 

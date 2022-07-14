@@ -4,11 +4,8 @@ import java.util.*
 
 data class CalendarDay(
     val calendar: Calendar,
-    val type: Type,
+    val isToday: Boolean,
     var isSelected: Boolean,
 ) {
     fun getText() = calendar.get(Calendar.DAY_OF_MONTH).toString()
-    enum class Type {
-        TODAY, NORMAL
-    }
 }

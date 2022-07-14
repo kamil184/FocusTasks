@@ -20,4 +20,30 @@
     <string name="low">Низкий</string>
     <string name="none">Нет</string>
     <string name="description">Описание</string>
+
+    <!--first day is sunday, last day is saturday-->
+    <string-array name="calendar_days">
+        <item>В</item>  <!--sunday-->
+        <item>П</item>  <!--sunday-->
+        <item>В</item>  <!--tuesday-->
+        <item>С</item>  <!--wednesday-->
+        <item>Ч</item>  <!--thursday-->
+        <item>П</item>  <!--friday-->
+        <item>С</item>  <!--saturday-->
+    </string-array>
+
+    <string-array name="months">
+        <item>Январь</item>
+        <item>Февраль</item>
+        <item>Март</item>
+        <item>Апрель</item>
+        <item>Май</item>
+        <item>Июнь</item>
+        <item>Июль</item>
+        <item>Август</item>
+        <item>Сентябрь</item>
+        <item>Октябрь</item>
+        <item>Ноябрь</item>
+        <item>Декабрь</item>
+    </string-array>
 </resources>

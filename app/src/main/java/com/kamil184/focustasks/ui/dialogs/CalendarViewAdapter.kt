@@ -1,6 +1,8 @@
 package com.kamil184.focustasks.ui.dialogs
 
+import android.content.res.Configuration
 import android.content.res.TypedArray
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,51 +11,65 @@ import androidx.recyclerview.widget.RecyclerView
 import com.kamil184.focustasks.R
 import com.kamil184.focustasks.model.CalendarDay
 import com.kamil184.focustasks.model.CalendarMonthHelper
+import com.kamil184.focustasks.model.OnSelectedDayChangedListener
 
-class CalendarViewAdapter(private val calendarMonthHelper: CalendarMonthHelper) :
+class CalendarViewAdapter(
+    private val days: Array<CalendarDay?>,
+    private val calendarMonthHelper: CalendarMonthHelper,
+) :
     RecyclerView.Adapter<CalendarViewAdapter.ViewHolder>() {
-    private val days = calendarMonthHelper.getDaysOfMonth()
 
     inner class ViewHolder(val textView: TextView) : RecyclerView.ViewHolder(textView) {
-        private var calendarDay: CalendarDay? = null
+        private var _calendarDay: CalendarDay? = null
+        private val calendarDay get() = _calendarDay!!
 
-        init {
-            textView.setOnClickListener {
-                if (calendarDay != null && calendarDay?.isSelected == false) {
-                    calendarDay!!.isSelected = true
-                    updateTextColorAndBackground()
-                    val lastSelectedId = calendarMonthHelper.onSelectedDayChange(calendarDay!!.calendar)
-                    days[lastSelectedId]?.isSelected = false
-                    notifyItemChanged(lastSelectedId)
-                }
-            }
-        }
-
-        fun bind(calendarDay: CalendarDay?) {
-            this.calendarDay = calendarDay
-            if (calendarDay != null) {
-                textView.text = calendarDay.getText()
+        private val listener = object : OnSelectedDayChangedListener {
+            override fun onSelectedDayChanged() {
+                calendarDay.isSelected = false
                 updateTextColorAndBackground()
             }
         }
 
-        private fun updateTextColorAndBackground() {
-            if (calendarDay!!.isSelected) {
-                textView.setBackgroundResource(R.drawable.date_picker_selected_day_background)
-                textView.setTextColor(getColor(android.R.color.white))
-            } else {
-                when (calendarDay!!.type) {
-                    CalendarDay.Type.TODAY -> {
-                        textView.setBackgroundResource(android.R.color.transparent)
-                        textView.setTextColor(getColor(R.attr.colorPrimary))
-                    }
-                    CalendarDay.Type.NORMAL -> {
-                        textView.setBackgroundResource(android.R.color.transparent)
-                        textView.setTextColor(getColor(android.R.attr.textColorPrimary))
-                    }
+        fun bind(calendarDay: CalendarDay) {
+            _calendarDay = calendarDay
+
+            if (calendarDay.isSelected) {
+                calendarMonthHelper.selectedDay.update(calendarDay.calendar,
+                    CalendarMonthHelper.getDayId(calendarDay.calendar), listener)
+            }
+            textView.text = calendarDay.getText()
+            updateTextColorAndBackground()
+
+            textView.setOnClickListener {
+                if (!calendarDay.isSelected) {
+                    calendarDay.isSelected = true
+                    updateTextColorAndBackground()
+                    calendarMonthHelper.selectedDay.update(calendarDay.calendar,
+                        CalendarMonthHelper.getDayId(calendarDay.calendar), listener)
                 }
             }
         }
+
+        private fun updateTextColorAndBackground() {
+            if (calendarDay.isSelected) {
+                textView.setBackgroundResource(R.drawable.date_picker_selected_day_background)
+                textView.setTextColor(getColor(android.R.color.white))
+            } else {
+                if (calendarDay.isToday) {
+                    textView.setBackgroundResource(android.R.color.transparent)
+
+                    val currentNightMode = textView.context.resources
+                        .configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+                    if (currentNightMode == Configuration.UI_MODE_NIGHT_YES)
+                        textView.setTextColor(getColor(R.attr.colorPrimary))
+                    else textView.setTextColor(getColor(R.attr.colorPrimaryContainer))
+                } else {
+                    textView.setBackgroundResource(android.R.color.transparent)
+                    textView.setTextColor(getColor(android.R.attr.textColorPrimary))
+                }
+            }
+        }
+
 
         private fun getColor(attrId: Int): Int {
             val typedValue = TypedValue()
@@ -66,16 +82,20 @@ class CalendarViewAdapter(private val calendarMonthHelper: CalendarMonthHelper) 
         }
     }
 
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val textView =
             inflater.inflate(R.layout.date_picker_calendar_day, parent, false) as TextView
-        //TODO: рассмотреть, может базовый layout лучше подойдет
+        //TODO: рассмотреть, может базовый layout лучше подойдет (android.R.layout.simple_list_item_1)
         return ViewHolder(textView)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(days[position])
+        val calendarDay = days[position]
+        if (calendarDay != null) {
+            holder.bind(calendarDay)
+        }
     }
 
     override fun getItemCount() = days.size

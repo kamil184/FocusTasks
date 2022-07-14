@@ -1,187 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="12dp">
+    android:padding="16dp">
 
     <TextView
         android:id="@+id/date_picker_month_title"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Июль 2021"
+        android:layout_height="24dp"
+        android:layout_marginTop="12dp"
         android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
-        app:layout_constraintBottom_toBottomOf="@+id/date_picker_left_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/date_picker_left_button" />
-
-    <Button
-        android:id="@+id/date_picker_left_button"
-        style="@style/Widget.Material3.Button.IconButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/ic_arrow_left_24"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/date_picker_right_button"
-        style="@style/Widget.Material3.Button.IconButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:drawableRight="@drawable/ic_arrow_right_24"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Июль 2021" />
 
     <!-- days header begin -->
-
     <TextView
         android:id="@+id/date_picker_calendar_header_tv1"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:text="П"
+        android:layout_marginTop="12dp"
         android:gravity="center"
         android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+        android:textColor="?android:textColorHint"
+        app:layout_constraintEnd_toStartOf="@+id/date_picker_calendar_header_tv2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/date_picker_left_button" />
+        app:layout_constraintTop_toBottomOf="@+id/date_picker_month_title"
+        tools:text="П" />
+
     <TextView
         android:id="@+id/date_picker_calendar_header_tv2"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:text="П"
         android:gravity="center"
         android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+        android:textColor="?android:textColorHint"
+        app:layout_constraintEnd_toStartOf="@+id/date_picker_calendar_header_tv3"
         app:layout_constraintStart_toEndOf="@+id/date_picker_calendar_header_tv1"
-        app:layout_constraintTop_toBottomOf="@+id/date_picker_left_button" />
+        app:layout_constraintTop_toTopOf="@+id/date_picker_calendar_header_tv1"
+        tools:text="В" />
+
     <TextView
         android:id="@+id/date_picker_calendar_header_tv3"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:text="П"
         android:gravity="center"
         android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+        android:textColor="?android:textColorHint"
+        app:layout_constraintEnd_toStartOf="@+id/date_picker_calendar_header_tv4"
         app:layout_constraintStart_toEndOf="@+id/date_picker_calendar_header_tv2"
-        app:layout_constraintTop_toBottomOf="@+id/date_picker_left_button" />
+        app:layout_constraintTop_toTopOf="@+id/date_picker_calendar_header_tv1"
+        tools:text="С" />
+
     <TextView
         android:id="@+id/date_picker_calendar_header_tv4"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:text="П"
         android:gravity="center"
         android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+        android:textColor="?android:textColorHint"
+        app:layout_constraintEnd_toStartOf="@+id/date_picker_calendar_header_tv5"
         app:layout_constraintStart_toEndOf="@+id/date_picker_calendar_header_tv3"
-        app:layout_constraintTop_toBottomOf="@+id/date_picker_left_button" />
+        app:layout_constraintTop_toTopOf="@+id/date_picker_calendar_header_tv1"
+        tools:text="Ч" />
+
     <TextView
         android:id="@+id/date_picker_calendar_header_tv5"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:text="П"
         android:gravity="center"
         android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+        android:textColor="?android:textColorHint"
+        app:layout_constraintEnd_toStartOf="@+id/date_picker_calendar_header_tv6"
         app:layout_constraintStart_toEndOf="@+id/date_picker_calendar_header_tv4"
-        app:layout_constraintTop_toBottomOf="@+id/date_picker_left_button" />
+        app:layout_constraintTop_toTopOf="@+id/date_picker_calendar_header_tv1"
+        tools:text="П" />
+
     <TextView
         android:id="@+id/date_picker_calendar_header_tv6"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:text="П"
         android:gravity="center"
         android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+        android:textColor="?android:textColorHint"
+        app:layout_constraintEnd_toStartOf="@+id/date_picker_calendar_header_tv7"
         app:layout_constraintStart_toEndOf="@+id/date_picker_calendar_header_tv5"
-        app:layout_constraintTop_toBottomOf="@+id/date_picker_left_button" />
+        app:layout_constraintTop_toTopOf="@+id/date_picker_calendar_header_tv1"
+        tools:text="С" />
+
     <TextView
         android:id="@+id/date_picker_calendar_header_tv7"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:text="П"
         android:gravity="center"
         android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+        android:textColor="?android:textColorHint"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/date_picker_calendar_header_tv6"
-        app:layout_constraintTop_toBottomOf="@+id/date_picker_left_button" />
+        app:layout_constraintTop_toTopOf="@+id/date_picker_calendar_header_tv1"
+        tools:text="В" />
     <!-- days header end -->
 
-    <!--
-    <TextView
-        android:id="@+id/date_picker_calendar_header_tv1"
-        android:layout_width="wrap_content"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/date_picker_calendar_pager"
+        android:layout_width="280dp"
         android:layout_height="wrap_content"
-        android:text="П"
-        android:textAppearance="@style/TextAppearance.Material3.BodySmall"
-        app:layout_constraintEnd_toStartOf="@+id/date_picker_calendar_header_tv2"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/date_picker_left_button" />
-
-    <TextView
-        android:id="@+id/date_picker_calendar_header_tv2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="В"
-        android:textAppearance="@style/TextAppearance.Material3.BodySmall"
-        app:layout_constraintEnd_toStartOf="@+id/date_picker_calendar_header_tv3"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/date_picker_calendar_header_tv1"
-        app:layout_constraintTop_toBottomOf="@+id/date_picker_left_button" />
-
-    <TextView
-        android:id="@+id/date_picker_calendar_header_tv3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="С"
-        android:textAppearance="@style/TextAppearance.Material3.BodySmall"
-        app:layout_constraintEnd_toStartOf="@+id/date_picker_calendar_header_tv4"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/date_picker_calendar_header_tv2"
-        app:layout_constraintTop_toBottomOf="@+id/date_picker_left_button" />
-
-    <TextView
-        android:id="@+id/date_picker_calendar_header_tv4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Ч"
-        android:textAppearance="@style/TextAppearance.Material3.BodySmall"
-        app:layout_constraintEnd_toStartOf="@+id/date_picker_calendar_header_tv5"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/date_picker_calendar_header_tv3"
-        app:layout_constraintTop_toBottomOf="@+id/date_picker_left_button" />
-
-    <TextView
-        android:id="@+id/date_picker_calendar_header_tv5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="П"
-        android:textAppearance="@style/TextAppearance.Material3.BodySmall"
-        app:layout_constraintEnd_toStartOf="@+id/date_picker_calendar_header_tv6"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/date_picker_calendar_header_tv4"
-        app:layout_constraintTop_toBottomOf="@+id/date_picker_left_button" />
-
-    <TextView
-        android:id="@+id/date_picker_calendar_header_tv6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="С"
-        android:textAppearance="@style/TextAppearance.Material3.BodySmall"
-        app:layout_constraintEnd_toStartOf="@+id/date_picker_calendar_header_tv7"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/date_picker_calendar_header_tv5"
-        app:layout_constraintTop_toBottomOf="@+id/date_picker_left_button" />
-
-    <TextView
-        android:id="@+id/date_picker_calendar_header_tv7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="В"
-        android:textAppearance="@style/TextAppearance.Material3.BodySmall"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/date_picker_calendar_header_tv6"
-        app:layout_constraintTop_toBottomOf="@+id/date_picker_left_button" />-->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/date_picker_calendar_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/date_picker_calendar_header_tv1" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

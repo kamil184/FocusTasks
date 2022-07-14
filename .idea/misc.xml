@@ -43,7 +43,9 @@
         <entry key="..\:/Users/tukta/AndroidStudioProjects/FocusTasks/app/src/main/res/layout-v21/fragment_timer.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/tukta/AndroidStudioProjects/FocusTasks/app/src/main/res/layout/activity_main.xml" value="0.13451086956521738" />
         <entry key="..\:/Users/tukta/AndroidStudioProjects/FocusTasks/app/src/main/res/layout/date_picker_calendar_day.xml" value="2.4" />
-        <entry key="..\:/Users/tukta/AndroidStudioProjects/FocusTasks/app/src/main/res/layout/date_picker_dialog.xml" value="0.31375579598145287" />
+        <entry key="..\:/Users/tukta/AndroidStudioProjects/FocusTasks/app/src/main/res/layout/date_picker_calendar_layout.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/tukta/AndroidStudioProjects/FocusTasks/app/src/main/res/layout/date_picker_calendar_recycler.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/tukta/AndroidStudioProjects/FocusTasks/app/src/main/res/layout/date_picker_dialog.xml" value="0.4" />
         <entry key="..\:/Users/tukta/AndroidStudioProjects/FocusTasks/app/src/main/res/layout/fragment_calendar.xml" value="0.13451086956521738" />
         <entry key="..\:/Users/tukta/AndroidStudioProjects/FocusTasks/app/src/main/res/layout/fragment_tasks.xml" value="0.264" />
         <entry key="..\:/Users/tukta/AndroidStudioProjects/FocusTasks/app/src/main/res/layout/fragment_tasks_content.xml" value="0.25416666666666665" />
