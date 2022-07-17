@@ -1,5 +1,6 @@
 package com.kamil184.focustasks.ui.dialogs
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,7 +10,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.kamil184.focustasks.databinding.DatePickerDialogBinding
 import com.kamil184.focustasks.model.CalendarMonthHelper
 
-class DatePickerDialog : DialogFragment() {
+class DatePickerDialog(private val onDismissListener: () -> Unit) : DialogFragment() {
     private var _binding: DatePickerDialogBinding? = null
     private val binding get() = _binding!!
 
@@ -39,6 +40,11 @@ class DatePickerDialog : DialogFragment() {
         setDaysHeader()
 
         return binding.root
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        onDismissListener.invoke()
     }
 
     private fun setDaysHeader() {

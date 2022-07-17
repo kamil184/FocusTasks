@@ -6,14 +6,16 @@ import android.os.Build
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.*
+import android.widget.FrameLayout
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.widget.PopupMenu
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.*
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.kamil184.focustasks.R
 import com.kamil184.focustasks.databinding.TaskCreateBinding
 import com.kamil184.focustasks.ui.dialogs.DatePickerDialog
-import com.kamil184.focustasks.util.dpToPx
+
 
 class TaskCreateBottomSheet : BottomSheetDialogFragment() {
     private var _binding: TaskCreateBinding? = null
@@ -31,7 +33,9 @@ class TaskCreateBottomSheet : BottomSheetDialogFragment() {
         }
 
         binding.taskCreateCalendarButton.setOnClickListener {
-            val datePickerDialog = DatePickerDialog()
+            val datePickerDialog = DatePickerDialog {
+                binding.taskCreateEditText.windowInsetsController?.show(WindowInsets.Type.ime())
+            }
             datePickerDialog.show(parentFragmentManager, DatePickerDialog.TAG)
         }
         dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
@@ -41,7 +45,7 @@ class TaskCreateBottomSheet : BottomSheetDialogFragment() {
 
     override fun onResume() {
         super.onResume()
-        binding.taskCreateEditText.requestFocus()
+        binding.taskCreateEditText.windowInsetsController?.show(WindowInsets.Type.ime())
     }
 
     @SuppressLint("RestrictedApi")
