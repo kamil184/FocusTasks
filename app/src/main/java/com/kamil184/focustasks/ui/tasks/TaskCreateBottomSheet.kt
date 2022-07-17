@@ -38,8 +38,11 @@ class TaskCreateBottomSheet : BottomSheetDialogFragment() {
             }
             datePickerDialog.show(parentFragmentManager, DatePickerDialog.TAG)
         }
-        dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
-
+        ViewCompat
+            .setOnApplyWindowInsetsListener(binding.root) { view, insets ->
+                view.updatePadding(bottom = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom)
+                insets
+            }
         return binding.root
     }
 
