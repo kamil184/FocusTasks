@@ -1,10 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="Theme.FocusTasks" parent="Theme.Material3.Light.NoActionBar">
-        <item name="android:windowTranslucentStatus">true</item>
-        <item name="android:windowTranslucentNavigation">true</item>
-        <item name="android:navigationBarColor" tools:targetApi="lollipop">#80FFFFFF</item>
-        <item name="android:statusBarColor" tools:targetApi="lollipop">#80FFFFFF</item>
         <item name="colorPrimary">@color/md_theme_light_primary</item>
         <item name="colorOnPrimary">@color/md_theme_light_onPrimary</item>
         <item name="colorPrimaryContainer">@color/md_theme_light_primaryContainer</item>
@@ -34,10 +30,21 @@
         <item name="android:shadowColor">@color/md_theme_light_shadow</item>
         <item name="trackColor">@color/light_track_color</item>
 
-        <item name="bottomSheetDialogTheme">@style/ThemeOverlay.FocusTasks.BottomSheetDialog</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:navigationBarColor" tools:targetApi="lollipop">#80FFFFFF</item>
+        <item name="android:statusBarColor" tools:targetApi="lollipop">#80FFFFFF</item>
+
+        <item name="bottomSheetDialogTheme">@style/ThemeOverlay.App.BottomSheetDialog</item>
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.App.MaterialAlertDialog</item>
     </style>
 
-    <style name="ThemeOverlay.FocusTasks.BottomSheetDialog" parent="ThemeOverlay.MaterialComponents.BottomSheetDialog">
-        <item name="bottomSheetStyle">@style/ModalBottomSheetDialog</item>
+    <style name="ThemeOverlay.App.BottomSheetDialog" parent="ThemeOverlay.MaterialComponents.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/App.ModalBottomSheetDialog</item>
     </style>
+
+    <style name="ThemeOverlay.App.MaterialAlertDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="android:background">?colorSurface</item>
+    </style>
+
 </resources>

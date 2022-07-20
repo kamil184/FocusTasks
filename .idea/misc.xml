@@ -15,18 +15,26 @@
         <entry key="..\:/Users/tukta/AndroidStudioProjects/FocusTasks/app/src/main/res/drawable/expand_more-48px.xml" value="0.1715" />
         <entry key="..\:/Users/tukta/AndroidStudioProjects/FocusTasks/app/src/main/res/drawable/expand_more_24.xml" value="0.1245" />
         <entry key="..\:/Users/tukta/AndroidStudioProjects/FocusTasks/app/src/main/res/drawable/ic_add_24.xml" value="0.1715" />
+        <entry key="..\:/Users/tukta/AndroidStudioProjects/FocusTasks/app/src/main/res/drawable/ic_arrow_left_24.xml" value="0.1245" />
         <entry key="..\:/Users/tukta/AndroidStudioProjects/FocusTasks/app/src/main/res/drawable/ic_calendar_24.xml" value="0.1715" />
         <entry key="..\:/Users/tukta/AndroidStudioProjects/FocusTasks/app/src/main/res/drawable/ic_calendar_month.xml" value="0.1245" />
+        <entry key="..\:/Users/tukta/AndroidStudioProjects/FocusTasks/app/src/main/res/drawable/ic_calendar_month_24.xml" value="0.1245" />
         <entry key="..\:/Users/tukta/AndroidStudioProjects/FocusTasks/app/src/main/res/drawable/ic_check_box_24.xml" value="0.1715" />
         <entry key="..\:/Users/tukta/AndroidStudioProjects/FocusTasks/app/src/main/res/drawable/ic_close_24.xml" value="0.1715" />
         <entry key="..\:/Users/tukta/AndroidStudioProjects/FocusTasks/app/src/main/res/drawable/ic_event_available_24.xml" value="0.1715" />
         <entry key="..\:/Users/tukta/AndroidStudioProjects/FocusTasks/app/src/main/res/drawable/ic_exclamation.xml" value="0.1715" />
         <entry key="..\:/Users/tukta/AndroidStudioProjects/FocusTasks/app/src/main/res/drawable/ic_exclamation_24.xml" value="0.1715" />
         <entry key="..\:/Users/tukta/AndroidStudioProjects/FocusTasks/app/src/main/res/drawable/ic_expand_less_24.xml" value="0.1715" />
+        <entry key="..\:/Users/tukta/AndroidStudioProjects/FocusTasks/app/src/main/res/drawable/ic_expand_more_24.xml" value="0.1245" />
         <entry key="..\:/Users/tukta/AndroidStudioProjects/FocusTasks/app/src/main/res/drawable/ic_inventory_24.xml" value="0.1715" />
         <entry key="..\:/Users/tukta/AndroidStudioProjects/FocusTasks/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1715" />
         <entry key="..\:/Users/tukta/AndroidStudioProjects/FocusTasks/app/src/main/res/drawable/ic_pause_24.xml" value="0.1715" />
+        <entry key="..\:/Users/tukta/AndroidStudioProjects/FocusTasks/app/src/main/res/drawable/ic_person_24.xml" value="0.1245" />
+        <entry key="..\:/Users/tukta/AndroidStudioProjects/FocusTasks/app/src/main/res/drawable/ic_play_arrow_24.xml" value="0.1245" />
         <entry key="..\:/Users/tukta/AndroidStudioProjects/FocusTasks/app/src/main/res/drawable/ic_priority_high_24.xml" value="0.1715" />
+        <entry key="..\:/Users/tukta/AndroidStudioProjects/FocusTasks/app/src/main/res/drawable/ic_priority_high_3.xml" value="0.1245" />
+        <entry key="..\:/Users/tukta/AndroidStudioProjects/FocusTasks/app/src/main/res/drawable/ic_repeat_24.xml" value="0.1245" />
+        <entry key="..\:/Users/tukta/AndroidStudioProjects/FocusTasks/app/src/main/res/drawable/ic_schedule_24.xml" value="0.1245" />
         <entry key="..\:/Users/tukta/AndroidStudioProjects/FocusTasks/app/src/main/res/drawable/ic_settings_24.xml" value="0.1715" />
         <entry key="..\:/Users/tukta/AndroidStudioProjects/FocusTasks/app/src/main/res/drawable/ic_stop_24.xml" value="0.1715" />
         <entry key="..\:/Users/tukta/AndroidStudioProjects/FocusTasks/app/src/main/res/drawable/ic_timer_24.xml" value="0.1245" />
@@ -45,7 +53,7 @@
         <entry key="..\:/Users/tukta/AndroidStudioProjects/FocusTasks/app/src/main/res/layout/date_picker_calendar_day.xml" value="2.4" />
         <entry key="..\:/Users/tukta/AndroidStudioProjects/FocusTasks/app/src/main/res/layout/date_picker_calendar_layout.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/tukta/AndroidStudioProjects/FocusTasks/app/src/main/res/layout/date_picker_calendar_recycler.xml" value="0.25416666666666665" />
-        <entry key="..\:/Users/tukta/AndroidStudioProjects/FocusTasks/app/src/main/res/layout/date_picker_dialog.xml" value="0.4" />
+        <entry key="..\:/Users/tukta/AndroidStudioProjects/FocusTasks/app/src/main/res/layout/date_picker_dialog.xml" value="0.264" />
         <entry key="..\:/Users/tukta/AndroidStudioProjects/FocusTasks/app/src/main/res/layout/fragment_calendar.xml" value="0.13451086956521738" />
         <entry key="..\:/Users/tukta/AndroidStudioProjects/FocusTasks/app/src/main/res/layout/fragment_settings.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/tukta/AndroidStudioProjects/FocusTasks/app/src/main/res/layout/fragment_tasks.xml" value="0.264" />
@@ -56,6 +64,7 @@
         <entry key="..\:/Users/tukta/AndroidStudioProjects/FocusTasks/app/src/main/res/menu/priority_menu.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/tukta/AppData/Local/Android/Sdk/platforms/android-31/data/res/drawable/btn_default.xml" value="0.1235" />
         <entry key="..\:/Users/tukta/AppData/Local/Android/Sdk/platforms/android-31/data/res/layout/simple_list_item_1.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/tukta/Documents/GitHub/material-components-android-examples/MaterialThemeBuilder/.gradle/caches/transforms-3/2f74e86d6b7c7cba48896578307b903b/transformed/material-1.6.1/res/layout/m3_alert_dialog.xml" value="0.11354166666666667" />
       </map>
     </option>
   </component>

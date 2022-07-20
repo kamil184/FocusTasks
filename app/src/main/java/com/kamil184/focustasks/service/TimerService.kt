@@ -228,7 +228,7 @@ class TimerService : Service() {
             activityIntent, flags)
 
         timerRunningBuilder = Builder(this, timerRunningNotificationChannelId)
-            .setSmallIcon(R.drawable.ic_timer_24)
+            .setSmallIcon(R.drawable.ic_timer_48)
             .setContentIntent(activityPendingIntent)
             .setPriority(PRIORITY_LOW)
             .setAutoCancel(false)
@@ -236,7 +236,7 @@ class TimerService : Service() {
             .setCategory(CATEGORY_PROGRESS)
 
         timerExpiredBuilder = Builder(this, timerExpiredNotificationChannelId)
-            .setSmallIcon(R.drawable.ic_timer_24)
+            .setSmallIcon(R.drawable.ic_timer_48)
             .setContentIntent(activityPendingIntent)
             .setPriority(PRIORITY_MAX)
             .setSound(Settings.System.DEFAULT_NOTIFICATION_URI) //TODO another sound

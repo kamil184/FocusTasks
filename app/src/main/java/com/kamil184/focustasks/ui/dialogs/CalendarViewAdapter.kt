@@ -1,9 +1,6 @@
 package com.kamil184.focustasks.ui.dialogs
 
 import android.content.res.Configuration
-import android.content.res.TypedArray
-import android.util.Log
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
@@ -12,6 +9,7 @@ import com.kamil184.focustasks.R
 import com.kamil184.focustasks.model.CalendarDay
 import com.kamil184.focustasks.model.CalendarMonthHelper
 import com.kamil184.focustasks.model.OnSelectedDayChangedListener
+import com.kamil184.focustasks.util.getColorFromAttr
 
 class CalendarViewAdapter(
     private val days: Array<CalendarDay?>,
@@ -53,7 +51,7 @@ class CalendarViewAdapter(
         private fun updateTextColorAndBackground() {
             if (calendarDay.isSelected) {
                 textView.setBackgroundResource(R.drawable.date_picker_selected_day_background)
-                textView.setTextColor(getColor(android.R.color.white))
+                textView.setTextColor(getColorFromAttr(textView.context,android.R.color.white))
             } else {
                 if (calendarDay.isToday) {
                     textView.setBackgroundResource(android.R.color.transparent)
@@ -61,24 +59,13 @@ class CalendarViewAdapter(
                     val currentNightMode = textView.context.resources
                         .configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
                     if (currentNightMode == Configuration.UI_MODE_NIGHT_YES)
-                        textView.setTextColor(getColor(R.attr.colorPrimary))
-                    else textView.setTextColor(getColor(R.attr.colorPrimaryContainer))
+                        textView.setTextColor(getColorFromAttr(textView.context,R.attr.colorPrimary))
+                    else textView.setTextColor(getColorFromAttr(textView.context, R.attr.colorPrimaryContainer))
                 } else {
                     textView.setBackgroundResource(android.R.color.transparent)
-                    textView.setTextColor(getColor(android.R.attr.textColorPrimary))
+                    textView.setTextColor(getColorFromAttr(textView.context, android.R.attr.textColorPrimary))
                 }
             }
-        }
-
-
-        private fun getColor(attrId: Int): Int {
-            val typedValue = TypedValue()
-            textView.context.theme.resolveAttribute(attrId, typedValue, true)
-            val arr: TypedArray =
-                textView.context.obtainStyledAttributes(typedValue.data, intArrayOf(attrId))
-            val primaryColor = arr.getColor(0, -1)
-            arr.recycle()
-            return primaryColor
         }
     }
 

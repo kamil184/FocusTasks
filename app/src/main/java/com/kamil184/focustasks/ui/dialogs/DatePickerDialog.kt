@@ -1,12 +1,12 @@
 package com.kamil184.focustasks.ui.dialogs
 
+import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.kamil184.focustasks.R
 import com.kamil184.focustasks.databinding.DatePickerDialogBinding
 import com.kamil184.focustasks.model.CalendarMonthHelper
 
@@ -26,12 +26,9 @@ class DatePickerDialog(private val onDismissListener: () -> Unit) : DialogFragme
 
     private val adapter = CalendarViewPagerAdapter()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View {
-        _binding = DatePickerDialogBinding.inflate(inflater, container, false)
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        _binding = DatePickerDialogBinding.inflate(layoutInflater, null, false)
         binding.datePickerCalendarPager.offscreenPageLimit = 1
         binding.datePickerCalendarPager.adapter = adapter
         binding.datePickerCalendarPager.registerOnPageChangeCallback(onPageChangeCallback)
@@ -39,7 +36,15 @@ class DatePickerDialog(private val onDismissListener: () -> Unit) : DialogFragme
             CalendarMonthHelper.getMonthId(CalendarMonthHelper.today), false)
         setDaysHeader()
 
-        return binding.root
+        val dialog = MaterialAlertDialogBuilder(requireContext())
+            .setNegativeButton("Закрыть"){ _, _ ->
+
+            }
+            .setPositiveButton("Готово"){ _, _ ->
+
+            }
+            .setView(binding.root)
+        return dialog.create()
     }
 
     override fun onDismiss(dialog: DialogInterface) {
