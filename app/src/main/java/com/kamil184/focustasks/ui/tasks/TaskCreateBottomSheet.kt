@@ -5,12 +5,15 @@ import android.graphics.drawable.InsetDrawable
 import android.os.Build
 import android.os.Bundle
 import android.util.TypedValue
-import android.view.*
-import android.widget.FrameLayout
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowInsets
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.widget.PopupMenu
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.*
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.kamil184.focustasks.R
 import com.kamil184.focustasks.databinding.TaskCreateBinding
@@ -20,6 +23,7 @@ import com.kamil184.focustasks.ui.dialogs.DatePickerDialog
 class TaskCreateBottomSheet : BottomSheetDialogFragment() {
     private var _binding: TaskCreateBinding? = null
     private val binding get() = _binding!!
+    private var datePickerDialog: DatePickerDialog? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,10 +37,11 @@ class TaskCreateBottomSheet : BottomSheetDialogFragment() {
         }
 
         binding.taskCreateCalendarButton.setOnClickListener {
-            val datePickerDialog = DatePickerDialog {
+            datePickerDialog = DatePickerDialog {
                 binding.taskCreateEditText.windowInsetsController?.show(WindowInsets.Type.ime())
             }
-            datePickerDialog.show(parentFragmentManager, DatePickerDialog.TAG)
+            datePickerDialog!!.show(parentFragmentManager, DatePickerDialog.TAG)
+            binding.taskCreateEditText.windowInsetsController?.hide(WindowInsets.Type.ime())
         }
         ViewCompat
             .setOnApplyWindowInsetsListener(binding.root) { view, insets ->
@@ -95,6 +100,7 @@ class TaskCreateBottomSheet : BottomSheetDialogFragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        datePickerDialog?.dismiss()
         _binding = null
     }
 }

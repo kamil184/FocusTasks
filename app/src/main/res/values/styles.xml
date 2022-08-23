@@ -10,6 +10,5 @@
 
     <style name="App.ModalBottomSheetDialog" parent="Widget.MaterialComponents.BottomSheet.Modal">
         <item name="backgroundTint">?android:colorBackground</item>
-        <item name="background">?android:colorBackground</item>
     </style>
 </resources>

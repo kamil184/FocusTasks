@@ -44,7 +44,7 @@
     </style>
 
     <style name="ThemeOverlay.App.MaterialAlertDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
-        <item name="android:background">?colorSurface</item>
+<!--        <item name="android:background">?colorSurface</item>-->
     </style>
 
 </resources>

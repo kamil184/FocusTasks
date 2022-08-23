@@ -3,14 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="16dp">
+    android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/date_picker_month_title"
         android:layout_width="wrap_content"
         android:layout_height="24dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="28dp"
         android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,6 +21,7 @@
         android:id="@+id/date_picker_calendar_header_tv1"
         android:layout_width="40dp"
         android:layout_height="40dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
         android:gravity="center"
         android:textAppearance="@style/TextAppearance.Material3.BodySmall"
@@ -95,6 +95,7 @@
         android:id="@+id/date_picker_calendar_header_tv7"
         android:layout_width="40dp"
         android:layout_height="40dp"
+        android:layout_marginEnd="16dp"
         android:gravity="center"
         android:textAppearance="@style/TextAppearance.Material3.BodySmall"
         android:textColor="?android:textColorHint"
@@ -106,10 +107,75 @@
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/date_picker_calendar_pager"
-        android:layout_width="280dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/date_picker_calendar_header_tv1" />
+        app:layout_constraintEnd_toEndOf="@+id/date_picker_calendar_header_tv7"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toStartOf="@+id/date_picker_calendar_header_tv1"
+        app:layout_constraintTop_toBottomOf="@+id/date_picker_calendar_header_tv1"
+        tools:layout_height="240dp" />
 
+    <LinearLayout
+        android:id="@+id/date_picker_calendar_time_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/date_picker_calendar_pager">
+
+        <ImageView
+            android:id="@+id/date_picker_calendar_time_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            app:srcCompat="@drawable/ic_schedule_24" />
+
+        <TextView
+            android:id="@+id/date_picker_calendar_time_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="16dp"
+            android:background="@drawable/date_picker_calendar_text_background"
+            android:backgroundTint="?colorSurfaceVariant"
+            android:padding="12dp"
+            android:text="Выбрать время" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/date_picker_calendar_repeat_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/date_picker_calendar_time_container">
+
+        <ImageView
+            android:id="@+id/date_picker_calendar_repeat_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            app:srcCompat="@drawable/ic_repeat_24" />
+
+        <TextView
+            android:id="@+id/date_picker_calendar_repeat_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="16dp"
+            android:background="@drawable/date_picker_calendar_text_background"
+            android:backgroundTint="?colorSurfaceVariant"
+            android:padding="12dp"
+            android:text="Повторять" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

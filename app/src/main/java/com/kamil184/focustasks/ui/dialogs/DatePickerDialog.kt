@@ -3,12 +3,18 @@ package com.kamil184.focustasks.ui.dialogs
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
+import android.text.format.DateFormat.is24HourFormat
 import androidx.fragment.app.DialogFragment
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.timepicker.MaterialTimePicker
+import com.google.android.material.timepicker.TimeFormat
 import com.kamil184.focustasks.R
 import com.kamil184.focustasks.databinding.DatePickerDialogBinding
 import com.kamil184.focustasks.model.CalendarMonthHelper
+import com.kamil184.focustasks.util.getColorFromAttr
+import java.util.*
+
 
 class DatePickerDialog(private val onDismissListener: () -> Unit) : DialogFragment() {
     private var _binding: DatePickerDialogBinding? = null
@@ -37,13 +43,41 @@ class DatePickerDialog(private val onDismissListener: () -> Unit) : DialogFragme
         setDaysHeader()
 
         val dialog = MaterialAlertDialogBuilder(requireContext())
-            .setNegativeButton("Закрыть"){ _, _ ->
+            .setNegativeButton("Закрыть") { _, _ ->
 
             }
-            .setPositiveButton("Готово"){ _, _ ->
-
+            .setPositiveButton("Готово") { _, _ ->
+                //TODO save result
             }
             .setView(binding.root)
+
+        binding.datePickerCalendarTimeContainer.setOnClickListener {
+            val isSystem24Hour = is24HourFormat(context)
+            val clockFormat = if (isSystem24Hour) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H
+            val calendar = Calendar.getInstance()
+            val timePicker = MaterialTimePicker.Builder()
+                .setTimeFormat(clockFormat)
+                .setHour(calendar.get(Calendar.HOUR_OF_DAY))
+                .setMinute(calendar.get(Calendar.MINUTE))
+                .build()
+
+            timePicker.addOnPositiveButtonClickListener {
+                val text = if (isSystem24Hour) {
+                    "${timePicker.hour}:${timePicker.minute}"
+                } else {
+                    val isAm = timePicker.hour < 12
+                    var h = if (isAm) timePicker.hour
+                    else timePicker.hour - 12
+                    if (h == 0) h = 12
+                    val amPmText = if (isAm) "AM" else "PM"
+                    val m = if(timePicker.minute<10) "0${timePicker.minute}" else "${timePicker.minute}"
+                    "$amPmText $h:$m"
+                }
+                binding.datePickerCalendarTimeText.text = text
+                binding.datePickerCalendarTimeText.setTextColor(getColorFromAttr(requireContext(), R.attr.colorOnSurfaceVariant))
+            }
+            timePicker.show(parentFragmentManager, "MaterialTimePicker")
+        }
         return dialog.create()
     }
 

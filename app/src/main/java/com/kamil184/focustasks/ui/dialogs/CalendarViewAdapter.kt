@@ -1,6 +1,7 @@
 package com.kamil184.focustasks.ui.dialogs
 
 import android.content.res.Configuration
+import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
@@ -50,19 +51,20 @@ class CalendarViewAdapter(
 
         private fun updateTextColorAndBackground() {
             if (calendarDay.isSelected) {
+                textView.setTypeface(null, Typeface.NORMAL)
                 textView.setBackgroundResource(R.drawable.date_picker_selected_day_background)
-                textView.setTextColor(getColorFromAttr(textView.context,android.R.color.white))
+                textView.setTextColor(getColorFromAttr(textView.context, R.attr.colorOnPrimary))
             } else {
+                textView.setBackgroundResource(android.R.color.transparent)
                 if (calendarDay.isToday) {
-                    textView.setBackgroundResource(android.R.color.transparent)
-
+                    textView.setTypeface(null, Typeface.BOLD)
                     val currentNightMode = textView.context.resources
                         .configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
                     if (currentNightMode == Configuration.UI_MODE_NIGHT_YES)
-                        textView.setTextColor(getColorFromAttr(textView.context,R.attr.colorPrimary))
-                    else textView.setTextColor(getColorFromAttr(textView.context, R.attr.colorPrimaryContainer))
+                        textView.setTextColor(textView.context.getColor(R.color.material_dynamic_primary30))
+                    else textView.setTextColor(textView.context.getColor(R.color.material_dynamic_primary70))
                 } else {
-                    textView.setBackgroundResource(android.R.color.transparent)
+                    textView.setTypeface(null, Typeface.NORMAL)
                     textView.setTextColor(getColorFromAttr(textView.context, android.R.attr.textColorPrimary))
                 }
             }
