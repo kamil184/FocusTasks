@@ -38,13 +38,18 @@ class TaskCreateBottomSheet : BottomSheetDialogFragment() {
         binding.taskCreateCalendarButton.setOnClickListener {
             datePickerDialog = DatePickerDialog {
                 binding.taskCreateEditText.windowInsetsController?.show(WindowInsets.Type.ime())
+                datePickerDialog = null
             }
             datePickerDialog!!.show(parentFragmentManager, DatePickerDialog.TAG)
             binding.taskCreateEditText.windowInsetsController?.hide(WindowInsets.Type.ime())
+            binding.taskCreateEditText.clearFocus()
+            binding.taskCreateDescriptionEditText.clearFocus()
         }
         ViewCompat
             .setOnApplyWindowInsetsListener(binding.root) { view, insets ->
-                view.updatePadding(bottom = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom)
+                val ins = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom
+                if (datePickerDialog == null || ins==0)
+                    view.updatePadding(bottom = ins)
                 insets
             }
         return binding.root

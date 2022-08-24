@@ -10,7 +10,6 @@ import com.kamil184.focustasks.R
 import com.kamil184.focustasks.databinding.RepeatDialogBinding
 import java.util.*
 
-//TODO съесть отступы клавиатуры
 class RepeatDialog : DialogFragment(), RepeatDialogDayTextView.StateOnClickListener {
     private var _binding: RepeatDialogBinding? = null
     private val binding get() = _binding!!
@@ -80,7 +79,6 @@ class RepeatDialog : DialogFragment(), RepeatDialogDayTextView.StateOnClickListe
             requireContext().getDrawable(R.drawable.ic_expand_less_24),
             null)
     }
-
     private fun fillDayList() {
         _daysList = listOf(binding.repeatDialogMonday,
             binding.repeatDialogTuesday,

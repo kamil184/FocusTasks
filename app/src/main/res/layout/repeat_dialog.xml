@@ -7,17 +7,17 @@
     android:padding="24dp">
 
     <TextView
-        android:id="@+id/repeat_dialog_text_every"
+        android:id="@+id/repeat_dialog_every_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/every"
         android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
-        app:layout_constraintBottom_toBottomOf="@+id/repeat_dialog_every_number"
+        app:layout_constraintBottom_toBottomOf="@+id/repeat_dialog_every_number_edit_text"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/repeat_dialog_every_number" />
+        app:layout_constraintTop_toTopOf="@+id/repeat_dialog_every_number_edit_text" />
 
     <EditText
-        android:id="@+id/repeat_dialog_every_number"
+        android:id="@+id/repeat_dialog_every_number_edit_text"
         android:layout_width="60dp"
         android:layout_height="56dp"
         android:layout_marginStart="16dp"
@@ -29,7 +29,7 @@
         android:paddingTop="12dp"
         android:paddingBottom="12dp"
         android:text="1"
-        app:layout_constraintStart_toEndOf="@+id/repeat_dialog_text_every"
+        app:layout_constraintStart_toEndOf="@+id/repeat_dialog_every_text"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -45,7 +45,7 @@
         android:text="@string/week"
         app:drawableEndCompat="@drawable/ic_expand_more_24"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/repeat_dialog_every_number"
+        app:layout_constraintStart_toEndOf="@+id/repeat_dialog_every_number_edit_text"
         app:layout_constraintTop_toTopOf="parent" />
 
     <!-- days begins -->
