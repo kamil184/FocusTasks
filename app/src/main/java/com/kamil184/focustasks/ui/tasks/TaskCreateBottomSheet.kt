@@ -17,7 +17,6 @@ import androidx.core.view.updatePadding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.kamil184.focustasks.R
 import com.kamil184.focustasks.databinding.TaskCreateBinding
-import com.kamil184.focustasks.ui.dialogs.DatePickerDialog
 
 
 class TaskCreateBottomSheet : BottomSheetDialogFragment() {

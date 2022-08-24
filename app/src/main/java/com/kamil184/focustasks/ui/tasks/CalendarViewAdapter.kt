@@ -1,4 +1,4 @@
-package com.kamil184.focustasks.ui.dialogs
+package com.kamil184.focustasks.ui.tasks
 
 import android.content.res.Configuration
 import android.graphics.Typeface

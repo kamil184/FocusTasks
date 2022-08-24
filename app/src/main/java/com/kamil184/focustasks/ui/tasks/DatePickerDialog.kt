@@ -1,9 +1,10 @@
-package com.kamil184.focustasks.ui.dialogs
+package com.kamil184.focustasks.ui.tasks
 
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.text.format.DateFormat.is24HourFormat
+import android.view.WindowInsets
 import androidx.fragment.app.DialogFragment
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -31,7 +32,6 @@ class DatePickerDialog(private val onDismissListener: () -> Unit) : DialogFragme
     }
 
     private val adapter = CalendarViewPagerAdapter()
-
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         _binding = DatePickerDialogBinding.inflate(layoutInflater, null, false)
@@ -77,6 +77,11 @@ class DatePickerDialog(private val onDismissListener: () -> Unit) : DialogFragme
                 binding.datePickerCalendarTimeText.setTextColor(getColorFromAttr(requireContext(), R.attr.colorOnSurfaceVariant))
             }
             timePicker.show(parentFragmentManager, "MaterialTimePicker")
+        }
+
+        binding.datePickerCalendarRepeatContainer.setOnClickListener {
+            val repeatDialog = RepeatDialog()
+            repeatDialog.show(parentFragmentManager, RepeatDialog.TAG)
         }
         return dialog.create()
     }

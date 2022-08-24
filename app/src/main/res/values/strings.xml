@@ -20,6 +20,11 @@
     <string name="low">Низкий</string>
     <string name="none">Нет</string>
     <string name="description">Описание</string>
+    <string name="every">Кажд.</string>
+    <string name="day">День</string>
+    <string name="week">Неделя</string>
+    <string name="month">Месяц</string>
+    <string name="year">Год</string>
 
     <!--first day is sunday, last day is saturday-->
     <string-array name="calendar_days">

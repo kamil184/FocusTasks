@@ -1,6 +1,5 @@
-package com.kamil184.focustasks.ui.dialogs
+package com.kamil184.focustasks.ui.tasks
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
