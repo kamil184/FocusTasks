@@ -1,6 +1,7 @@
 package com.kamil184.focustasks.ui.tasks
 
 import android.app.Dialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.widget.PopupMenu
@@ -10,7 +11,8 @@ import com.kamil184.focustasks.R
 import com.kamil184.focustasks.databinding.RepeatDialogBinding
 import java.util.*
 
-class RepeatDialog : DialogFragment(), RepeatDialogDayTextView.StateOnClickListener {
+class RepeatDialog(private val onCloseListener: () -> Unit) : DialogFragment(),
+    RepeatDialogDayTextView.StateOnClickListener {
     private var _binding: RepeatDialogBinding? = null
     private val binding get() = _binding!!
 
@@ -79,6 +81,7 @@ class RepeatDialog : DialogFragment(), RepeatDialogDayTextView.StateOnClickListe
             requireContext().getDrawable(R.drawable.ic_expand_less_24),
             null)
     }
+
     private fun fillDayList() {
         _daysList = listOf(binding.repeatDialogMonday,
             binding.repeatDialogTuesday,
@@ -124,6 +127,16 @@ class RepeatDialog : DialogFragment(), RepeatDialogDayTextView.StateOnClickListe
             if (day.isClicked) count++
         }
         return count > 1
+    }
+
+    override fun onCancel(dialog: DialogInterface) {
+        super.onCancel(dialog)
+        onCloseListener.invoke()
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        onCloseListener.invoke()
     }
 
     override fun onDestroyView() {

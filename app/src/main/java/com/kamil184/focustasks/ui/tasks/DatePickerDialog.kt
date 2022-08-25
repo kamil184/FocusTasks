@@ -4,7 +4,6 @@ import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.text.format.DateFormat.is24HourFormat
-import android.view.WindowInsets
 import androidx.fragment.app.DialogFragment
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -20,6 +19,10 @@ import java.util.*
 class DatePickerDialog(private val onDismissListener: () -> Unit) : DialogFragment() {
     private var _binding: DatePickerDialogBinding? = null
     private val binding get() = _binding!!
+
+    private var repeatDialog: RepeatDialog? = null
+    private var _timePicker: MaterialTimePicker? = null
+    private val timePicker get() = _timePicker!!
 
     private val onPageChangeCallback = object :
         ViewPager2.OnPageChangeCallback() {
@@ -55,7 +58,7 @@ class DatePickerDialog(private val onDismissListener: () -> Unit) : DialogFragme
             val isSystem24Hour = is24HourFormat(context)
             val clockFormat = if (isSystem24Hour) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H
             val calendar = Calendar.getInstance()
-            val timePicker = MaterialTimePicker.Builder()
+            _timePicker = MaterialTimePicker.Builder()
                 .setTimeFormat(clockFormat)
                 .setHour(calendar.get(Calendar.HOUR_OF_DAY))
                 .setMinute(calendar.get(Calendar.MINUTE))
@@ -70,20 +73,44 @@ class DatePickerDialog(private val onDismissListener: () -> Unit) : DialogFragme
                     else timePicker.hour - 12
                     if (h == 0) h = 12
                     val amPmText = if (isAm) "AM" else "PM"
-                    val m = if(timePicker.minute<10) "0${timePicker.minute}" else "${timePicker.minute}"
+                    val m =
+                        if (timePicker.minute < 10) "0${timePicker.minute}" else "${timePicker.minute}"
                     "$amPmText $h:$m"
                 }
                 binding.datePickerCalendarTimeText.text = text
-                binding.datePickerCalendarTimeText.setTextColor(getColorFromAttr(requireContext(), R.attr.colorOnSurfaceVariant))
+                binding.datePickerCalendarTimeText.setTextColor(getColorFromAttr(requireContext(),
+                    R.attr.colorOnSurfaceVariant))
+            }
+
+            timePicker.addOnCancelListener {
+                getDialog()?.show()
+                _timePicker = null
+            }
+
+            timePicker.addOnDismissListener {
+                getDialog()?.show()
+                _timePicker = null
             }
             timePicker.show(parentFragmentManager, "MaterialTimePicker")
+            getDialog()?.hide()
         }
 
         binding.datePickerCalendarRepeatContainer.setOnClickListener {
-            val repeatDialog = RepeatDialog()
-            repeatDialog.show(parentFragmentManager, RepeatDialog.TAG)
+            repeatDialog = RepeatDialog {
+                getDialog()?.show()
+                repeatDialog = null
+            }
+            repeatDialog?.show(parentFragmentManager, RepeatDialog.TAG)
+            getDialog()?.hide()
+
         }
         return dialog.create()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (repeatDialog != null) dialog?.hide()
+        if (_timePicker != null) dialog?.hide()
     }
 
     override fun onDismiss(dialog: DialogInterface) {
