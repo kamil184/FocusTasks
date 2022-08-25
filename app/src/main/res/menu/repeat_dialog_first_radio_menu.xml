@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/repeat_dialog_first_radio_btn_1_menu"
+        android:title="@string/day_1" />
+    <item
+        android:id="@+id/repeat_dialog_first_radio_btn_2_menu"
+        android:title="@string/day_2" />
+    <item
+        android:id="@+id/repeat_dialog_first_radio_btn_3_menu"
+        android:title="@string/day_3" />
+    <item
+        android:id="@+id/repeat_dialog_first_radio_btn_4_menu"
+        android:title="@string/day_4" />
+    <item
+        android:id="@+id/repeat_dialog_first_radio_btn_5_menu"
+        android:title="@string/day_5" />
+    <item
+        android:id="@+id/repeat_dialog_first_radio_btn_6_menu"
+        android:title="@string/day_6" />
+    <item
+        android:id="@+id/repeat_dialog_first_radio_btn_7_menu"
+        android:title="@string/day_7" />
+    <item
+        android:id="@+id/repeat_dialog_first_radio_btn_8_menu"
+        android:title="@string/day_8" />
+    <item
+        android:id="@+id/repeat_dialog_first_radio_btn_9_menu"
+        android:title="@string/day_9" />
+    <item
+        android:id="@+id/repeat_dialog_first_radio_btn_10_menu"
+        android:title="@string/day_10" />
+    <item
+        android:id="@+id/repeat_dialog_first_radio_btn_11_menu"
+        android:title="@string/day_11" />
+    <item
+        android:id="@+id/repeat_dialog_first_radio_btn_12_menu"
+        android:title="@string/day_12" />
+    <item
+        android:id="@+id/repeat_dialog_first_radio_btn_13_menu"
+        android:title="@string/day_13" />
+    <item
+        android:id="@+id/repeat_dialog_first_radio_btn_14_menu"
+        android:title="@string/day_14" />
+    <item
+        android:id="@+id/repeat_dialog_first_radio_btn_15_menu"
+        android:title="@string/day_15" />
+    <item
+        android:id="@+id/repeat_dialog_first_radio_btn_16_menu"
+        android:title="@string/day_16" />
+    <item
+        android:id="@+id/repeat_dialog_first_radio_btn_17_menu"
+        android:title="@string/day_17" />
+    <item
+        android:id="@+id/repeat_dialog_first_radio_btn_18_menu"
+        android:title="@string/day_18" />
+    <item
+        android:id="@+id/repeat_dialog_first_radio_btn_19_menu"
+        android:title="@string/day_19" />
+    <item
+        android:id="@+id/repeat_dialog_first_radio_btn_20_menu"
+        android:title="@string/day_20" />
+    <item
+        android:id="@+id/repeat_dialog_first_radio_btn_21_menu"
+        android:title="@string/day_21" />
+    <item
+        android:id="@+id/repeat_dialog_first_radio_btn_22_menu"
+        android:title="@string/day_22" />
+    <item
+        android:id="@+id/repeat_dialog_first_radio_btn_23_menu"
+        android:title="@string/day_23" />
+    <item
+        android:id="@+id/repeat_dialog_first_radio_btn_24_menu"
+        android:title="@string/day_24" />
+    <item
+        android:id="@+id/repeat_dialog_first_radio_btn_25_menu"
+        android:title="@string/day_25" />
+    <item
+        android:id="@+id/repeat_dialog_first_radio_btn_26_menu"
+        android:title="@string/day_26" />
+    <item
+        android:id="@+id/repeat_dialog_first_radio_btn_27_menu"
+        android:title="@string/day_27" />
+    <item
+        android:id="@+id/repeat_dialog_first_radio_btn_28_menu"
+        android:title="@string/day_28" />
+    <item
+        android:id="@+id/repeat_dialog_first_radio_btn_29_menu"
+        android:title="@string/day_29" />
+    <item
+        android:id="@+id/repeat_dialog_first_radio_btn_30_menu"
+        android:title="@string/day_30" />
+    <item
+        android:id="@+id/repeat_dialog_first_radio_btn_31_menu"
+        android:title="@string/day_31" />
+    <item
+        android:id="@+id/repeat_dialog_first_radio_btn_last_menu"
+        android:title="@string/last_day" />
+
+</menu>

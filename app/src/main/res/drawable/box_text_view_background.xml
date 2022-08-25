@@ -2,7 +2,9 @@
 <shape
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle"
+    android:tint="?colorSurfaceVariant"
     android:innerRadius="8dp">
+    <size android:height="@dimen/repeat_dialog_text_field_height"/>
     <corners
         android:radius="8dp"/>
 </shape>

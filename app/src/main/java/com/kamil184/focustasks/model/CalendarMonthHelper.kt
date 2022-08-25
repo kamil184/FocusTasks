@@ -29,7 +29,7 @@ class CalendarMonthHelper {
         }
 
         fun getDaysHeadersList(context: Context): Array<String> {
-            val daysStringArray = context.resources.getStringArray(R.array.calendar_days)
+            val daysStringArray = context.resources.getStringArray(R.array.calendar_days_1_letter)
             val days = Array(7) { "" }
             for (i in 0..6) {
                 var dayId = i + (today.firstDayOfWeek - 1)

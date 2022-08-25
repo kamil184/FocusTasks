@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/repeat_dialog_second_radio_count_first_menu"
+        android:title="@string/first" />
+    <item
+        android:id="@+id/repeat_dialog_second_radio_count_second_menu"
+        android:title="@string/second" />
+    <item
+        android:id="@+id/repeat_dialog_second_radio_count_third_menu"
+        android:title="@string/third" />
+    <item
+        android:id="@+id/repeat_dialog_second_radio_count_fourth_menu"
+        android:title="@string/fourth" />
+    <item
+        android:id="@+id/repeat_dialog_second_radio_count_last_menu"
+        android:title="@string/last" />
+</menu>

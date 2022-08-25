@@ -25,16 +25,64 @@
     <string name="week">Неделя</string>
     <string name="month">Месяц</string>
     <string name="year">Год</string>
+    <string name="day_1">1 Число</string>
+    <string name="day_2">2 Число</string>
+    <string name="day_3">3 Число</string>
+    <string name="day_4">4 Число</string>
+    <string name="day_5">5 Число</string>
+    <string name="day_6">6 Число</string>
+    <string name="day_7">7 Число</string>
+    <string name="day_8">8 Число</string>
+    <string name="day_9">9 Число</string>
+    <string name="day_10">10 Число</string>
+    <string name="day_11">11 Число</string>
+    <string name="day_12">12 Число</string>
+    <string name="day_13">13 Число</string>
+    <string name="day_14">14 Число</string>
+    <string name="day_15">15 Число</string>
+    <string name="day_16">16 Число</string>
+    <string name="day_17">17 Число</string>
+    <string name="day_18">18 Число</string>
+    <string name="day_19">19 Число</string>
+    <string name="day_20">20 Число</string>
+    <string name="day_21">21 Число</string>
+    <string name="day_22">22 Число</string>
+    <string name="day_23">23 Число</string>
+    <string name="day_24">24 Число</string>
+    <string name="day_25">25 Число</string>
+    <string name="day_26">26 Число</string>
+    <string name="day_27">27 Число</string>
+    <string name="day_28">28 Число</string>
+    <string name="day_29">29 Число</string>
+    <string name="day_30">30 Число</string>
+    <string name="day_31">31 Число</string>
+    <string name="last_day">Последний день</string>
+    <string name="first">Перв.</string>
+    <string name="second">Втор.</string>
+    <string name="third">Трет.</string>
+    <string name="fourth">Четверт.</string>
+    <string name="last">Последн.</string>
 
     <!--first day is sunday, last day is saturday-->
-    <string-array name="calendar_days">
+    <string-array name="calendar_days_1_letter">
         <item>В</item>  <!--sunday-->
-        <item>П</item>  <!--sunday-->
+        <item>П</item>  <!--monday-->
         <item>В</item>  <!--tuesday-->
         <item>С</item>  <!--wednesday-->
         <item>Ч</item>  <!--thursday-->
         <item>П</item>  <!--friday-->
         <item>С</item>  <!--saturday-->
+    </string-array>
+
+    <!--first day is sunday, last day is saturday-->
+    <string-array name="calendar_days_2_letters">
+        <item>Вс</item>  <!--sunday-->
+        <item>Пн</item>  <!--monday-->
+        <item>Вт</item>  <!--tuesday-->
+        <item>Ср</item>  <!--wednesday-->
+        <item>Чт</item>  <!--thursday-->
+        <item>Пт</item>  <!--friday-->
+        <item>Сб</item>  <!--saturday-->
     </string-array>
 
     <string-array name="months">

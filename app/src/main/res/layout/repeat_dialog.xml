@@ -7,167 +7,212 @@
     android:padding="24dp">
 
     <TextView
-        android:id="@+id/repeat_dialog_every_text"
+        android:id="@+id/repeat_dialog_repeats_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/every"
         android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
-        app:layout_constraintBottom_toBottomOf="@+id/repeat_dialog_every_number_edit_text"
+        app:layout_constraintBottom_toBottomOf="@+id/repeat_dialog_repeats_count_edit_text"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/repeat_dialog_every_number_edit_text" />
+        app:layout_constraintTop_toTopOf="@+id/repeat_dialog_repeats_count_edit_text" />
 
     <EditText
-        android:id="@+id/repeat_dialog_every_number_edit_text"
+        android:id="@+id/repeat_dialog_repeats_count_edit_text"
+        style="@style/Widget.App.TextView.Box"
         android:layout_width="60dp"
-        android:layout_height="56dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:background="@drawable/date_picker_calendar_text_background"
-        android:backgroundTint="?colorSurfaceVariant"
         android:gravity="center"
-        android:maxLength="2"
         android:inputType="number"
+        android:maxLength="2"
         android:paddingTop="12dp"
         android:paddingBottom="12dp"
         android:text="1"
-        app:layout_constraintStart_toEndOf="@+id/repeat_dialog_every_text"
+        app:layout_constraintStart_toEndOf="@+id/repeat_dialog_repeats_text"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/repeat_dialog_every_time_units"
+        android:id="@+id/repeat_dialog_repeats_time_units_text"
+        style="@style/Widget.App.TextView.Box"
         android:layout_width="0dp"
-        android:layout_height="56dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:background="@drawable/date_picker_calendar_text_background"
-        android:backgroundTint="?colorSurfaceVariant"
         android:gravity="center_vertical"
-        android:inputType="none"
         android:padding="12dp"
-        android:text="@string/week"
         app:drawableEndCompat="@drawable/ic_expand_more_24"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/repeat_dialog_every_number_edit_text"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/repeat_dialog_repeats_count_edit_text"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/week" />
 
     <!-- days begins -->
     <com.kamil184.focustasks.ui.tasks.RepeatDialogDayTextView
-        android:id="@+id/repeat_dialog_monday"
+        android:id="@+id/repeat_dialog_day_1"
         android:layout_width="@dimen/repeat_dialog_day_size"
         android:layout_height="@dimen/repeat_dialog_day_size"
         android:layout_marginTop="16dp"
         android:background="@drawable/repeat_dialog_day_background"
         android:gravity="center"
         android:textAppearance="@style/TextAppearance.Material3.BodySmall"
-        app:layout_constraintEnd_toStartOf="@+id/repeat_dialog_tuesday"
+        app:layout_constraintEnd_toStartOf="@+id/repeat_dialog_day_2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/repeat_dialog_every_time_units"
+        app:layout_constraintTop_toBottomOf="@+id/repeat_dialog_repeats_time_units_text"
         tools:backgroundTint="?colorPrimary"
         tools:text="П"
         tools:textColor="?colorOnPrimary"
         tools:visibility="gone" />
 
     <com.kamil184.focustasks.ui.tasks.RepeatDialogDayTextView
-        android:id="@+id/repeat_dialog_tuesday"
+        android:id="@+id/repeat_dialog_day_2"
         android:layout_width="@dimen/repeat_dialog_day_size"
         android:layout_height="@dimen/repeat_dialog_day_size"
         android:background="@drawable/repeat_dialog_day_background"
         android:gravity="center"
         android:textAppearance="@style/TextAppearance.Material3.BodySmall"
-        app:layout_constraintEnd_toStartOf="@+id/repeat_dialog_wednesday"
-        app:layout_constraintStart_toEndOf="@+id/repeat_dialog_monday"
-        app:layout_constraintTop_toTopOf="@+id/repeat_dialog_monday"
+        app:layout_constraintEnd_toStartOf="@+id/repeat_dialog_day_3"
+        app:layout_constraintStart_toEndOf="@+id/repeat_dialog_day_1"
+        app:layout_constraintTop_toTopOf="@+id/repeat_dialog_day_1"
         tools:backgroundTint="?colorSurfaceVariant"
         tools:text="В"
         tools:textColor="?colorOnSurfaceVariant"
         tools:visibility="gone" />
 
     <com.kamil184.focustasks.ui.tasks.RepeatDialogDayTextView
-        android:id="@+id/repeat_dialog_wednesday"
+        android:id="@+id/repeat_dialog_day_3"
         android:layout_width="@dimen/repeat_dialog_day_size"
         android:layout_height="@dimen/repeat_dialog_day_size"
         android:background="@drawable/repeat_dialog_day_background"
         android:gravity="center"
         android:textAppearance="@style/TextAppearance.Material3.BodySmall"
-        app:layout_constraintEnd_toStartOf="@+id/repeat_dialog_thursday"
-        app:layout_constraintStart_toEndOf="@+id/repeat_dialog_tuesday"
-        app:layout_constraintTop_toTopOf="@+id/repeat_dialog_monday"
+        app:layout_constraintEnd_toStartOf="@+id/repeat_dialog_day_4"
+        app:layout_constraintStart_toEndOf="@+id/repeat_dialog_day_2"
+        app:layout_constraintTop_toTopOf="@+id/repeat_dialog_day_1"
         tools:backgroundTint="?colorSurfaceVariant"
         tools:text="С"
         tools:textColor="?colorOnSurfaceVariant"
         tools:visibility="gone" />
 
     <com.kamil184.focustasks.ui.tasks.RepeatDialogDayTextView
-        android:id="@+id/repeat_dialog_thursday"
+        android:id="@+id/repeat_dialog_day_4"
         android:layout_width="@dimen/repeat_dialog_day_size"
         android:layout_height="@dimen/repeat_dialog_day_size"
         android:background="@drawable/repeat_dialog_day_background"
         android:gravity="center"
         android:textAppearance="@style/TextAppearance.Material3.BodySmall"
-        app:layout_constraintEnd_toStartOf="@+id/repeat_dialog_friday"
-        app:layout_constraintStart_toEndOf="@+id/repeat_dialog_wednesday"
-        app:layout_constraintTop_toTopOf="@+id/repeat_dialog_monday"
+        app:layout_constraintEnd_toStartOf="@+id/repeat_dialog_day_5"
+        app:layout_constraintStart_toEndOf="@+id/repeat_dialog_day_3"
+        app:layout_constraintTop_toTopOf="@+id/repeat_dialog_day_1"
         tools:backgroundTint="?colorPrimary"
         tools:text="Ч"
         tools:textColor="?colorOnPrimary"
         tools:visibility="gone" />
 
     <com.kamil184.focustasks.ui.tasks.RepeatDialogDayTextView
-        android:id="@+id/repeat_dialog_friday"
+        android:id="@+id/repeat_dialog_day_5"
         android:layout_width="@dimen/repeat_dialog_day_size"
         android:layout_height="@dimen/repeat_dialog_day_size"
         android:background="@drawable/repeat_dialog_day_background"
         android:gravity="center"
         android:textAppearance="@style/TextAppearance.Material3.BodySmall"
-        app:layout_constraintEnd_toStartOf="@+id/repeat_dialog_saturday"
-        app:layout_constraintStart_toEndOf="@+id/repeat_dialog_thursday"
-        app:layout_constraintTop_toTopOf="@+id/repeat_dialog_monday"
+        app:layout_constraintEnd_toStartOf="@+id/repeat_dialog_day_6"
+        app:layout_constraintStart_toEndOf="@+id/repeat_dialog_day_4"
+        app:layout_constraintTop_toTopOf="@+id/repeat_dialog_day_1"
         tools:backgroundTint="?colorSurfaceVariant"
         tools:text="П"
         tools:textColor="?colorOnSurfaceVariant"
         tools:visibility="gone" />
 
     <com.kamil184.focustasks.ui.tasks.RepeatDialogDayTextView
-        android:id="@+id/repeat_dialog_saturday"
+        android:id="@+id/repeat_dialog_day_6"
         android:layout_width="@dimen/repeat_dialog_day_size"
         android:layout_height="@dimen/repeat_dialog_day_size"
         android:background="@drawable/repeat_dialog_day_background"
         android:gravity="center"
         android:textAppearance="@style/TextAppearance.Material3.BodySmall"
-        app:layout_constraintEnd_toStartOf="@+id/repeat_dialog_sunday"
-        app:layout_constraintStart_toEndOf="@+id/repeat_dialog_friday"
-        app:layout_constraintTop_toTopOf="@+id/repeat_dialog_monday"
+        app:layout_constraintEnd_toStartOf="@+id/repeat_dialog_day_7"
+        app:layout_constraintStart_toEndOf="@+id/repeat_dialog_day_5"
+        app:layout_constraintTop_toTopOf="@+id/repeat_dialog_day_1"
         tools:backgroundTint="?colorSurfaceVariant"
         tools:text="С"
         tools:textColor="?colorOnSurfaceVariant"
         tools:visibility="gone" />
 
     <com.kamil184.focustasks.ui.tasks.RepeatDialogDayTextView
-        android:id="@+id/repeat_dialog_sunday"
+        android:id="@+id/repeat_dialog_day_7"
         android:layout_width="@dimen/repeat_dialog_day_size"
         android:layout_height="@dimen/repeat_dialog_day_size"
         android:background="@drawable/repeat_dialog_day_background"
         android:gravity="center"
         android:textAppearance="@style/TextAppearance.Material3.BodySmall"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/repeat_dialog_saturday"
-        app:layout_constraintTop_toTopOf="@+id/repeat_dialog_monday"
+        app:layout_constraintStart_toEndOf="@+id/repeat_dialog_day_6"
+        app:layout_constraintTop_toTopOf="@+id/repeat_dialog_day_1"
         tools:backgroundTint="?colorSurfaceVariant"
         tools:text="В"
         tools:textColor="?colorOnSurfaceVariant"
         tools:visibility="gone" />
     <!-- days ends -->
 
-    <!--<RadioGroup
+    <com.google.android.material.radiobutton.MaterialRadioButton
+        android:id="@+id/repeat_dialog_first_radio_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toStartOf="@+id/repeat_dialog_tuesday"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toStartOf="@+id/repeat_dialog_day_2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/repeat_dialog_every_time_units" >
-        <com.google.android.material.radiobutton.MaterialRadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-        <com.google.android.material.radiobutton.MaterialRadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-    </RadioGroup>-->
+        app:layout_constraintTop_toBottomOf="@+id/repeat_dialog_repeats_time_units_text" />
+
+    <TextView
+        android:id="@+id/repeat_dialog_first_radio_text"
+        style="@style/Widget.App.TextView.Box"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:gravity="center_vertical"
+        android:padding="12dp"
+        app:drawableEndCompat="@drawable/ic_expand_more_24"
+        app:layout_constraintBottom_toBottomOf="@+id/repeat_dialog_first_radio_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/repeat_dialog_first_radio_btn"
+        app:layout_constraintTop_toTopOf="@+id/repeat_dialog_first_radio_btn"
+        tools:text="25 Число" />
+
+    <com.google.android.material.radiobutton.MaterialRadioButton
+        android:id="@+id/repeat_dialog_second_radio_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toStartOf="@+id/repeat_dialog_day_2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/repeat_dialog_first_radio_btn" />
+
+    <TextView
+        android:id="@+id/repeat_dialog_second_radio_count_text"
+        style="@style/Widget.App.TextView.Box"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:gravity="center_vertical"
+        android:padding="12dp"
+        app:drawableEndCompat="@drawable/ic_expand_more_24"
+        app:layout_constraintBottom_toBottomOf="@+id/repeat_dialog_second_radio_btn"
+        app:layout_constraintStart_toEndOf="@+id/repeat_dialog_second_radio_btn"
+        app:layout_constraintTop_toTopOf="@+id/repeat_dialog_second_radio_btn"
+        tools:text="Первый" />
+
+    <TextView
+        android:id="@+id/repeat_dialog_second_radio_day_text"
+        style="@style/Widget.App.TextView.Box"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/repeat_dialog_text_field_height"
+        android:layout_marginStart="16dp"
+        android:gravity="center_vertical"
+        android:padding="12dp"
+        app:drawableEndCompat="@drawable/ic_expand_more_24"
+        app:layout_constraintBottom_toBottomOf="@+id/repeat_dialog_second_radio_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/repeat_dialog_second_radio_count_text"
+        app:layout_constraintTop_toTopOf="@+id/repeat_dialog_second_radio_btn"
+        tools:text="Понедельник" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

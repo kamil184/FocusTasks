@@ -11,4 +11,10 @@
     <style name="App.ModalBottomSheetDialog" parent="Widget.MaterialComponents.BottomSheet.Modal">
         <item name="backgroundTint">?android:colorBackground</item>
     </style>
+
+    <style name="Widget.App.TextView.Box" parent="Widget.AppCompat.TextView">
+        <item name="android:background">@drawable/box_text_view_background</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textColor">?colorOnSurfaceVariant</item>
+    </style>
 </resources>
