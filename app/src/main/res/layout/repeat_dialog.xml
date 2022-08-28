@@ -23,13 +23,15 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:gravity="center"
+        android:importantForAutofill="no"
         android:inputType="number"
         android:maxLength="2"
         android:paddingTop="12dp"
         android:paddingBottom="12dp"
-        android:text="1"
         app:layout_constraintStart_toEndOf="@+id/repeat_dialog_repeats_text"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="1"
+        tools:ignore="LabelFor" />
 
     <TextView
         android:id="@+id/repeat_dialog_repeats_time_units_text"

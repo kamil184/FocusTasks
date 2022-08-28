@@ -4,6 +4,8 @@ import android.app.Dialog
 import android.content.DialogInterface
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.widget.CompoundButton
 import android.widget.TextView
@@ -110,18 +112,20 @@ class RepeatDialog(
         binding.repeatDialogSecondRadioBtn.setOnCheckedChangeListener(
             secondRadioBtnOnCheckedChangeListener)
 
-        // if there is no data
+        //TODO: генерировать данные исходя из выбранного дня в DatePickerDialog
+        //      (например, если выбрано 23 февраля, то при выборе "каждый .. месяц" будет 23 число)
+        //if there is no data
         binding.repeatDialogRepeatsTimeUnitsText.setText(R.string.week)
         binding.repeatDialogFirstRadioBtn.isChecked = true
         binding.repeatDialogFirstRadioText.setText(R.string.day_1)
         binding.repeatDialogSecondRadioCountText.setText(R.string.first)
         binding.repeatDialogSecondRadioDayText.text = localeDays2LettersArray[0]
+        binding.repeatDialogRepeatsCountEditText.setText("1")
 
         setDaysViewsListeners()
         setDaysViewsListWithCalendar()
 
         showUpDependingOnTimeUnits(binding.repeatDialogRepeatsTimeUnitsText.text)
-
 
         binding.repeatDialogRepeatsTimeUnitsText.setOnClickListener {
             showPopupWithExpandDrawables(binding.repeatDialogRepeatsTimeUnitsText,
@@ -145,7 +149,7 @@ class RepeatDialog(
                 localeDays2LettersArray, null)
         }
 
-        val dialog = MaterialAlertDialogBuilder(requireContext())
+        val dialogBuilder = MaterialAlertDialogBuilder(requireContext())
             .setNegativeButton("Закрыть") { _, _ ->
 
             }
@@ -166,7 +170,28 @@ class RepeatDialog(
             } //TODO: text
             .setView(binding.root)
 
-        return dialog.create()
+        val dialog = dialogBuilder.create()
+
+        binding.repeatDialogRepeatsCountEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                var isEnabled = false
+                try {
+                    if(s != null || s.toString().isNotEmpty())
+                        isEnabled = s.toString().toInt() >= 1
+                } catch (ignore: NumberFormatException){}
+
+                dialog.getButton(DialogInterface.BUTTON_POSITIVE).isEnabled =
+                    isEnabled
+
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+
+        })
+
+        return dialog
     }
 
     companion object {
@@ -309,7 +334,9 @@ class RepeatDialog(
                     }
                     var secondInPair = -1
                     for (i in localeDays2LettersArray.indices)
-                        if (binding.repeatDialogSecondRadioDayText.text.equals(localeDays2LettersArray[i]))
+                        if (binding.repeatDialogSecondRadioDayText.text.equals(
+                                localeDays2LettersArray[i])
+                        )
                             secondInPair = i + 1
                     if (secondInPair == -1) throw IllegalArgumentException("variable secondInPair must be in 1..7")
 
