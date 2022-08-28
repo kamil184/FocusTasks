@@ -213,6 +213,24 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/repeat_dialog_second_radio_count_text"
         app:layout_constraintTop_toTopOf="@+id/repeat_dialog_second_radio_btn"
-        tools:text="Понедельник" />
+        tools:text="Пн" />
+
+    <!--TODO: Starts Ends-->
+
+    <!--<androidx.constraintlayout.widget.Barrier
+        android:id="@+id/repeat_dialog_barrier_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="repeat_dialog_second_radio_btn,repeat_dialog_day_1" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/starts"
+        android:layout_marginTop="16dp"
+        android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/repeat_dialog_barrier_horizontal"/>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

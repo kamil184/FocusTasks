@@ -37,6 +37,7 @@ class TaskCreateBottomSheet : BottomSheetDialogFragment() {
 
         binding.taskCreateCalendarButton.setOnClickListener {
             datePickerDialog = DatePickerDialog {
+                binding.taskCreateEditText.requestFocus()
                 binding.taskCreateEditText.windowInsetsController?.show(WindowInsets.Type.ime())
                 datePickerDialog = null
             }

@@ -9,6 +9,11 @@ class CalendarMonthHelper {
         private val calendar2000 = Calendar.getInstance()
         val today: Calendar = Calendar.getInstance()
 
+        /**
+         * Before call getter, you should call fillDays2LettersList(context: Context)
+         */
+        val localeDays2LettersArray: Array<CharSequence> = Array(7) { "" }
+
         init {
             removeTimeFromCalendar(today)
 
@@ -21,6 +26,20 @@ class CalendarMonthHelper {
         }
 
         val allMonths = getMonths()
+
+        fun fillLocaleDays2LettersList(context: Context) {
+            if (localeDays2LettersArray[0].length != 2) {
+                val daysStringArray =
+                    context.resources.getStringArray(R.array.calendar_days_2_letters)
+                val diff = today.firstDayOfWeek - 1
+                for (i in daysStringArray.indices) {
+                    if (i + diff > 6)
+                        localeDays2LettersArray[i] = daysStringArray[i + diff - 7]
+                    else
+                        localeDays2LettersArray[i] = daysStringArray[i + diff]
+                }
+            }
+        }
 
         fun getMonthTitle(context: Context, c: Calendar): String {
             val months = context.resources.getStringArray(R.array.months)
@@ -99,6 +118,7 @@ class CalendarMonthHelper {
         }
         return days
     }
+
     private fun getDay(calendar: Calendar): CalendarDay {
         val day = calendar.clone() as Calendar
 

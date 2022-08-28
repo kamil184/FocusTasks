@@ -9,10 +9,8 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
-import com.kamil184.focustasks.R
 import com.kamil184.focustasks.databinding.DatePickerDialogBinding
 import com.kamil184.focustasks.model.CalendarMonthHelper
-import com.kamil184.focustasks.util.getColorFromAttr
 import java.util.*
 
 
@@ -78,8 +76,6 @@ class DatePickerDialog(private val onDismissListener: () -> Unit) : DialogFragme
                     "$amPmText $h:$m"
                 }
                 binding.datePickerCalendarTimeText.text = text
-                binding.datePickerCalendarTimeText.setTextColor(getColorFromAttr(requireContext(),
-                    R.attr.colorOnSurfaceVariant))
             }
 
             timePicker.addOnCancelListener {
@@ -96,10 +92,12 @@ class DatePickerDialog(private val onDismissListener: () -> Unit) : DialogFragme
         }
 
         binding.datePickerCalendarRepeatContainer.setOnClickListener {
-            repeatDialog = RepeatDialog {
+            repeatDialog = RepeatDialog({ repeat ->
+                binding.datePickerCalendarRepeatText.text = repeat.getText(requireContext())
+            }, {
                 getDialog()?.show()
                 repeatDialog = null
-            }
+            })
             repeatDialog?.show(parentFragmentManager, RepeatDialog.TAG)
             getDialog()?.hide()
 
