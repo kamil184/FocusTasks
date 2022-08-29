@@ -4,19 +4,26 @@ import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.text.format.DateFormat.is24HourFormat
+import android.util.Log
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.setFragmentResult
+import androidx.fragment.app.setFragmentResultListener
+import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
+import com.kamil184.focustasks.R
 import com.kamil184.focustasks.databinding.DatePickerDialogBinding
 import com.kamil184.focustasks.model.CalendarMonthHelper
+import com.kamil184.focustasks.ui.calendar.CalendarViewModel
 import java.util.*
 
 
 class DatePickerDialog(private val onDismissListener: () -> Unit) : DialogFragment() {
     private var _binding: DatePickerDialogBinding? = null
     private val binding get() = _binding!!
+    private lateinit var viewModel: DatePickerViewModel
 
     private var repeatDialog: RepeatDialog? = null
     private var _timePicker: MaterialTimePicker? = null
@@ -36,6 +43,12 @@ class DatePickerDialog(private val onDismissListener: () -> Unit) : DialogFragme
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         _binding = DatePickerDialogBinding.inflate(layoutInflater, null, false)
+        viewModel =
+            ViewModelProvider(this).get(DatePickerViewModel::class.java)
+
+        val isSystem24Hour = is24HourFormat(context)
+        val clockFormat = if (isSystem24Hour) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H
+
         binding.datePickerCalendarPager.offscreenPageLimit = 1
         binding.datePickerCalendarPager.adapter = adapter
         binding.datePickerCalendarPager.registerOnPageChangeCallback(onPageChangeCallback)
@@ -44,37 +57,30 @@ class DatePickerDialog(private val onDismissListener: () -> Unit) : DialogFragme
         setDaysHeader()
 
         val dialog = MaterialAlertDialogBuilder(requireContext())
-            .setNegativeButton("Закрыть") { _, _ ->
+            .setNegativeButton(getString(R.string.dialog_negative_button_text)) { _, _ ->
 
             }
-            .setPositiveButton("Готово") { _, _ ->
-                //TODO save result
+            .setPositiveButton(getString(R.string.dialog_positive_button_text)) { _, _ ->
+                val bundle = Bundle()
+                bundle.putParcelable(BUNDLE_KEY_REPEAT, viewModel.repeat.value)
+                bundle.putSerializable(BUNDLE_KEY_CALENDAR, adapter.calendarMonthHelper.selectedDay.calendar)
+                setFragmentResult(REQUEST_KEY, bundle)
             }
             .setView(binding.root)
 
         binding.datePickerCalendarTimeContainer.setOnClickListener {
-            val isSystem24Hour = is24HourFormat(context)
-            val clockFormat = if (isSystem24Hour) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H
             val calendar = Calendar.getInstance()
             _timePicker = MaterialTimePicker.Builder()
                 .setTimeFormat(clockFormat)
+                .setTitleText(R.string.select_time)
                 .setHour(calendar.get(Calendar.HOUR_OF_DAY))
                 .setMinute(calendar.get(Calendar.MINUTE))
+                .setPositiveButtonText(getString(R.string.dialog_positive_button_text))
+                .setNegativeButtonText(getString(R.string.dialog_negative_button_text))
                 .build()
 
             timePicker.addOnPositiveButtonClickListener {
-                val text = if (isSystem24Hour) {
-                    "${timePicker.hour}:${timePicker.minute}"
-                } else {
-                    val isAm = timePicker.hour < 12
-                    var h = if (isAm) timePicker.hour
-                    else timePicker.hour - 12
-                    if (h == 0) h = 12
-                    val amPmText = if (isAm) "AM" else "PM"
-                    val m =
-                        if (timePicker.minute < 10) "0${timePicker.minute}" else "${timePicker.minute}"
-                    "$amPmText $h:$m"
-                }
+                val text = viewModel.getTimeText(timePicker.hour, timePicker.minute, isSystem24Hour)
                 binding.datePickerCalendarTimeText.text = text
             }
 
@@ -92,15 +98,19 @@ class DatePickerDialog(private val onDismissListener: () -> Unit) : DialogFragme
         }
 
         binding.datePickerCalendarRepeatContainer.setOnClickListener {
-            repeatDialog = RepeatDialog({ repeat ->
-                binding.datePickerCalendarRepeatText.text = repeat.getText(requireContext())
-            }, {
+            repeatDialog = RepeatDialog {
                 getDialog()?.show()
                 repeatDialog = null
-            })
+            }
             repeatDialog?.show(parentFragmentManager, RepeatDialog.TAG)
             getDialog()?.hide()
 
+        }
+
+        setFragmentResultListener(RepeatDialog.REQUEST_KEY) { key, bundle ->
+            Log.d("FragmentResult", "childFragmentManager listener")
+            viewModel.repeat.value = bundle.getParcelable(RepeatDialog.BUNDLE_KEY_REPEAT)
+            binding.datePickerCalendarRepeatText.text = viewModel.repeat.value?.getText(requireContext())
         }
         return dialog.create()
     }
@@ -129,6 +139,9 @@ class DatePickerDialog(private val onDismissListener: () -> Unit) : DialogFragme
 
     companion object {
         const val TAG = "DatePickerDialog"
+        const val REQUEST_KEY = "DatePickerRequestKey"
+        const val BUNDLE_KEY_REPEAT = "BundleKeyRepeat"
+        const val BUNDLE_KEY_CALENDAR = "BundleKeyCalendar"
     }
 
     override fun onDestroyView() {

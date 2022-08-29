@@ -68,6 +68,9 @@
     <string name="weeks">недели</string>
     <string name="days">дней</string>
     <string name="yearly">ежегодно</string>
+    <string name="select_time">Выбрать время</string>
+    <string name="dialog_negative_button_text">Закрыть</string>
+    <string name="dialog_positive_button_text">Готово</string>
 
     <!--first day is sunday, last day is saturday-->
     <string-array name="calendar_days_1_letter">

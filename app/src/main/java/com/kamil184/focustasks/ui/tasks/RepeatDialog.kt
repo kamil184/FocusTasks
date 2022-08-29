@@ -12,7 +12,9 @@ import android.widget.TextView
 import androidx.annotation.MenuRes
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.PopupMenu
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.setFragmentResult
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.kamil184.focustasks.R
 import com.kamil184.focustasks.databinding.RepeatDialogBinding
@@ -24,7 +26,6 @@ import com.kamil184.focustasks.util.getColorFromAttr
 import java.util.*
 
 class RepeatDialog(
-    private val onPositiveButtonClickListener: (Repeat) -> Unit,
     private val onCloseListener: () -> Unit,
 ) : DialogFragment(),
     RepeatDialogDayTextView.StateOnClickListener {
@@ -150,10 +151,10 @@ class RepeatDialog(
         }
 
         val dialogBuilder = MaterialAlertDialogBuilder(requireContext())
-            .setNegativeButton("Закрыть") { _, _ ->
+            .setNegativeButton(getString(R.string.dialog_negative_button_text)) { _, _ ->
 
             }
-            .setPositiveButton("Готово") { _, _ ->
+            .setPositiveButton(getString(R.string.dialog_positive_button_text)) { _, _ ->
                 val repeat = when (binding.repeatDialogRepeatsTimeUnitsText.text) {
                     requireContext().getString(R.string.day) -> Repeat.DAY
                     requireContext().getString(R.string.week) -> Repeat.WEEK
@@ -166,7 +167,7 @@ class RepeatDialog(
 
                 repeat.count = binding.repeatDialogRepeatsCountEditText.text.toString().toInt()
 
-                onPositiveButtonClickListener.invoke(repeat)
+                setFragmentResult(REQUEST_KEY, bundleOf(BUNDLE_KEY_REPEAT to repeat))
             } //TODO: text
             .setView(binding.root)
 
@@ -196,6 +197,8 @@ class RepeatDialog(
 
     companion object {
         const val TAG = "RepeatDialog"
+        const val REQUEST_KEY = "RepeatRequestKey"
+        const val BUNDLE_KEY_REPEAT = "BundleKeyRepeat"
     }
 
     private fun showPopupWithExpandDrawables(

@@ -10,7 +10,7 @@ import java.util.*
 
 class CalendarViewPagerAdapter : RecyclerView.Adapter<CalendarViewPagerAdapter.ViewHolder>() {
 
-    private val calendarMonthHelper = CalendarMonthHelper()
+    val calendarMonthHelper = CalendarMonthHelper()
 
     inner class ViewHolder(private val recyclerView: RecyclerView) :
         RecyclerView.ViewHolder(recyclerView) {

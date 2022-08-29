@@ -1,12 +1,15 @@
 package com.kamil184.focustasks.model
 
 import android.content.Context
+import android.os.Parcelable
 import com.kamil184.focustasks.R
 import com.kamil184.focustasks.model.CalendarMonthHelper.Companion.localeDays2LettersArray
 import com.kamil184.focustasks.model.CalendarMonthHelper.Companion.today
+import kotlinx.parcelize.Parcelize
 
 //TODO: make russia text normal (просколнять все)
-enum class Repeat {
+@Parcelize
+enum class Repeat: Parcelable {
     DAY {
         override fun getText(context: Context): String {
             checkCount()

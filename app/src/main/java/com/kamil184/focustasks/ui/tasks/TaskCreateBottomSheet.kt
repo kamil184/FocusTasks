@@ -14,9 +14,12 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
+import androidx.fragment.app.setFragmentResultListener
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.kamil184.focustasks.R
 import com.kamil184.focustasks.databinding.TaskCreateBinding
+import java.util.*
 
 
 class TaskCreateBottomSheet : BottomSheetDialogFragment() {
@@ -24,12 +27,17 @@ class TaskCreateBottomSheet : BottomSheetDialogFragment() {
     private val binding get() = _binding!!
     private var datePickerDialog: DatePickerDialog? = null
 
+    private lateinit var viewModel: TaskCreateViewModel
+
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
         _binding = TaskCreateBinding.inflate(inflater, container, false)
+        viewModel =
+            ViewModelProvider(this).get(TaskCreateViewModel::class.java)
 
         binding.taskCreatePriorityButton.setOnClickListener {
             showPriorityPopup(it)
@@ -49,10 +57,15 @@ class TaskCreateBottomSheet : BottomSheetDialogFragment() {
         ViewCompat
             .setOnApplyWindowInsetsListener(binding.root) { view, insets ->
                 val ins = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom
-                if (datePickerDialog == null || ins==0)
+                if (datePickerDialog == null || ins == 0)
                     view.updatePadding(bottom = ins)
                 insets
             }
+
+        setFragmentResultListener(DatePickerDialog.REQUEST_KEY) { key, bundle ->
+            viewModel.task.value?.repeat = bundle.getParcelable(DatePickerDialog.BUNDLE_KEY_REPEAT)
+            viewModel.task.value?.calendar = bundle.getSerializable(DatePickerDialog.BUNDLE_KEY_CALENDAR) as Calendar
+        }
         return binding.root
     }
 
