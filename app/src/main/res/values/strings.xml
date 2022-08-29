@@ -108,4 +108,40 @@
         <item>Ноябрь</item>
         <item>Декабрь</item>
     </string-array>
+
+    <string-array name="calendar_days_from_1_to_31">
+        <item>1 число</item>
+        <item>2 число</item>
+        <item>3 число</item>
+        <item>4 число</item>
+        <item>5 число</item>
+        <item>6 число</item>
+        <item>7 число</item>
+        <item>8 число</item>
+        <item>9 число</item>
+        <item>10 число</item>
+        <item>11 число</item>
+        <item>12 число</item>
+        <item>13 число</item>
+        <item>14 число</item>
+        <item>15 число</item>
+        <item>16 число</item>
+        <item>17 число</item>
+        <item>18 число</item>
+        <item>19 число</item>
+        <item>20 число</item>
+        <item>21 число</item>
+        <item>22 число</item>
+        <item>23 число</item>
+        <item>24 число</item>
+        <item>25 число</item>
+        <item>26 число</item>
+        <item>27 число</item>
+        <item>28 число</item>
+        <item>29 число</item>
+        <item>30 число</item>
+        <item>31 число</item>
+        <item>последний день</item>
+    </string-array>
+
 </resources>

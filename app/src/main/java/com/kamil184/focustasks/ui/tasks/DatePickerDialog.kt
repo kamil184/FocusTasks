@@ -5,6 +5,7 @@ import android.content.DialogInterface
 import android.os.Bundle
 import android.text.format.DateFormat.is24HourFormat
 import android.util.Log
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
@@ -102,6 +103,9 @@ class DatePickerDialog(private val onDismissListener: () -> Unit) : DialogFragme
                 getDialog()?.show()
                 repeatDialog = null
             }
+            if(viewModel.repeat.value != null)
+                repeatDialog!!.arguments = bundleOf(RepeatDialog.BUNDLE_KEY_REPEAT to viewModel.repeat.value)
+
             repeatDialog?.show(parentFragmentManager, RepeatDialog.TAG)
             getDialog()?.hide()
 

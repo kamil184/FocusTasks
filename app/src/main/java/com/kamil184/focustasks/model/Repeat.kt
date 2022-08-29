@@ -81,11 +81,9 @@ enum class Repeat: Parcelable {
                         }
 
                     if (pairInfo.second as Int !in 1..7) throw IllegalArgumentException("second variable in info must be in 1..7")
-                    val daysStringArray =
+                    val normalDaysStringArray =
                         context.resources.getStringArray(R.array.calendar_days_2_letters)
-                    var id = pairInfo.second as Int - 1 + today.firstDayOfWeek - 1
-                    if (id > 6) id -= 7
-                    val textEnd = daysStringArray[id]
+                    val textEnd = normalDaysStringArray[pairInfo.second as Int - 1]
 
                     return "$textBegin$textMiddle $textEnd"
 
@@ -105,6 +103,13 @@ enum class Repeat: Parcelable {
 
     var count: Int? = null
 
+    //normal - USA (first day - sunday), local - all others
+    /**
+     * if it's WEEK it can be Array<Boolean>
+     *
+     * if it's MONTH it can be Int in 1.32 (32 is last days index)
+     * or Pair<Int,Int>, then first in 1..5, second in 1..7 (normal id: 1 - sunday)
+     */
     var info: Any? = null
 
     abstract fun getText(context: Context): String
@@ -112,5 +117,13 @@ enum class Repeat: Parcelable {
     protected fun checkCount() {
         if (count == null) throw IllegalArgumentException("variable count isn't initialised!")
         if (count!! < 1) throw IllegalArgumentException("variable count must be > 0")
+    }
+
+    fun getNameRes() = when(ordinal){
+        DAY.ordinal -> R.string.day
+        WEEK.ordinal -> R.string.week
+        MONTH.ordinal -> R.string.month
+        YEAR.ordinal -> R.string.year
+        else -> throw IllegalArgumentException("Repeat text must be day, week, month or year")
     }
 }
