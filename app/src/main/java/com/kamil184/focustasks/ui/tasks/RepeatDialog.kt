@@ -2,7 +2,6 @@ package com.kamil184.focustasks.ui.tasks
 
 import android.app.Dialog
 import android.content.DialogInterface
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -15,24 +14,26 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.kamil184.focustasks.R
 import com.kamil184.focustasks.databinding.RepeatDialogBinding
-import com.kamil184.focustasks.model.CalendarMonthHelper
 import com.kamil184.focustasks.model.CalendarMonthHelper.Companion.localeDays2LettersArray
 import com.kamil184.focustasks.model.CalendarMonthHelper.Companion.today
 import com.kamil184.focustasks.model.Repeat
 import com.kamil184.focustasks.util.getColorFromAttr
+import com.kamil184.focustasks.util.parcelable
 import java.util.*
 
 class RepeatDialog(
     private val onCloseListener: () -> Unit,
 ) : DialogFragment(),
     RepeatDialogDayTextView.StateOnClickListener {
+    constructor():this({})
+
     private var _binding: RepeatDialogBinding? = null
     private val binding get() = _binding!!
-    private lateinit var viewModel: RepeatViewModel
+    private val viewModel: RepeatViewModel by viewModels()
 
     private var _daysViewsList: List<RepeatDialogDayTextView>? = null
     private val daysViewsList get() = _daysViewsList!!
@@ -44,13 +45,17 @@ class RepeatDialog(
             }
             return result
         }
-    private val firstRadioBtnMenuItems: Array<CharSequence> = Array(32) { "" }
 
-    private var expandMoreDrawable: Drawable? = null
-    private var expandLessDrawable: Drawable? = null
+    private val expandMoreDrawable by lazy {
+        AppCompatResources.getDrawable(requireContext(),
+            R.drawable.ic_expand_more_24)
+    }
+    private val expandLessDrawable by lazy {
+        AppCompatResources.getDrawable(requireContext(), R.drawable.ic_expand_less_24)
+    }
 
     private val firstRadioBtnOnCheckedChangeListener: CompoundButton.OnCheckedChangeListener =
-        CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
+        CompoundButton.OnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 binding.repeatDialogSecondRadioBtn.setOnCheckedChangeListener(null)
                 binding.repeatDialogSecondRadioBtn.isChecked = false
@@ -75,7 +80,7 @@ class RepeatDialog(
         }
 
     private val secondRadioBtnOnCheckedChangeListener: CompoundButton.OnCheckedChangeListener =
-        CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
+        CompoundButton.OnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 binding.repeatDialogFirstRadioBtn.setOnCheckedChangeListener(null)
                 binding.repeatDialogFirstRadioBtn.isChecked = false
@@ -99,33 +104,27 @@ class RepeatDialog(
             }
         }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel.fillLocaleDays2LettersList(requireContext())
+        viewModel.fillFirstRadioBtnMenuItems(requireContext())
+
+        //TODO: генерировать данные исходя из выбранного дня в DatePickerDialog
+        //      (например, если выбрано 23 февраля, то при выборе "каждый .. месяц" будет 23 число)
+        viewModel.repeat.value = savedInstanceState?.parcelable(BUNDLE_KEY_REPEAT)
+    }
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         _binding = RepeatDialogBinding.inflate(layoutInflater, null, false)
-        viewModel =
-            ViewModelProvider(this).get(RepeatViewModel::class.java)
 
-        expandMoreDrawable =
-            AppCompatResources.getDrawable(requireContext(), R.drawable.ic_expand_more_24)
-        expandLessDrawable =
-            AppCompatResources.getDrawable(requireContext(), R.drawable.ic_expand_less_24)
-
-        fillDayList()
-        CalendarMonthHelper.fillLocaleDays2LettersList(requireContext())
-        val dayString = resources.getString(R.string.day)
-        for (i in 1..31)
-            firstRadioBtnMenuItems[i - 1] = "$i $dayString"
-        firstRadioBtnMenuItems[31] = resources.getString(R.string.last_day)
+        fillDaysViewsList()
 
         binding.repeatDialogFirstRadioBtn.setOnCheckedChangeListener(
             firstRadioBtnOnCheckedChangeListener)
         binding.repeatDialogSecondRadioBtn.setOnCheckedChangeListener(
             secondRadioBtnOnCheckedChangeListener)
 
-        //TODO: генерировать данные исходя из выбранного дня в DatePickerDialog
-        //      (например, если выбрано 23 февраля, то при выборе "каждый .. месяц" будет 23 число)
-        viewModel.repeat.value = arguments?.getParcelable(BUNDLE_KEY_REPEAT)
-        setViews()
-
+        restoreViewState()
         setDaysViewsListeners()
         fillDaysViewsTexts()
 
@@ -140,7 +139,7 @@ class RepeatDialog(
 
         binding.repeatDialogFirstRadioText.setOnClickListener {
             showPopupWithExpandDrawables(binding.repeatDialogFirstRadioText,
-                firstRadioBtnMenuItems, null)
+                viewModel.firstRadioBtnMenuItems, null)
         }
 
         binding.repeatDialogSecondRadioCountText.setOnClickListener {
@@ -158,19 +157,7 @@ class RepeatDialog(
 
             }
             .setPositiveButton(getString(R.string.dialog_positive_button_text)) { _, _ ->
-                val repeat = when (binding.repeatDialogRepeatsTimeUnitsText.text) {
-                    requireContext().getString(R.string.day) -> Repeat.DAY
-                    requireContext().getString(R.string.week) -> Repeat.WEEK
-                    requireContext().getString(R.string.month) -> Repeat.MONTH
-                    requireContext().getString(R.string.year) -> Repeat.YEAR
-                    else -> throw IllegalArgumentException("Repeat text must be day, week, month or year")
-                }
-
-                setRepeatInfo(repeat)
-
-                repeat.count = binding.repeatDialogRepeatsCountEditText.text.toString().toInt()
-
-                setFragmentResult(REQUEST_KEY, bundleOf(BUNDLE_KEY_REPEAT to repeat))
+                setFragmentResult(REQUEST_KEY, bundleOf(BUNDLE_KEY_REPEAT to buildRepeat()))
             } //TODO: text
             .setView(binding.root)
 
@@ -199,7 +186,67 @@ class RepeatDialog(
         return dialog
     }
 
-    private fun setViews() {
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putParcelable(BUNDLE_KEY_REPEAT, viewModel.repeat.value)
+    }
+
+    private fun buildRepeat(): Repeat {
+        val repeat = when (binding.repeatDialogRepeatsTimeUnitsText.text) {
+            requireContext().getString(R.string.day) -> Repeat.DAY
+            requireContext().getString(R.string.week) -> Repeat.WEEK
+            requireContext().getString(R.string.month) -> Repeat.MONTH
+            requireContext().getString(R.string.year) -> Repeat.YEAR
+            else -> throw IllegalArgumentException("Repeat text must be day, week, month or year")
+        }
+
+        setRepeatInfo(repeat)
+
+        repeat.count = binding.repeatDialogRepeatsCountEditText.text.toString().toInt()
+        return repeat
+    }
+
+    private fun setRepeatInfo(repeat: Repeat) {
+        when (binding.repeatDialogRepeatsTimeUnitsText.text) {
+            requireContext().getString(R.string.week) ->
+                repeat.info = daysListChecked
+
+            requireContext().getString(R.string.month) -> {
+                if (binding.repeatDialogFirstRadioBtn.isChecked) {
+                    var isInfoInitialized = false
+                    for (i in 1..31)
+                        if (binding.repeatDialogFirstRadioText.text.contains(i.toString())) {
+                            repeat.info = i
+                            isInfoInitialized = true
+                        }
+                    if (!isInfoInitialized) repeat.info = 32
+                } else {
+                    val firstInPair = when (binding.repeatDialogSecondRadioCountText.text) {
+                        requireContext().getString(R.string.first) -> 1
+                        requireContext().getString(R.string.second) -> 2
+                        requireContext().getString(R.string.third) -> 3
+                        requireContext().getString(R.string.fourth) -> 4
+                        requireContext().getString(R.string.last) -> 5
+                        else -> throw IllegalArgumentException("variable firstInPair must be in 1..5")
+                    }
+                    var secondInPair = -1
+                    val diff = today.firstDayOfWeek - 1
+                    for (i in localeDays2LettersArray.indices)
+                        if (binding.repeatDialogSecondRadioDayText.text.equals(
+                                localeDays2LettersArray[i])
+                        )
+                            secondInPair = i + 1 + diff
+                    if (secondInPair > 7) secondInPair -= 7
+                    if (secondInPair !in 1..7) throw IllegalArgumentException("variable secondInPair must be in 1..7")
+
+                    repeat.info = Pair(firstInPair, secondInPair)
+                }
+            }
+
+        }
+    }
+
+    private fun restoreViewState() {
         if (viewModel.repeat.value != null) {
             binding.repeatDialogRepeatsCountEditText.setText(viewModel.repeat.value?.count.toString())
             binding.repeatDialogRepeatsTimeUnitsText.setText(viewModel.repeat.value!!.getNameRes())
@@ -229,7 +276,8 @@ class RepeatDialog(
                 is Int -> {
                     val intInfo = viewModel.repeat.value?.info as Int
                     binding.repeatDialogFirstRadioBtn.isChecked = true
-                    binding.repeatDialogFirstRadioText.text = firstRadioBtnMenuItems[intInfo - 1]
+                    binding.repeatDialogFirstRadioText.text =
+                        viewModel.firstRadioBtnMenuItems[intInfo - 1]
                     binding.repeatDialogSecondRadioCountText.setText(R.string.first)
                     binding.repeatDialogSecondRadioDayText.text = localeDays2LettersArray[0]
                     setDaysListCheckedWithCalendar()
@@ -371,7 +419,7 @@ class RepeatDialog(
         }
     }
 
-    private fun fillDayList() {
+    private fun fillDaysViewsList() {
         _daysViewsList = listOf(binding.repeatDialogDay1,
             binding.repeatDialogDay2,
             binding.repeatDialogDay3,
@@ -389,46 +437,6 @@ class RepeatDialog(
 
     private fun setDaysViewsListeners() =
         daysViewsList.forEach { it.stateOnClickListener = this }
-
-    private fun setRepeatInfo(repeat: Repeat) {
-        when (binding.repeatDialogRepeatsTimeUnitsText.text) {
-            requireContext().getString(R.string.week) ->
-                repeat.info = daysListChecked
-
-            requireContext().getString(R.string.month) -> {
-                if (binding.repeatDialogFirstRadioBtn.isChecked) {
-                    var isInfoInitialized = false
-                    for (i in 1..31)
-                        if (binding.repeatDialogFirstRadioText.text.contains(i.toString())) {
-                            repeat.info = i
-                            isInfoInitialized = true
-                        }
-                    if (!isInfoInitialized) repeat.info = 32
-                } else {
-                    val firstInPair = when (binding.repeatDialogSecondRadioCountText.text) {
-                        requireContext().getString(R.string.first) -> 1
-                        requireContext().getString(R.string.second) -> 2
-                        requireContext().getString(R.string.third) -> 3
-                        requireContext().getString(R.string.fourth) -> 4
-                        requireContext().getString(R.string.last) -> 5
-                        else -> throw IllegalArgumentException("variable firstInPair must be in 1..5")
-                    }
-                    var secondInPair = -1
-                    val diff = today.firstDayOfWeek - 1
-                    for (i in localeDays2LettersArray.indices)
-                        if (binding.repeatDialogSecondRadioDayText.text.equals(
-                                localeDays2LettersArray[i])
-                        )
-                            secondInPair = i + 1 + diff
-                    if (secondInPair > 7) secondInPair -= 7
-                    if (secondInPair !in 1..7) throw IllegalArgumentException("variable secondInPair must be in 1..7")
-
-                    repeat.info = Pair(firstInPair, secondInPair)
-                }
-            }
-
-        }
-    }
 
     private fun fillDaysViewsTexts() {
         val daysStringArray =

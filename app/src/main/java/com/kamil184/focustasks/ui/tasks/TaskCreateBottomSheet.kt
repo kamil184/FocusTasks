@@ -1,6 +1,7 @@
 package com.kamil184.focustasks.ui.tasks
 
 import android.annotation.SuppressLint
+import android.content.DialogInterface
 import android.graphics.drawable.InsetDrawable
 import android.os.Build
 import android.os.Bundle
@@ -19,6 +20,9 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.kamil184.focustasks.R
 import com.kamil184.focustasks.databinding.TaskCreateBinding
+import com.kamil184.focustasks.util.parcelable
+import com.kamil184.focustasks.util.serializable
+import java.lang.NullPointerException
 import java.util.*
 
 
@@ -45,8 +49,11 @@ class TaskCreateBottomSheet : BottomSheetDialogFragment() {
 
         binding.taskCreateCalendarButton.setOnClickListener {
             datePickerDialog = DatePickerDialog {
-                binding.taskCreateEditText.requestFocus()
-                binding.taskCreateEditText.windowInsetsController?.show(WindowInsets.Type.ime())
+                try {
+                    binding.taskCreateEditText.requestFocus()
+                    binding.taskCreateEditText.windowInsetsController?.show(WindowInsets.Type.ime())
+                }catch (ignore: NullPointerException){}
+
                 datePickerDialog = null
             }
             datePickerDialog!!.show(parentFragmentManager, DatePickerDialog.TAG)
@@ -63,8 +70,9 @@ class TaskCreateBottomSheet : BottomSheetDialogFragment() {
             }
 
         setFragmentResultListener(DatePickerDialog.REQUEST_KEY) { key, bundle ->
-            viewModel.task.value?.repeat = bundle.getParcelable(DatePickerDialog.BUNDLE_KEY_REPEAT)
-            viewModel.task.value?.calendar = bundle.getSerializable(DatePickerDialog.BUNDLE_KEY_CALENDAR) as Calendar
+            viewModel.task.value?.repeat = bundle.parcelable(DatePickerDialog.BUNDLE_KEY_REPEAT)
+            viewModel.task.value?.calendar =
+                bundle.serializable(DatePickerDialog.BUNDLE_KEY_CALENDAR) as Calendar?
         }
         return binding.root
     }
@@ -118,7 +126,7 @@ class TaskCreateBottomSheet : BottomSheetDialogFragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        datePickerDialog?.dismiss()
+        datePickerDialog = null
         _binding = null
     }
 }

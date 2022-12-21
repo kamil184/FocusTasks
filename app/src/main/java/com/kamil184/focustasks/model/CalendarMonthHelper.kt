@@ -8,11 +8,23 @@ class CalendarMonthHelper {
     companion object {
         private val calendar2000 = Calendar.getInstance()
         val today: Calendar = Calendar.getInstance()
+        lateinit var days2LettersArray: Array<String>
 
+        fun isDays2LettersArrayInitialized() = this::days2LettersArray.isInitialized
         /**
-         * Before call getter, you should call fillDays2LettersList(context: Context)
+         * Before call getter, you should init days2LettersArray
          */
-        val localeDays2LettersArray: Array<CharSequence> = Array(7) { "" }
+        val localeDays2LettersArray: Array<CharSequence> by lazy {
+            val arr = Array<CharSequence>(7) { "" }
+            val diff = today.firstDayOfWeek - 1
+            for (i in arr.indices) {
+                if (i + diff > 6)
+                    arr[i] = days2LettersArray[i + diff - 7]
+                else
+                    arr[i] = days2LettersArray[i + diff]
+            }
+            arr
+        }
 
         init {
             removeTimeFromCalendar(today)
@@ -27,19 +39,6 @@ class CalendarMonthHelper {
 
         val allMonths = getMonths()
 
-        fun fillLocaleDays2LettersList(context: Context) {
-            if (localeDays2LettersArray[0].length != 2) {
-                val daysStringArray =
-                    context.resources.getStringArray(R.array.calendar_days_2_letters)
-                val diff = today.firstDayOfWeek - 1
-                for (i in daysStringArray.indices) {
-                    if (i + diff > 6)
-                        localeDays2LettersArray[i] = daysStringArray[i + diff - 7]
-                    else
-                        localeDays2LettersArray[i] = daysStringArray[i + diff]
-                }
-            }
-        }
 
         fun getMonthTitle(context: Context, c: Calendar): String {
             val months = context.resources.getStringArray(R.array.months)

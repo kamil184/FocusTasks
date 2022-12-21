@@ -8,8 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.kamil184.focustasks.databinding.FragmentTimerBinding
 import com.kamil184.focustasks.model.Timer
 import com.kamil184.focustasks.model.TimerState
@@ -17,7 +17,7 @@ import com.kamil184.focustasks.service.TimerService
 
 class TimerFragment : Fragment() {
 
-    private lateinit var viewModel: TimerViewModel
+    private val viewModel: TimerViewModel by viewModels()
     private var _binding: FragmentTimerBinding? = null
     private val binding get() = _binding!!
 
@@ -57,9 +57,8 @@ class TimerFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        viewModel =
-            ViewModelProvider(this).get(TimerViewModel::class.java)
         _binding = FragmentTimerBinding.inflate(inflater, container, false)
+
         return binding.root
     }
 

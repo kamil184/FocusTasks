@@ -144,7 +144,8 @@
             android:layout_marginStart="16dp"
             android:gravity="center_vertical"
             android:padding="12dp"
-            android:text="Выбрать время" />
+            android:text="@string/set_time"
+            android:textColor="?android:textColorHint" />
     </LinearLayout>
 
     <LinearLayout
@@ -176,6 +177,7 @@
             android:layout_marginStart="16dp"
             android:gravity="center_vertical"
             android:padding="12dp"
-            android:text="Повторять" />
+            android:text="@string/repeat"
+            android:textColor="?android:textColorHint" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

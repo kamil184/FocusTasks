@@ -8,12 +8,13 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import com.kamil184.focustasks.databinding.FragmentTasksBinding
 
 class TasksFragment : Fragment() {
 
-    private lateinit var tasksViewModel: TasksViewModel
+    private val viewModel: TasksViewModel by viewModels()
+
     private var _binding: FragmentTasksBinding? = null
 
     private val binding get() = _binding!!
@@ -23,8 +24,6 @@ class TasksFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        tasksViewModel =
-            ViewModelProvider(this).get(TasksViewModel::class.java)
 
         _binding = FragmentTasksBinding.inflate(inflater, container, false)
 
