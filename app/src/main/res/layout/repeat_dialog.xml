@@ -30,8 +30,8 @@
         android:paddingBottom="12dp"
         app:layout_constraintStart_toEndOf="@+id/repeat_dialog_repeats_text"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="1"
-        tools:ignore="LabelFor" />
+        tools:ignore="LabelFor"
+        tools:text="1" />
 
     <TextView
         android:id="@+id/repeat_dialog_repeats_time_units_text"
@@ -39,6 +39,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:freezesText="true"
         android:gravity="center_vertical"
         android:padding="12dp"
         app:drawableEndCompat="@drawable/ic_expand_more_24"
@@ -170,6 +171,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:freezesText="true"
         android:gravity="center_vertical"
         android:padding="12dp"
         app:drawableEndCompat="@drawable/ic_expand_more_24"
@@ -194,6 +196,7 @@
         android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:freezesText="true"
         android:gravity="center_vertical"
         android:padding="12dp"
         app:drawableEndCompat="@drawable/ic_expand_more_24"
@@ -208,6 +211,7 @@
         android:layout_width="0dp"
         android:layout_height="@dimen/repeat_dialog_text_field_height"
         android:layout_marginStart="16dp"
+        android:freezesText="true"
         android:gravity="center_vertical"
         android:padding="12dp"
         app:drawableEndCompat="@drawable/ic_expand_more_24"

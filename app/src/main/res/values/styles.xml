@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="Widget.App.TimerProgressBar" parent="Widget.Material3.CircularProgressIndicator">
         <item name="trackThickness">4dp</item>
         <item name="trackCornerRadius">2dp</item>
@@ -8,7 +9,10 @@
         <!--TODO: видно засечки на trackCornerRadius-->
     </style>
 
-    <style name="App.ModalBottomSheetDialog" parent="Widget.MaterialComponents.BottomSheet.Modal">
+    <style name="App.ModalBottomSheetDialog" parent="Widget.Material3.BottomSheet.Modal">
+        <!-- TODO:https://m3.material.io/components/bottom-sheets/specs
+                <item name="surfaceTintColor">?colorSurface</item>
+        -->
         <item name="backgroundTint">?android:colorBackground</item>
     </style>
 

@@ -25,38 +25,6 @@
     <string name="week">неделя</string>
     <string name="month">месяц</string>
     <string name="year">год</string>
-    <string name="day_1">1 число</string>
-    <string name="day_2">2 число</string>
-    <string name="day_3">3 число</string>
-    <string name="day_4">4 число</string>
-    <string name="day_5">5 число</string>
-    <string name="day_6">6 число</string>
-    <string name="day_7">7 число</string>
-    <string name="day_8">8 число</string>
-    <string name="day_9">9 число</string>
-    <string name="day_10">10 число</string>
-    <string name="day_11">11 число</string>
-    <string name="day_12">12 число</string>
-    <string name="day_13">13 число</string>
-    <string name="day_14">14 число</string>
-    <string name="day_15">15 число</string>
-    <string name="day_16">16 число</string>
-    <string name="day_17">17 число</string>
-    <string name="day_18">18 число</string>
-    <string name="day_19">19 число</string>
-    <string name="day_20">20 число</string>
-    <string name="day_21">21 число</string>
-    <string name="day_22">22 число</string>
-    <string name="day_23">23 число</string>
-    <string name="day_24">24 число</string>
-    <string name="day_25">25 число</string>
-    <string name="day_26">26 число</string>
-    <string name="day_27">27 число</string>
-    <string name="day_28">28 число</string>
-    <string name="day_29">29 число</string>
-    <string name="day_30">30 число</string>
-    <string name="day_31">31 число</string>
-    <string name="last_day">Последний день</string>
     <string name="first">перв.</string>
     <string name="second">втор.</string>
     <string name="third">трет.</string>
@@ -73,6 +41,7 @@
     <string name="dialog_positive_button_text">Готово</string>
     <string name="repeat">Повторять</string>
     <string name="set_time">Выбрать время</string>
+    <string name="at_time">в</string>
 
     <!--first day is sunday, last day is saturday-->
     <string-array name="calendar_days_1_letter">

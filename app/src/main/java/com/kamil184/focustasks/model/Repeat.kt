@@ -2,14 +2,16 @@ package com.kamil184.focustasks.model
 
 import android.content.Context
 import android.os.Parcelable
+import androidx.annotation.StringRes
 import com.kamil184.focustasks.R
-import com.kamil184.focustasks.model.CalendarMonthHelper.Companion.localeDays2LettersArray
-import com.kamil184.focustasks.model.CalendarMonthHelper.Companion.today
+import com.kamil184.focustasks.model.CalendarMonthsHelper.Companion.today
+import com.kamil184.focustasks.ui.tasks.RepeatDialogViewModel
 import kotlinx.parcelize.Parcelize
+import java.util.*
 
 //TODO: make russia text normal (просколнять все)
 @Parcelize
-enum class Repeat: Parcelable {
+enum class Repeat : Parcelable {
     DAY {
         override fun getText(context: Context): String {
             checkCount()
@@ -35,7 +37,7 @@ enum class Repeat: Parcelable {
             var endText = " ("
             for (i in days.indices) {
                 if (!days[i]) isDaily = false
-                else endText += localeDays2LettersArray[i].toString() + ", "
+                else endText += RepeatDialogViewModel.localeDays2LettersArray[i] + ", "
             }
             endText = endText.dropLast(2) + ")"
             if (isDaily) return context.getString(R.string.daily)
@@ -119,11 +121,37 @@ enum class Repeat: Parcelable {
         if (count!! < 1) throw IllegalArgumentException("variable count must be > 0")
     }
 
-    fun getNameRes() = when(ordinal){
+    fun getNameRes() = when (ordinal) {
         DAY.ordinal -> R.string.day
         WEEK.ordinal -> R.string.week
         MONTH.ordinal -> R.string.month
         YEAR.ordinal -> R.string.year
         else -> throw IllegalArgumentException("Repeat text must be day, week, month or year")
+    }
+
+    companion object {
+        fun getBasicInstance(): Repeat {
+            val repeat = WEEK
+            repeat.count = 1
+
+            val diff = today.firstDayOfWeek - 1
+            val ti = today.get(Calendar.DAY_OF_WEEK) - 1 - diff
+            val todayId =
+                if (ti < 0) ti + 7
+                else ti
+            val info = Array(7) { false }
+            info[todayId] = true
+            repeat.info = info
+            return repeat
+        }
+
+        @StringRes
+        fun getNumberOfTheWeekInMonthStringRes() = when (today.get(Calendar.WEEK_OF_MONTH)) {
+            1 -> R.string.first
+            2 -> R.string.second
+            3 -> R.string.third
+            4 -> R.string.fourth
+            else -> R.string.last
+        }
     }
 }
