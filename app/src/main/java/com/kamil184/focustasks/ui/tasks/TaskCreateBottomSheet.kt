@@ -13,6 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowInsets
+import android.widget.Button
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
@@ -43,6 +44,8 @@ class TaskCreateBottomSheet : BottomSheetDialogFragment() {
         super.onCreate(savedInstanceState)
         if (viewModel.task.value == null)
             viewModel.task.value = arguments?.parcelable(BUNDLE_KEY_TASK) ?: Task()
+        viewModel.taskListNames = arguments?.getStringArrayList(BUNDLE_KEY_LIST)
+
         _iconMarginPx =
             TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 0F, context?.resources?.displayMetrics).toInt()
@@ -96,6 +99,10 @@ class TaskCreateBottomSheet : BottomSheetDialogFragment() {
             }
         })
 
+        binding.taskCreateListButton.text = viewModel.task.value?.list
+        binding.taskCreateListButton.setOnClickListener {
+            showTaskListNamesMenu(binding.taskCreateListButton)
+        }
         ViewCompat
             .setOnApplyWindowInsetsListener(binding.root) { view, insets ->
                 val ins = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom
@@ -111,12 +118,26 @@ class TaskCreateBottomSheet : BottomSheetDialogFragment() {
         return binding.root
     }
 
+    private fun showTaskListNamesMenu(button: Button) {
+        val popup = PopupMenu(requireContext(), button)
+        viewModel.taskListNames?.forEach {
+            popup.menu.add(it)
+        }
+
+        popup.setOnMenuItemClickListener { menuItem ->
+            button.text = menuItem.title
+            viewModel.task.value?.list = menuItem.title.toString()
+            true
+        }
+        popup.show()
+    }
+
     override fun onResume() {
         super.onResume()
         binding.taskCreateEditText.windowInsetsController?.show(WindowInsets.Type.ime())
     }
 
-    private fun showDatePickerDialog(){
+    private fun showDatePickerDialog() {
         datePickerDialog = DatePickerDialog {
             try {
                 binding.taskCreateEditText.requestFocus()
@@ -133,7 +154,7 @@ class TaskCreateBottomSheet : BottomSheetDialogFragment() {
         binding.taskCreateDescriptionEditText.clearFocus()
     }
 
-    private fun updateCalendarChip(){
+    private fun updateCalendarChip() {
         if (viewModel.task.value?.calendar == null) {
             binding.taskCreateCalendarChip.visibility = View.GONE
         } else {
@@ -207,7 +228,7 @@ class TaskCreateBottomSheet : BottomSheetDialogFragment() {
     companion object {
         const val TAG = "TaskCreateBottomSheet"
         const val BUNDLE_KEY_TASK = DatePickerDialog.BUNDLE_KEY_TASK
-
+        const val BUNDLE_KEY_LIST = "BundleKeyList"
     }
 
     override fun onDestroyView() {

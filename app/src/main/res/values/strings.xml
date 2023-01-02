@@ -12,7 +12,7 @@
     <string name="timer_paused">Таймер приостановлен</string>
     <string name="timer_running">Таймер выполняется</string>
     <string name="close">Закрыть</string>
-    <string name="create">+ Создать</string>
+    <string name="create_tab">+ Создать</string>
     <string name="new_task">Новая задача</string>
     <string name="save">Сохранить</string>
     <string name="high">Высокий</string>
@@ -42,6 +42,16 @@
     <string name="repeat">Повторять</string>
     <string name="set_time">Выбрать время</string>
     <string name="at_time">в</string>
+    <string name="base_list_tab">Задачи</string>
+    <string name="add_a_list">Добавить список</string>
+    <string name="this_list_already_exists">Такой список уже существует</string>
+    <string name="rename_list">Переименовать список</string>
+    <string name="delete_list">Удалить список</string>
+    <string name="delete_completed_tasks">Удалить выполненные задачи</string>
+    <string name="sort_by">Отсортировать по</string>
+    <string name="the_only_existing_list_cannot_be_deleted">Единственный существующий список не может быть удален</string>
+    <string name="list_name">Название списка</string>
+    <string name="something_went_wrong">Что-то пошло не так</string>
 
     <!--first day is sunday, last day is saturday-->
     <string-array name="calendar_days_1_letter">

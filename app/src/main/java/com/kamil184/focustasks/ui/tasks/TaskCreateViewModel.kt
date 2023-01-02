@@ -25,4 +25,5 @@ class TaskCreateViewModel : ViewModel() {
         }
 
     val task = MutableLiveData<Task>()
+    var taskListNames : List<String>? = null
 }

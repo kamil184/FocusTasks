@@ -1,0 +1,26 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/tasks_menu_delete_list"
+        android:icon="@drawable/ic_more_horizontal_24"
+        android:title="@string/delete_list"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/tasks_menu_rename_list"
+        android:title="@string/rename_list"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/tasks_menu_delete_completed_tasks"
+        android:title="@string/delete_completed_tasks"
+        app:showAsAction="never" />
+
+    <group android:id="@+id/tasks_menu_sort_by_group">
+        <item
+            android:id="@+id/tasks_menu_sort_by"
+            android:title="@string/sort_by"
+            app:showAsAction="never" />
+    </group>
+
+</menu>

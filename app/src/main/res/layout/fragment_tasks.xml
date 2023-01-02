@@ -6,32 +6,68 @@
     android:layout_height="match_parent"
     tools:context=".ui.tasks.TasksFragment">
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tasks_tab_layout"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/tasks_tabs_app_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tabIndicatorAnimationMode="elastic"
-        app:tabMode="scrollable"
-        app:tabPaddingEnd="18dp"
-        app:tabPaddingStart="18dp"
-        app:tabRippleColor="@null">
+        app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.tabs.TabItem
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/tasks_tabs_app_bar"
+            android:layout_width="match_parent"
+            app:titleCentered="true"
+            android:layout_height="?attr/actionBarSize"
+            app:title="@string/title_tasks"
+            app:menu="@menu/tasks_menu" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <HorizontalScrollView
+        android:id="@+id/tasks_tabs_scroll_View"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:overScrollMode="never"
+        android:scrollbars="none"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tasks_tabs_app_bar_layout">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Сегодня" />
+            android:layout_height="wrap_content">
 
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/create" />
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tasks_tab_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tabIndicatorAnimationMode="elastic"
+                app:tabMode="scrollable"
+                app:tabPaddingEnd="20dp"
+                app:tabPaddingStart="20dp"
+                app:tabRippleColor="@null" />
 
-    </com.google.android.material.tabs.TabLayout>
+            <Button
+                android:id="@+id/tasks_create_tab_button"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:visibility="gone"
+                android:layout_height="wrap_content"
+                android:text="@string/create_tab"
+                app:layout_constraintBottom_toBottomOf="@id/tasks_tab_layout"
+                app:layout_constraintStart_toEndOf="@id/tasks_tab_layout" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </HorizontalScrollView>
 
-    <!--TODO: ViewPager2-->
+    <com.google.android.material.divider.MaterialDivider
+        style="@style/Widget.Material3.MaterialDivider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:dividerColor="?colorSurfaceVariant"
+        app:layout_constraintBottom_toBottomOf="@id/tasks_tabs_scroll_View"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/tasks_view_pager"
         android:layout_width="match_parent"

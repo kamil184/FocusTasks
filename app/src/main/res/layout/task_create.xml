@@ -71,12 +71,12 @@
         app:layout_constraintTop_toTopOf="@+id/task_create_calendar_button" />
 
     <Button
-        android:id="@+id/task_create_project_button"
+        android:id="@+id/task_create_list_button"
         style="@style/Widget.Material3.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:drawableLeft="@drawable/ic_inventory_24"
-        android:text="Проект"
+        tools:text="Задачи"
         android:textColor="?android:attr/textColorSecondary"
         app:layout_constraintBottom_toBottomOf="@+id/task_create_calendar_button"
         app:layout_constraintStart_toEndOf="@+id/task_create_priority_button"

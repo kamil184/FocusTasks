@@ -14,13 +14,13 @@ import kotlinx.coroutines.flow.map
 import java.io.InputStream
 import java.io.OutputStream
 
-private val Context.timerProtoDataStore: DataStore<TimerPreferences> by dataStore(
+private val Context.timerProto: DataStore<TimerPreferences> by dataStore(
     fileName = "timer.proto",
     serializer = TimerSerializer
 )
 
 class TimerManager(private val context: Context) {
-    val timerFlow = context.timerProtoDataStore.data.map {
+    val timerFlow = context.timerProto.data.map {
         Timer(
             length = it.length,
             state = it.state,
@@ -28,7 +28,7 @@ class TimerManager(private val context: Context) {
         )
     }
 
-    val nonLiveDataTimerFlow = context.timerProtoDataStore.data.map {
+    val nonLiveDataTimerFlow = context.timerProto.data.map {
         NonLiveDataTimer(
             length = it.length,
             state = it.state,
@@ -37,7 +37,7 @@ class TimerManager(private val context: Context) {
     }
 
     suspend fun saveTimer(timer: Timer) {
-        context.timerProtoDataStore.updateData {
+        context.timerProto.updateData {
             it.toBuilder()
                 .setLength(timer.length.value!!)
                 .setState(TimerPreferences.TimerState.values()[timer.state.value!!.ordinal])
@@ -48,7 +48,7 @@ class TimerManager(private val context: Context) {
     }
 
     suspend fun saveTimer(timer: NonLiveDataTimer) {
-        context.timerProtoDataStore.updateData {
+        context.timerProto.updateData {
             it.toBuilder()
                 .setLength(timer.length)
                 .setState(TimerPreferences.TimerState.values()[timer.state.ordinal])
