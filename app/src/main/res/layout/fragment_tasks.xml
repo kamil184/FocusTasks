@@ -32,7 +32,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tasks_tabs_app_bar_layout">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
@@ -57,7 +57,7 @@
                 android:text="@string/create_tab"
                 app:layout_constraintBottom_toBottomOf="@id/tasks_tab_layout"
                 app:layout_constraintStart_toEndOf="@id/tasks_tab_layout" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
     </HorizontalScrollView>
 
     <com.google.android.material.divider.MaterialDivider
@@ -73,7 +73,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        app:layout_constraintTop_toBottomOf="@+id/tasks_tab_layout" />
+        app:layout_constraintTop_toBottomOf="@+id/tasks_tabs_scroll_View" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/tasks_fab"

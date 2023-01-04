@@ -14,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowInsets
 import android.widget.Button
+import androidx.annotation.RequiresApi
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
@@ -132,6 +133,7 @@ class TaskCreateBottomSheet : BottomSheetDialogFragment() {
         popup.show()
     }
 
+    @RequiresApi(Build.VERSION_CODES.R)
     override fun onResume() {
         super.onResume()
         binding.taskCreateEditText.windowInsetsController?.show(WindowInsets.Type.ime())
@@ -141,7 +143,9 @@ class TaskCreateBottomSheet : BottomSheetDialogFragment() {
         datePickerDialog = DatePickerDialog {
             try {
                 binding.taskCreateEditText.requestFocus()
-                binding.taskCreateEditText.windowInsetsController?.show(WindowInsets.Type.ime())
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    binding.taskCreateEditText.windowInsetsController?.show(WindowInsets.Type.ime())
+                }
             } catch (ignore: NullPointerException) {
             }
 
@@ -149,7 +153,9 @@ class TaskCreateBottomSheet : BottomSheetDialogFragment() {
         }
         datePickerDialog!!.arguments = bundleOf(BUNDLE_KEY_TASK to viewModel.task.value)
         datePickerDialog!!.show(parentFragmentManager, DatePickerDialog.TAG)
-        binding.taskCreateEditText.windowInsetsController?.hide(WindowInsets.Type.ime())
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            binding.taskCreateEditText.windowInsetsController?.hide(WindowInsets.Type.ime())
+        }
         binding.taskCreateEditText.clearFocus()
         binding.taskCreateDescriptionEditText.clearFocus()
     }
@@ -213,17 +219,8 @@ class TaskCreateBottomSheet : BottomSheetDialogFragment() {
         popup.show()
     }
 
-    private fun getInsetIcon(drawable: Drawable): InsetDrawable {
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-            return InsetDrawable(drawable, iconMarginPx, 0, iconMarginPx, 0)
-        } else {
-            return object : InsetDrawable(drawable, iconMarginPx, 0, iconMarginPx, 0) {
-                override fun getIntrinsicWidth(): Int {
-                    return intrinsicHeight + iconMarginPx + iconMarginPx
-                }
-            }
-        }
-    }
+    private fun getInsetIcon(drawable: Drawable): InsetDrawable =
+        InsetDrawable(drawable, iconMarginPx, 0, iconMarginPx, 0)
 
     companion object {
         const val TAG = "TaskCreateBottomSheet"

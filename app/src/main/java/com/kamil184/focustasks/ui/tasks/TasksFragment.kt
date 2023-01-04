@@ -2,7 +2,6 @@ package com.kamil184.focustasks.ui.tasks
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +11,6 @@ import androidx.annotation.StringRes
 import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.isEmpty
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -141,7 +139,9 @@ class TasksFragment : Fragment() {
                         }
                         false
                     }
-                    editText.windowInsetsController?.show(WindowInsets.Type.ime())
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                        editText.windowInsetsController?.show(WindowInsets.Type.ime())
+                    }
                     true
                 }
                 else -> false
@@ -180,7 +180,9 @@ class TasksFragment : Fragment() {
                 }
                 false
             }
-            editText.windowInsetsController?.show(WindowInsets.Type.ime())
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                editText.windowInsetsController?.show(WindowInsets.Type.ime())
+            }
 
         }
 

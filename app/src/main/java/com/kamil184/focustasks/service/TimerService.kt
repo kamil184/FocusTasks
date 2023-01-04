@@ -21,7 +21,6 @@ import com.kamil184.focustasks.model.NonLiveDataTimer
 import com.kamil184.focustasks.model.TimerState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class TimerService : Service() {
@@ -154,8 +153,7 @@ class TimerService : Service() {
         val startIntent = Intent(this, TimerService::class.java)
         startIntent.action = ACTION_START
         val flags =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-            else PendingIntent.FLAG_UPDATE_CURRENT
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         startPendingIntent = PendingIntent.getService(this,
             0,
             startIntent,
@@ -222,8 +220,7 @@ class TimerService : Service() {
     private fun initBuilders() {
         val activityIntent = Intent(this, MainActivity::class.java)
         val flags =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-            else PendingIntent.FLAG_UPDATE_CURRENT
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         val activityPendingIntent = PendingIntent.getActivity(this, 0,
             activityIntent, flags)
 

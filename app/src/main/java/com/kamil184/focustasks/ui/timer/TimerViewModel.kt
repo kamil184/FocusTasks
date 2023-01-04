@@ -8,7 +8,6 @@ import com.kamil184.focustasks.manager.TimerManager
 import com.kamil184.focustasks.model.Timer
 import com.kamil184.focustasks.model.TimerState
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class TimerViewModel(application: Application) : AndroidViewModel(application) {

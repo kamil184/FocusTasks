@@ -24,7 +24,7 @@ enum class Repeat : Parcelable {
     WEEK {
 
         /**
-         * @param info must be initialised as Array<Boolean> before calling getText()
+         * @see info must be initialised as Array<Boolean> before calling getText()
          */
         override fun getText(context: Context): String {
             checkCount()
@@ -48,7 +48,7 @@ enum class Repeat : Parcelable {
     MONTH {
 
         /**
-         * @param info must be initialised as Int or Pair<Int,Int> before calling getText()
+         * @see info must be initialised as Int or Pair<Int,Int> before calling getText()
          * if info is Int, then it must be 1.32 (32 is last days index)
          * if info is Pair<Int,Int>, then first in 1..5, second in 1..7
          */

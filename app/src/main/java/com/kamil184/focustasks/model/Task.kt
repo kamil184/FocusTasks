@@ -1,7 +1,6 @@
 package com.kamil184.focustasks.model
 
 import android.os.Parcelable
-import com.kamil184.focustasks.model.CalendarMonthsHelper.Companion.today
 import kotlinx.parcelize.Parcelize
 import java.util.*
 

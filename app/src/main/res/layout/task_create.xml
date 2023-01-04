@@ -36,6 +36,7 @@
         android:inputType="textCapSentences|textMultiLine"
         android:padding="12dp"
         android:paddingStart="24dp"
+        android:paddingEnd="24dp"
         android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
         app:layout_constraintTop_toBottomOf="@+id/task_create_edit_text" />
 
@@ -58,7 +59,8 @@
         android:layout_height="wrap_content"
         android:drawableLeft="@drawable/ic_event_available_24"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/task_create_calendar_chip" />
+        app:layout_constraintTop_toBottomOf="@+id/task_create_calendar_chip"
+        tools:ignore="RtlHardcoded" />
 
     <Button
         android:id="@+id/task_create_priority_button"
@@ -68,7 +70,8 @@
         android:drawableLeft="@drawable/ic_priority_high_0"
         app:layout_constraintBottom_toBottomOf="@+id/task_create_calendar_button"
         app:layout_constraintStart_toEndOf="@+id/task_create_calendar_button"
-        app:layout_constraintTop_toTopOf="@+id/task_create_calendar_button" />
+        app:layout_constraintTop_toTopOf="@+id/task_create_calendar_button"
+        tools:ignore="RtlHardcoded" />
 
     <Button
         android:id="@+id/task_create_list_button"
@@ -80,7 +83,8 @@
         android:textColor="?android:attr/textColorSecondary"
         app:layout_constraintBottom_toBottomOf="@+id/task_create_calendar_button"
         app:layout_constraintStart_toEndOf="@+id/task_create_priority_button"
-        app:layout_constraintTop_toTopOf="@+id/task_create_calendar_button" />
+        app:layout_constraintTop_toTopOf="@+id/task_create_calendar_button"
+        tools:ignore="RtlHardcoded" />
 
     <Button
         android:id="@+id/task_create_enter_button"
