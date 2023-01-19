@@ -49,7 +49,7 @@
         tools:text="@string/week" />
 
     <!-- days begins -->
-    <com.kamil184.focustasks.ui.tasks.RepeatDialogDayTextView
+    <com.kamil184.focustasks.ui.dialogs.RepeatDialogDayTextView
         android:id="@+id/repeat_dialog_day_1"
         android:layout_width="@dimen/repeat_dialog_day_size"
         android:layout_height="@dimen/repeat_dialog_day_size"
@@ -65,7 +65,7 @@
         tools:textColor="?colorOnPrimary"
         tools:visibility="gone" />
 
-    <com.kamil184.focustasks.ui.tasks.RepeatDialogDayTextView
+    <com.kamil184.focustasks.ui.dialogs.RepeatDialogDayTextView
         android:id="@+id/repeat_dialog_day_2"
         android:layout_width="@dimen/repeat_dialog_day_size"
         android:layout_height="@dimen/repeat_dialog_day_size"
@@ -80,7 +80,7 @@
         tools:textColor="?colorOnSurfaceVariant"
         tools:visibility="gone" />
 
-    <com.kamil184.focustasks.ui.tasks.RepeatDialogDayTextView
+    <com.kamil184.focustasks.ui.dialogs.RepeatDialogDayTextView
         android:id="@+id/repeat_dialog_day_3"
         android:layout_width="@dimen/repeat_dialog_day_size"
         android:layout_height="@dimen/repeat_dialog_day_size"
@@ -95,7 +95,7 @@
         tools:textColor="?colorOnSurfaceVariant"
         tools:visibility="gone" />
 
-    <com.kamil184.focustasks.ui.tasks.RepeatDialogDayTextView
+    <com.kamil184.focustasks.ui.dialogs.RepeatDialogDayTextView
         android:id="@+id/repeat_dialog_day_4"
         android:layout_width="@dimen/repeat_dialog_day_size"
         android:layout_height="@dimen/repeat_dialog_day_size"
@@ -110,7 +110,7 @@
         tools:textColor="?colorOnPrimary"
         tools:visibility="gone" />
 
-    <com.kamil184.focustasks.ui.tasks.RepeatDialogDayTextView
+    <com.kamil184.focustasks.ui.dialogs.RepeatDialogDayTextView
         android:id="@+id/repeat_dialog_day_5"
         android:layout_width="@dimen/repeat_dialog_day_size"
         android:layout_height="@dimen/repeat_dialog_day_size"
@@ -125,7 +125,7 @@
         tools:textColor="?colorOnSurfaceVariant"
         tools:visibility="gone" />
 
-    <com.kamil184.focustasks.ui.tasks.RepeatDialogDayTextView
+    <com.kamil184.focustasks.ui.dialogs.RepeatDialogDayTextView
         android:id="@+id/repeat_dialog_day_6"
         android:layout_width="@dimen/repeat_dialog_day_size"
         android:layout_height="@dimen/repeat_dialog_day_size"
@@ -140,7 +140,7 @@
         tools:textColor="?colorOnSurfaceVariant"
         tools:visibility="gone" />
 
-    <com.kamil184.focustasks.ui.tasks.RepeatDialogDayTextView
+    <com.kamil184.focustasks.ui.dialogs.RepeatDialogDayTextView
         android:id="@+id/repeat_dialog_day_7"
         android:layout_width="@dimen/repeat_dialog_day_size"
         android:layout_height="@dimen/repeat_dialog_day_size"

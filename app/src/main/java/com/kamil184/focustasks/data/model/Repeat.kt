@@ -1,11 +1,11 @@
-package com.kamil184.focustasks.model
+package com.kamil184.focustasks.data.model
 
-import android.content.Context
+import android.content.res.Resources
 import android.os.Parcelable
 import androidx.annotation.StringRes
 import com.kamil184.focustasks.R
-import com.kamil184.focustasks.model.CalendarMonthsHelper.Companion.today
-import com.kamil184.focustasks.ui.tasks.RepeatDialogViewModel
+import com.kamil184.focustasks.data.model.CalendarMonthsHelper.Companion.today
+import com.kamil184.focustasks.ui.dialogs.RepeatDialogViewModel
 import kotlinx.parcelize.Parcelize
 import java.util.*
 
@@ -13,12 +13,12 @@ import java.util.*
 @Parcelize
 enum class Repeat : Parcelable {
     DAY {
-        override fun getText(context: Context): String {
+        override fun getText(resources: Resources): String {
             checkCount()
 
-            return if (count == 1) context.getString(R.string.daily)
+            return if (count == 1) resources.getString(R.string.daily)
             else
-                context.getString(R.string.every) + " $count " + context.getString(R.string.days)
+                resources.getString(R.string.every) + " $count " + resources.getString(R.string.days)
         }
     },
     WEEK {
@@ -26,7 +26,7 @@ enum class Repeat : Parcelable {
         /**
          * @see info must be initialised as Array<Boolean> before calling getText()
          */
-        override fun getText(context: Context): String {
+        override fun getText(resources: Resources): String {
             checkCount()
             if (info == null) throw IllegalArgumentException("variable info isn't initialised!")
             if (info !is Array<*>) throw IllegalArgumentException("variable info isn't right datatype (Array<Boolean>)!")
@@ -40,9 +40,9 @@ enum class Repeat : Parcelable {
                 else endText += RepeatDialogViewModel.localeDays2LettersArray[i] + ", "
             }
             endText = endText.dropLast(2) + ")"
-            if (isDaily) return context.getString(R.string.daily)
-            if (count == 1) return context.getString(R.string.weekly) + endText
-            return context.getString(R.string.every) + " $count " + context.getString(R.string.weeks) + endText
+            if (isDaily) return resources.getString(R.string.daily)
+            if (count == 1) return resources.getString(R.string.weekly) + endText
+            return resources.getString(R.string.every) + " $count " + resources.getString(R.string.weeks) + endText
         }
     },
     MONTH {
@@ -52,13 +52,13 @@ enum class Repeat : Parcelable {
          * if info is Int, then it must be 1.32 (32 is last days index)
          * if info is Pair<Int,Int>, then first in 1..5, second in 1..7
          */
-        override fun getText(context: Context): String {
+        override fun getText(resources: Resources): String {
             checkCount()
             if (info == null) throw IllegalArgumentException("variable info isn't initialised!")
 
             val textBegin =
-                if (count == 1) context.getString(R.string.monthly) + " "
-                else context.getString(R.string.every) + " $count " + context.getString(R.string.month) + " "
+                if (count == 1) resources.getString(R.string.monthly) + " "
+                else resources.getString(R.string.every) + " $count " + resources.getString(R.string.month) + " "
             when (info) {
                 is Int -> {
                     val intInfo = info as Int
@@ -73,18 +73,18 @@ enum class Repeat : Parcelable {
                 is Pair<*, *> -> {
                     val pairInfo = info as Pair<*, *>
                     val textMiddle =
-                        "${context.getText(R.string.every)} " + when (pairInfo.first as Int) {
-                            1 -> context.getText(R.string.first)
-                            2 -> context.getText(R.string.second)
-                            3 -> context.getText(R.string.third)
-                            4 -> context.getText(R.string.fourth)
-                            5 -> context.getText(R.string.last)
+                        "${resources.getText(R.string.every)} " + when (pairInfo.first as Int) {
+                            1 -> resources.getText(R.string.first)
+                            2 -> resources.getText(R.string.second)
+                            3 -> resources.getText(R.string.third)
+                            4 -> resources.getText(R.string.fourth)
+                            5 -> resources.getText(R.string.last)
                             else -> throw IllegalArgumentException("first variable in info must be in 1..5")
                         }
 
                     if (pairInfo.second as Int !in 1..7) throw IllegalArgumentException("second variable in info must be in 1..7")
                     val normalDaysStringArray =
-                        context.resources.getStringArray(R.array.calendar_days_2_letters)
+                        resources.getStringArray(R.array.calendar_days_2_letters)
                     val textEnd = normalDaysStringArray[pairInfo.second as Int - 1]
 
                     return "$textBegin$textMiddle $textEnd"
@@ -95,11 +95,11 @@ enum class Repeat : Parcelable {
         }
     },
     YEAR {
-        override fun getText(context: Context): String {
+        override fun getText(resources: Resources): String {
             checkCount()
 
-            return if (count == 1) context.getString(R.string.yearly)
-            else context.getString(R.string.every) + " $count " + context.getString(R.string.year)
+            return if (count == 1) resources.getString(R.string.yearly)
+            else resources.getString(R.string.every) + " $count " + resources.getString(R.string.year)
         }
     };
 
@@ -114,7 +114,7 @@ enum class Repeat : Parcelable {
      */
     var info: Any? = null
 
-    abstract fun getText(context: Context): String
+    abstract fun getText(resources: Resources): String
 
     protected fun checkCount() {
         if (count == null) throw IllegalArgumentException("variable count isn't initialised!")

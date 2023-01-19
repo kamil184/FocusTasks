@@ -14,52 +14,43 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import com.kamil184.focustasks.R
+import com.kamil184.focustasks.data.model.Task
 import com.kamil184.focustasks.databinding.EditTextDialogBinding
 import com.kamil184.focustasks.databinding.FragmentTasksBinding
-import com.kamil184.focustasks.model.Task
+import com.kamil184.focustasks.ui.dialogs.DatePickerDialog
+import com.kamil184.focustasks.ui.dialogs.TaskCreateBottomSheet
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 
 class TasksFragment : Fragment() {
 
-    private val viewModel: TasksViewModel by viewModels()
+    private val viewModel: TasksViewModel by viewModels { TasksViewModel.Factory }
 
     private var _binding: FragmentTasksBinding? = null
 
     private val binding get() = _binding!!
 
+    private lateinit var viewPagerAdapter: TasksViewPagerAdapter
+
     private fun TabLayout.selectedTabText() =
         getTabAt(selectedTabPosition)?.text.toString()
 
-    private var taskListNamesObserver: Observer<List<String>>? = null
-
-    init {
-        taskListNamesObserver = Observer<List<String>> { strings ->
-            binding.tasksCreateTabButton.visibility = View.VISIBLE
-            binding.tasksTabLayout.removeAllTabs()
-            strings.forEach {
-                val tab = binding.tasksTabLayout.newTab()
-                tab.text = it
-                binding.tasksTabLayout.addTab(tab)
-            }
-            viewModel.taskListNames.removeObserver(taskListNamesObserver!!)
-        }
-    }
-
     override fun onStart() {
         super.onStart()
-        if (binding.tasksTabLayout.tabCount == 0) {
-            viewModel.taskListNames.observe(viewLifecycleOwner, taskListNamesObserver!!)
-            viewModel.fetchTaskListNames()
-        }
+        viewModel.fetchTaskListNames()
     }
 
-    override fun onPause() {
-        super.onPause()
+    override fun onStop() {
+        super.onStop()
         viewModel.saveTaskListNames()
     }
 
@@ -76,6 +67,41 @@ class TasksFragment : Fragment() {
                 insets
             }
 
+        viewPagerAdapter = TasksViewPagerAdapter()
+        binding.tasksViewPager.adapter = viewPagerAdapter
+        binding.tasksViewPager.offscreenPageLimit = 1
+
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.taskListNames.collectLatest { taskListNames ->
+                        binding.tasksCreateTabButton.visibility = View.VISIBLE
+                        viewPagerAdapter.submitTaskListNames(taskListNames)
+                        if (binding.tasksTabLayout.tabCount == 0) {
+                            taskListNames.forEach {
+                                val tab = binding.tasksTabLayout.newTab()
+                                tab.text = it
+                                binding.tasksTabLayout.addTab(tab)
+                            }
+                        }
+                    }
+                }
+                launch {
+                    viewModel.tasks.collectLatest {
+                        viewPagerAdapter.submitTasks(it)
+                    }
+                }
+            }
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            binding.tasksTabsAppBar.menu.setGroupDividerEnabled(true)
+        }
+
+        TabLayoutMediator(binding.tasksTabLayout, binding.tasksViewPager) { tab, position ->
+            tab.text = viewModel.taskListNames.value[position]
+        }.attach()
+
         binding.tasksFab.setOnClickListener {
             val taskCreateBottomSheet = TaskCreateBottomSheet()
             val task = Task()
@@ -85,18 +111,13 @@ class TasksFragment : Fragment() {
             taskCreateBottomSheet.show(parentFragmentManager, TaskCreateBottomSheet.TAG)
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            binding.tasksTabsAppBar.menu.setGroupDividerEnabled(true)
-        }
         binding.tasksTabsAppBar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.tasks_menu_delete_list -> {
-                    if (viewModel.taskListNames.value?.size != 1) {
-                        val text =
-                            binding.tasksTabLayout.selectedTabText()
-                        if (viewModel.removeFromTaskListNames(text))
-                            binding.tasksTabLayout.removeTabAt(binding.tasksTabLayout.selectedTabPosition)
-                        else showSnackbar(R.string.something_went_wrong)
+                    if (viewModel.taskListNames.value.size != 1) {
+                        val text = binding.tasksTabLayout.selectedTabText()
+                        val isSuccess = viewModel.removeTaskListName(text)
+                        if (!isSuccess) showSnackbar(R.string.something_went_wrong)
                     } else showSnackbar(R.string.the_only_existing_list_cannot_be_deleted)
                     true
                 }
@@ -112,29 +133,22 @@ class TasksFragment : Fragment() {
                     builder.setView(editTextDialogBinding.root)
                     builder.setPositiveButton(R.string.dialog_positive_button_text) { dialogInterface, i ->
                         val text = editText.text.toString()
-                        if (viewModel.renameFromTaskListNames(binding.tasksTabLayout.selectedTabPosition,
-                                text)
-                        )
-                            binding.tasksTabLayout.getTabAt(binding.tasksTabLayout.selectedTabPosition)?.text =
-                                text
-                        else showSnackbar(R.string.this_list_already_exists)
+                        val position = binding.tasksTabLayout.selectedTabPosition
+                        val isSuccess = viewModel.setTaskListName(position, text)
+                        if (!isSuccess)
+                            showSnackbar(R.string.this_list_already_exists)
                     }
 
-                    builder.setNegativeButton(R.string.dialog_negative_button_text) { dialogInterface, i ->
-
-                    }
+                    builder.setNegativeButton(R.string.dialog_negative_button_text, null)
                     val dialog = builder.create()
                     dialog.show()
                     editText.setOnEditorActionListener { textView, actionId, keyEvent ->
                         if (actionId == EditorInfo.IME_ACTION_DONE) {
-                            val text = textView.text.toString()
-                            if (viewModel.renameFromTaskListNames(binding.tasksTabLayout.selectedTabPosition,
-                                    text)
-                            ) {
-                                binding.tasksTabLayout.getTabAt(binding.tasksTabLayout.selectedTabPosition)?.text =
-                                    text
-                                dialog.cancel()
-                            } else showSnackbar(R.string.this_list_already_exists)
+                            val text = editText.text.toString()
+                            val position = binding.tasksTabLayout.selectedTabPosition
+                            val isSuccess = viewModel.setTaskListName(position, text)
+                            if (isSuccess) dialog.cancel()
+                            else showSnackbar(R.string.this_list_already_exists)
                             return@setOnEditorActionListener true
                         }
                         false
@@ -157,11 +171,8 @@ class TasksFragment : Fragment() {
             builder.setView(editTextDialogBinding.root)
             builder.setPositiveButton(R.string.dialog_positive_button_text) { dialogInterface, i ->
                 val text = editText.text.toString()
-                if (viewModel.addIntoTaskListNames(text)) {
-                    val tab = binding.tasksTabLayout.newTab()
-                    tab.text = text
-                    binding.tasksTabLayout.addTab(tab)
-                } else showSnackbar(R.string.this_list_already_exists)
+                val isSuccess = viewModel.addTaskListName(text)
+                if (!isSuccess) showSnackbar(R.string.this_list_already_exists)
             }
 
             builder.setNegativeButton(R.string.dialog_negative_button_text, null)
@@ -170,12 +181,9 @@ class TasksFragment : Fragment() {
             editText.setOnEditorActionListener { textView, actionId, keyEvent ->
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     val text = textView.text.toString()
-                    if (viewModel.addIntoTaskListNames(text)) {
-                        val tab = binding.tasksTabLayout.newTab()
-                        tab.text = text
-                        binding.tasksTabLayout.addTab(tab)
-                        dialog.cancel()
-                    } else showSnackbar(R.string.this_list_already_exists)
+                    val isSuccess = viewModel.addTaskListName(text)
+                    if (isSuccess) showSnackbar(R.string.this_list_already_exists)
+                    else dialog.cancel()
                     return@setOnEditorActionListener true
                 }
                 false
@@ -183,17 +191,7 @@ class TasksFragment : Fragment() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 editText.windowInsetsController?.show(WindowInsets.Type.ime())
             }
-
         }
-
-        binding.tasksTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab?) {}
-
-            override fun onTabUnselected(tab: TabLayout.Tab?) {}
-
-            override fun onTabReselected(tab: TabLayout.Tab?) {}
-
-        })
         return binding.root
     }
 

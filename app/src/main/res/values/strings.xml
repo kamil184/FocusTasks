@@ -52,6 +52,10 @@
     <string name="the_only_existing_list_cannot_be_deleted">Единственный существующий список не может быть удален</string>
     <string name="list_name">Название списка</string>
     <string name="something_went_wrong">Что-то пошло не так</string>
+    <string name="completed">Выполненные (%1$d)</string>
+    <string name="welcome_messages">Hello, %1$s! You have %2$d new messages.</string>
+    <string name="there_is_no_tasks">Пока нет задач</string>
+    <string name="create_new_task">Создайте новую задачу, нажав на +</string>
 
     <!--first day is sunday, last day is saturday-->
     <string-array name="calendar_days_1_letter">

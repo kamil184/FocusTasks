@@ -11,13 +11,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.kamil184.focustasks.databinding.FragmentTimerBinding
-import com.kamil184.focustasks.model.Timer
-import com.kamil184.focustasks.model.TimerState
+import com.kamil184.focustasks.data.model.Timer
+import com.kamil184.focustasks.data.model.TimerState
 import com.kamil184.focustasks.service.TimerService
 
 class TimerFragment : Fragment() {
 
-    private val viewModel: TimerViewModel by viewModels()
+    private val viewModel: TimerViewModel by viewModels{TimerViewModel.Factory}
     private var _binding: FragmentTimerBinding? = null
     private val binding get() = _binding!!
 

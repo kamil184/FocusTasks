@@ -1,4 +1,4 @@
-package com.kamil184.focustasks.manager
+package com.kamil184.focustasks.data.manager
 
 import android.content.Context
 import androidx.datastore.preferences.core.edit

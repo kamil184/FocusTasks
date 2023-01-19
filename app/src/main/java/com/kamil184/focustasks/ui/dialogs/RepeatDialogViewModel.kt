@@ -1,11 +1,11 @@
-package com.kamil184.focustasks.ui.tasks
+package com.kamil184.focustasks.ui.dialogs
 
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.kamil184.focustasks.R
-import com.kamil184.focustasks.model.CalendarMonthsHelper
-import com.kamil184.focustasks.model.Repeat
+import com.kamil184.focustasks.data.model.CalendarMonthsHelper
+import com.kamil184.focustasks.data.model.Repeat
 import java.util.*
 
 class RepeatDialogViewModel : ViewModel() {

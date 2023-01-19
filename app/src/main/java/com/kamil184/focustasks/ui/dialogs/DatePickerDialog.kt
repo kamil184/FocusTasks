@@ -1,4 +1,4 @@
-package com.kamil184.focustasks.ui.tasks
+package com.kamil184.focustasks.ui.dialogs
 
 import android.app.Dialog
 import android.content.DialogInterface
@@ -15,7 +15,7 @@ import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import com.kamil184.focustasks.R
 import com.kamil184.focustasks.databinding.DatePickerDialogBinding
-import com.kamil184.focustasks.model.CalendarMonthsHelper
+import com.kamil184.focustasks.data.model.CalendarMonthsHelper
 import com.kamil184.focustasks.util.getColorFromAttr
 import com.kamil184.focustasks.util.parcelable
 import java.util.*
@@ -137,7 +137,7 @@ class DatePickerDialog(private val onDismissListener: () -> Unit) : DialogFragme
         setFragmentResultListener(RepeatDialog.REQUEST_KEY) { key, bundle ->
             viewModel.taskValue.repeat = bundle.parcelable(RepeatDialog.BUNDLE_KEY_REPEAT)
             binding.datePickerCalendarRepeatText.text =
-                viewModel.taskValue.repeat?.getText(requireContext())
+                viewModel.taskValue.repeat?.getText(requireContext().resources)
             binding.datePickerCalendarRepeatText.setTextColor(getColorFromAttr(requireContext(),
                 android.R.attr.textColorPrimary))
         }
@@ -159,7 +159,7 @@ class DatePickerDialog(private val onDismissListener: () -> Unit) : DialogFragme
         }
         if(viewModel.taskValue.repeat != null){
             binding.datePickerCalendarRepeatText.text =
-                viewModel.taskValue.repeat!!.getText(requireContext())
+                viewModel.taskValue.repeat!!.getText(requireContext().resources)
             binding.datePickerCalendarRepeatText.setTextColor(getColorFromAttr(requireContext(),
                 android.R.attr.textColorPrimary))
         }

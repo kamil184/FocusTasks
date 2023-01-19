@@ -1,4 +1,4 @@
-package com.kamil184.focustasks.model
+package com.kamil184.focustasks.data.model
 
 import java.util.*
 

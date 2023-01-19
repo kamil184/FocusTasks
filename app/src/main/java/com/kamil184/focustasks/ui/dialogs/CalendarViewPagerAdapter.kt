@@ -1,12 +1,12 @@
-package com.kamil184.focustasks.ui.tasks
+package com.kamil184.focustasks.ui.dialogs
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kamil184.focustasks.R
-import com.kamil184.focustasks.model.CalendarMonthsHelper
-import com.kamil184.focustasks.model.SelectedDay
+import com.kamil184.focustasks.data.model.CalendarMonthsHelper
+import com.kamil184.focustasks.data.model.SelectedDay
 import java.util.*
 
 class CalendarViewPagerAdapter(calendar: Calendar) : RecyclerView.Adapter<CalendarViewPagerAdapter.ViewHolder>() {

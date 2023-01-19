@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--ConstraintLayout is less productive-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingHorizontal="8dp"
+    android:paddingVertical="6dp">
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/item_task_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/item_task_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="13dp"
+            android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
+            tools:text="Some Task" />
+
+        <TextView
+            android:id="@+id/item_task_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+            tools:text="Some large description, but I don't know, what to type, so AAAAAA" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/item_task_chip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:chipIcon="@drawable/ic_repeat_24"
+            tools:text="Tomorrow, 21:00" />
+    </LinearLayout>
+</LinearLayout>
+
+<!--<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="8dp"
+    android:paddingVertical="6dp">
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/item_task_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/item_task_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
+        app:layout_constraintBottom_toBottomOf="@id/item_task_checkbox"
+        app:layout_constraintStart_toEndOf="@id/item_task_checkbox"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Some Task" />
+
+    <TextView
+        android:id="@+id/item_task_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+        app:layout_constraintStart_toEndOf="@id/item_task_checkbox"
+        app:layout_constraintTop_toBottomOf="@id/item_task_title"
+        tools:text="Some large description, but I don't know, what to type, so AAAAAA" />
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/item_task_chip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/item_task_checkbox"
+        app:layout_constraintTop_toBottomOf="@id/item_task_description"
+        app:chipIcon="@drawable/ic_repeat_24"
+        tools:text="Tomorrow, 21:00"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>-->

@@ -16,9 +16,9 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat.*
 import com.kamil184.focustasks.MainActivity
 import com.kamil184.focustasks.R
-import com.kamil184.focustasks.manager.TimerManager
-import com.kamil184.focustasks.model.NonLiveDataTimer
-import com.kamil184.focustasks.model.TimerState
+import com.kamil184.focustasks.data.manager.TimerManager
+import com.kamil184.focustasks.data.model.NonLiveDataTimer
+import com.kamil184.focustasks.data.model.TimerState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

@@ -4,14 +4,6 @@ import android.content.Context
 import android.content.res.TypedArray
 import android.util.TypedValue
 
-/*fun dpToPx(context: Context?, dp: Int): Int {
-    context?.let {
-        val displayMetrics = it.resources.displayMetrics
-        return (dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT)).roundToInt()
-    }
-    return 0
-}*/
-
 fun getColorFromAttr(context: Context, attrId: Int): Int {
     val typedValue = TypedValue()
     context.theme.resolveAttribute(attrId, typedValue, true)

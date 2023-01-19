@@ -1,4 +1,4 @@
-package com.kamil184.focustasks.ui.tasks
+package com.kamil184.focustasks.ui.dialogs
 
 import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
@@ -7,7 +7,6 @@ import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.text.format.DateFormat
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -26,8 +25,8 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.kamil184.focustasks.R
+import com.kamil184.focustasks.data.model.Task
 import com.kamil184.focustasks.databinding.TaskCreateBinding
-import com.kamil184.focustasks.model.Task
 import com.kamil184.focustasks.util.parcelable
 
 
@@ -36,7 +35,7 @@ class TaskCreateBottomSheet : BottomSheetDialogFragment() {
     private val binding get() = _binding!!
     private var datePickerDialog: DatePickerDialog? = null
 
-    private val viewModel: TaskCreateViewModel by viewModels()
+    private val viewModel: TaskCreateViewModel by viewModels{ TaskCreateViewModel.Factory }
 
     private var _iconMarginPx: Int? = null
     private val iconMarginPx: Int get() = _iconMarginPx!!
@@ -82,6 +81,11 @@ class TaskCreateBottomSheet : BottomSheetDialogFragment() {
 
         binding.taskCreatePriorityButton.setOnClickListener {
             showPriorityPopup(it)
+        }
+
+        binding.taskCreateSaveButton.setOnClickListener {
+            viewModel.saveTask()
+            dialog?.cancel()
         }
 
         binding.taskCreateEditText.addTextChangedListener(object : TextWatcher {
@@ -166,7 +170,7 @@ class TaskCreateBottomSheet : BottomSheetDialogFragment() {
         } else {
             binding.taskCreateCalendarChip.visibility = View.VISIBLE
             binding.taskCreateCalendarChip.text =
-                viewModel.getCalendarChipText(requireContext(), DateFormat.is24HourFormat(context))
+                viewModel.task.value?.getChipText(requireContext())
         }
 
     }

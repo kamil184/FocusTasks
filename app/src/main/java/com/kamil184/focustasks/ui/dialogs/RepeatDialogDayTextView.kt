@@ -1,4 +1,4 @@
-package com.kamil184.focustasks.ui.tasks
+package com.kamil184.focustasks.ui.dialogs
 
 import android.content.Context
 import android.content.res.ColorStateList

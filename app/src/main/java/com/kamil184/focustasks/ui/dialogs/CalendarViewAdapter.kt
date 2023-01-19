@@ -1,4 +1,4 @@
-package com.kamil184.focustasks.ui.tasks
+package com.kamil184.focustasks.ui.dialogs
 
 import android.content.res.Configuration
 import android.graphics.Typeface
@@ -8,10 +8,10 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.kamil184.focustasks.R
-import com.kamil184.focustasks.model.CalendarDay
-import com.kamil184.focustasks.model.CalendarMonthsHelper
-import com.kamil184.focustasks.model.OnSelectedDayChangedListener
-import com.kamil184.focustasks.model.SelectedDay
+import com.kamil184.focustasks.data.model.CalendarDay
+import com.kamil184.focustasks.data.model.CalendarMonthsHelper
+import com.kamil184.focustasks.data.model.OnSelectedDayChangedListener
+import com.kamil184.focustasks.data.model.SelectedDay
 import com.kamil184.focustasks.util.getColorFromAttr
 import java.util.*
 

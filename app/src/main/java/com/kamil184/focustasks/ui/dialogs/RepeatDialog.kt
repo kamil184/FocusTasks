@@ -1,4 +1,4 @@
-package com.kamil184.focustasks.ui.tasks
+package com.kamil184.focustasks.ui.dialogs
 
 import android.app.Dialog
 import android.content.DialogInterface
@@ -17,9 +17,9 @@ import androidx.fragment.app.viewModels
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.kamil184.focustasks.R
 import com.kamil184.focustasks.databinding.RepeatDialogBinding
-import com.kamil184.focustasks.model.CalendarMonthsHelper.Companion.today
-import com.kamil184.focustasks.model.Repeat
-import com.kamil184.focustasks.ui.tasks.RepeatDialogViewModel.Companion.localeDays2LettersArray
+import com.kamil184.focustasks.data.model.CalendarMonthsHelper.Companion.today
+import com.kamil184.focustasks.data.model.Repeat
+import com.kamil184.focustasks.ui.dialogs.RepeatDialogViewModel.Companion.localeDays2LettersArray
 import com.kamil184.focustasks.util.getColorFromAttr
 import com.kamil184.focustasks.util.parcelable
 import java.util.*

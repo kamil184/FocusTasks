@@ -1,19 +1,32 @@
 package com.kamil184.focustasks.ui.timer
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.kamil184.focustasks.manager.TimerManager
-import com.kamil184.focustasks.model.Timer
-import com.kamil184.focustasks.model.TimerState
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import com.kamil184.focustasks.App
+import com.kamil184.focustasks.data.manager.TimerManager
+import com.kamil184.focustasks.data.model.Timer
+import com.kamil184.focustasks.data.model.TimerState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class TimerViewModel(application: Application) : AndroidViewModel(application) {
+class TimerViewModel(private val timerManager: TimerManager) : ViewModel() {
 
-    private val timerManager: TimerManager = TimerManager(application)
     val timer = MutableLiveData<Timer>()
+
+    companion object {
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                val timerManager = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as App).timerManager
+                TimerViewModel(
+                    timerManager = timerManager
+                )
+            }
+        }
+    }
 
     fun fetchTimer() = viewModelScope.launch(Dispatchers.IO) {
         timerManager.timerFlow.collect {

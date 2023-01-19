@@ -1,4 +1,4 @@
-package com.kamil184.focustasks.manager
+package com.kamil184.focustasks.data.manager
 
 import android.content.Context
 import android.util.Log
@@ -8,8 +8,8 @@ import androidx.datastore.core.Serializer
 import androidx.datastore.dataStore
 import com.google.protobuf.InvalidProtocolBufferException
 import com.kamil184.focustasks.TimerPreferences
-import com.kamil184.focustasks.model.NonLiveDataTimer
-import com.kamil184.focustasks.model.Timer
+import com.kamil184.focustasks.data.model.NonLiveDataTimer
+import com.kamil184.focustasks.data.model.Timer
 import kotlinx.coroutines.flow.map
 import java.io.InputStream
 import java.io.OutputStream

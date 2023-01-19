@@ -60,4 +60,7 @@
 
     <color name="light_track_color">#33994062</color>
     <color name="dark_track_color">#33FFB1CB</color>
+    <color name="priority_high_3">#D32F2F</color>
+    <color name="priority_high_2">#FBC02D</color>
+    <color name="priority_high_1">#1976D2</color>
 </resources>
