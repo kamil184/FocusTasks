@@ -6,32 +6,30 @@ import androidx.annotation.StringRes
 import com.kamil184.focustasks.R
 import com.kamil184.focustasks.data.model.CalendarMonthsHelper.Companion.today
 import com.kamil184.focustasks.ui.dialogs.RepeatDialogViewModel
+import com.kamil184.focustasks.util.getTodayLocalIndex
 import kotlinx.parcelize.Parcelize
 import java.util.*
 
-//TODO: make russia text normal (просколнять все)
 @Parcelize
-enum class Repeat : Parcelable {
+//TODO: make russia text normal (просколнять все)
+enum class Repeat(
+    var count: Int = 1,
+    var weekInfo: BooleanArray? = null,
+    private var _monthInfoInt: Int? = null,
+    private var _monthInfoPair: Pair<Int, Int>? = null,
+) : Parcelable {
     DAY {
         override fun getText(resources: Resources): String {
-            checkCount()
-
             return if (count == 1) resources.getString(R.string.daily)
             else
                 resources.getString(R.string.every) + " $count " + resources.getString(R.string.days)
         }
     },
     WEEK {
-
-        /**
-         * @see info must be initialised as Array<Boolean> before calling getText()
-         */
         override fun getText(resources: Resources): String {
-            checkCount()
-            if (info == null) throw IllegalArgumentException("variable info isn't initialised!")
-            if (info !is Array<*>) throw IllegalArgumentException("variable info isn't right datatype (Array<Boolean>)!")
+            if (weekInfo == null) throw IllegalArgumentException("variable weekInfo isn't initialised!")
 
-            val days = (info as Array<*>).filterIsInstance<Boolean>()
+            val days = weekInfo!!
             var isDaily = true
             if (count != 1) isDaily = false
             var endText = " ("
@@ -46,80 +44,68 @@ enum class Repeat : Parcelable {
         }
     },
     MONTH {
-
         /**
-         * @see info must be initialised as Int or Pair<Int,Int> before calling getText()
-         * if info is Int, then it must be 1.32 (32 is last days index)
-         * if info is Pair<Int,Int>, then first in 1..5, second in 1..7
+         * if monthInfoInt, then it must be 1.32 (32 is last days index)
+         * if monthInfoPair, then first has to be in 1..5, second - in 1..7
          */
         override fun getText(resources: Resources): String {
-            checkCount()
-            if (info == null) throw IllegalArgumentException("variable info isn't initialised!")
+            if (monthInfoPair == null && monthInfoInt == null)
+                throw IllegalArgumentException("one of the variables monthInfoInt or monthInfoPair has to be initialised!")
 
             val textBegin =
                 if (count == 1) resources.getString(R.string.monthly) + " "
                 else resources.getString(R.string.every) + " $count " + resources.getString(R.string.month) + " "
-            when (info) {
-                is Int -> {
-                    val intInfo = info as Int
-                    if (intInfo !in 1..32)
-                        throw IllegalArgumentException("variable info must be in 1..32")
+            if (monthInfoInt != null) {
+                if (monthInfoInt !in 1..32)
+                    throw IllegalArgumentException("variable info must be in 1..32")
 
-                    return if (intInfo in 1..31)
-                        textBegin + "on the ${intInfo}rd"
-                    else textBegin + "on the last day"
+                return if (monthInfoInt in 1..31)
+                    textBegin + resources.getString(R.string.on_the_xx_rd, monthInfoInt)
+                else textBegin + resources.getString(R.string.on_the_last_day)
 
-                }
-                is Pair<*, *> -> {
-                    val pairInfo = info as Pair<*, *>
-                    val textMiddle =
-                        "${resources.getText(R.string.every)} " + when (pairInfo.first as Int) {
-                            1 -> resources.getText(R.string.first)
-                            2 -> resources.getText(R.string.second)
-                            3 -> resources.getText(R.string.third)
-                            4 -> resources.getText(R.string.fourth)
-                            5 -> resources.getText(R.string.last)
-                            else -> throw IllegalArgumentException("first variable in info must be in 1..5")
-                        }
+            } else {
+                val pair = monthInfoPair!!
+                val textMiddle =
+                    "${resources.getText(R.string.every)} " + when (pair.first) {
+                        1 -> resources.getText(R.string.first)
+                        2 -> resources.getText(R.string.second)
+                        3 -> resources.getText(R.string.third)
+                        4 -> resources.getText(R.string.fourth)
+                        5 -> resources.getText(R.string.last)
+                        else -> throw IllegalArgumentException("first variable in info must be in 1..5")
+                    }
 
-                    if (pairInfo.second as Int !in 1..7) throw IllegalArgumentException("second variable in info must be in 1..7")
-                    val normalDaysStringArray =
-                        resources.getStringArray(R.array.calendar_days_2_letters)
-                    val textEnd = normalDaysStringArray[pairInfo.second as Int - 1]
+                if (pair.second !in 1..7) throw IllegalArgumentException("second variable in info must be in 1..7")
+                val normalDaysStringArray =
+                    resources.getStringArray(R.array.calendar_days_2_letters)
+                val textEnd = normalDaysStringArray[pair.second]
 
-                    return "$textBegin$textMiddle $textEnd"
-
-                }
-                else -> throw IllegalArgumentException("variable info isn't right datatype (Int or Pair<Int, Int>)!")
+                return "$textBegin$textMiddle $textEnd"
             }
         }
     },
     YEAR {
         override fun getText(resources: Resources): String {
-            checkCount()
-
             return if (count == 1) resources.getString(R.string.yearly)
             else resources.getString(R.string.every) + " $count " + resources.getString(R.string.year)
         }
     };
 
-    var count: Int? = null
+    var monthInfoInt
+        get() = _monthInfoInt
+        set(value) {
+            _monthInfoInt = value
+            _monthInfoPair = null
+        }
 
-    //normal - USA (first day - sunday), local - all others
-    /**
-     * if it's WEEK it can be Array<Boolean>
-     *
-     * if it's MONTH it can be Int in 1.32 (32 is last days index)
-     * or Pair<Int,Int>, then first in 1..5, second in 1..7 (normal id: 1 - sunday)
-     */
-    var info: Any? = null
+    var monthInfoPair
+        get() = _monthInfoPair
+        set(value) {
+            _monthInfoPair = value
+            _monthInfoInt = null
+        }
 
     abstract fun getText(resources: Resources): String
-
-    protected fun checkCount() {
-        if (count == null) throw IllegalArgumentException("variable count isn't initialised!")
-        if (count!! < 1) throw IllegalArgumentException("variable count must be > 0")
-    }
 
     fun getNameRes() = when (ordinal) {
         DAY.ordinal -> R.string.day
@@ -132,16 +118,9 @@ enum class Repeat : Parcelable {
     companion object {
         fun getBasicInstance(): Repeat {
             val repeat = WEEK
-            repeat.count = 1
-
-            val diff = today.firstDayOfWeek - 1
-            val ti = today.get(Calendar.DAY_OF_WEEK) - 1 - diff
-            val todayId =
-                if (ti < 0) ti + 7
-                else ti
-            val info = Array(7) { false }
-            info[todayId] = true
-            repeat.info = info
+            val info = BooleanArray(7)
+            info[getTodayLocalIndex()] = true
+            repeat.weekInfo = info
             return repeat
         }
 

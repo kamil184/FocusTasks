@@ -56,6 +56,8 @@
     <string name="welcome_messages">Hello, %1$s! You have %2$d new messages.</string>
     <string name="there_is_no_tasks">Пока нет задач</string>
     <string name="create_new_task">Создайте новую задачу, нажав на +</string>
+    <string name="on_the_xx_rd">%1$d числа</string>
+    <string name="on_the_last_day">в последний день</string>
 
     <!--first day is sunday, last day is saturday-->
     <string-array name="calendar_days_1_letter">

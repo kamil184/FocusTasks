@@ -15,7 +15,6 @@ import com.kamil184.focustasks.util.getColorFromAttr
 import kotlinx.parcelize.Parcelize
 import java.util.*
 
-
 @Entity(tableName = TABLE_NAME)
 @Parcelize
 data class Task(

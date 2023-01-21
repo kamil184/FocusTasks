@@ -75,15 +75,11 @@ class TasksFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
                     viewModel.taskListNames.collectLatest { taskListNames ->
+                        val tabCount = binding.tasksTabLayout.tabCount
+                        val isAdded = tabCount < taskListNames.size && tabCount != 0
                         binding.tasksCreateTabButton.visibility = View.VISIBLE
                         viewPagerAdapter.submitTaskListNames(taskListNames)
-                        if (binding.tasksTabLayout.tabCount == 0) {
-                            taskListNames.forEach {
-                                val tab = binding.tasksTabLayout.newTab()
-                                tab.text = it
-                                binding.tasksTabLayout.addTab(tab)
-                            }
-                        }
+                        if(isAdded) binding.tasksTabLayout.selectTab(binding.tasksTabLayout.getTabAt(tabCount))
                     }
                 }
                 launch {
@@ -94,9 +90,8 @@ class TasksFragment : Fragment() {
             }
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
             binding.tasksTabsAppBar.menu.setGroupDividerEnabled(true)
-        }
 
         TabLayoutMediator(binding.tasksTabLayout, binding.tasksViewPager) { tab, position ->
             tab.text = viewModel.taskListNames.value[position]
