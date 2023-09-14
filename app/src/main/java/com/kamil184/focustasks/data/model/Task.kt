@@ -6,9 +6,7 @@ import android.content.res.Resources
 import android.os.Parcelable
 import android.text.format.DateFormat
 import androidx.core.content.ContextCompat
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import androidx.room.*
 import com.kamil184.focustasks.R
 import com.kamil184.focustasks.data.model.Task.Companion.TABLE_NAME
 import com.kamil184.focustasks.util.getColorFromAttr
@@ -25,7 +23,7 @@ data class Task(
     var calendar: Calendar? = null,
     @ColumnInfo(name = "is_there_a_time") var isThereATime: Boolean = false,
     var priority: Priority = Priority.NO,
-    var repeat: Repeat? = null,
+    @Embedded var repeat: Repeat? = null,
     @ColumnInfo(name = "is_completed") var isCompleted: Boolean = false,
     @ColumnInfo(name = "position_in_list") var positionInList: Int = 0,
 ) : Parcelable {

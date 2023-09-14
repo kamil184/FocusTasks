@@ -22,7 +22,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.kamil184.focustasks.R
-import com.kamil184.focustasks.data.model.Task
 import com.kamil184.focustasks.databinding.EditTextDialogBinding
 import com.kamil184.focustasks.databinding.FragmentTasksBinding
 import com.kamil184.focustasks.ui.dialogs.DatePickerDialog
@@ -34,13 +33,10 @@ import kotlinx.coroutines.launch
 class TasksFragment : Fragment() {
 
     private val viewModel: TasksViewModel by viewModels { TasksViewModel.Factory }
-
     private var _binding: FragmentTasksBinding? = null
-
     private val binding get() = _binding!!
 
     private lateinit var viewPagerAdapter: TasksViewPagerAdapter
-
     private fun TabLayout.selectedTabText() =
         getTabAt(selectedTabPosition)?.text.toString()
 
@@ -67,7 +63,7 @@ class TasksFragment : Fragment() {
                 insets
             }
 
-        viewPagerAdapter = TasksViewPagerAdapter()
+        viewPagerAdapter = TasksViewPagerAdapter(viewModel.updatedTasksFlow)
         binding.tasksViewPager.adapter = viewPagerAdapter
         binding.tasksViewPager.offscreenPageLimit = 1
 
@@ -87,6 +83,11 @@ class TasksFragment : Fragment() {
                         viewPagerAdapter.submitTasks(it)
                     }
                 }
+                launch {
+                    viewModel.updatedTasksFlow.collectLatest {
+                        viewModel.updateTask(it)
+                    }
+                }
             }
         }
 
@@ -99,10 +100,8 @@ class TasksFragment : Fragment() {
 
         binding.tasksFab.setOnClickListener {
             val taskCreateBottomSheet = TaskCreateBottomSheet()
-            val task = Task()
-            task.list = binding.tasksTabLayout.selectedTabText()
             taskCreateBottomSheet.arguments =
-                bundleOf(BUNDLE_KEY_TASK to task, BUNDLE_KEY_LIST to viewModel.taskListNames.value)
+                bundleOf(BUNDLE_KEY_CURRENT_LIST to binding.tasksTabLayout.selectedTabText())
             taskCreateBottomSheet.show(parentFragmentManager, TaskCreateBottomSheet.TAG)
         }
 
@@ -200,7 +199,6 @@ class TasksFragment : Fragment() {
     }
 
     companion object {
-        const val BUNDLE_KEY_TASK = DatePickerDialog.BUNDLE_KEY_TASK
-        const val BUNDLE_KEY_LIST = TaskCreateBottomSheet.BUNDLE_KEY_LIST
+        const val BUNDLE_KEY_CURRENT_LIST = DatePickerDialog.BUNDLE_KEY_TASK
     }
 }

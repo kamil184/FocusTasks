@@ -8,9 +8,12 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.kamil184.focustasks.App
 import com.kamil184.focustasks.data.manager.TaskListNamesManager
+import com.kamil184.focustasks.data.model.Task
 import com.kamil184.focustasks.data.repo.TaskRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.launch
 
 class TasksViewModel(
@@ -22,6 +25,7 @@ class TasksViewModel(
     val taskListNames get() = _taskListNames
 
     val tasks = taskRepository.allTasks
+    val updatedTasksFlow = MutableSharedFlow<Task>(3)
 
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
@@ -81,6 +85,10 @@ class TasksViewModel(
         mutableList[id] = s
         _taskListNames.value = mutableList
         return true
+    }
+
+    suspend fun updateTask(task: Task){
+        taskRepository.update(task)
     }
 
     override fun onCleared() {

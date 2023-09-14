@@ -4,12 +4,16 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kamil184.focustasks.data.model.Task
 import com.kamil184.focustasks.databinding.TasksViewPagerItemBinding
+import kotlinx.coroutines.flow.MutableSharedFlow
 
-class TasksViewPagerAdapter : RecyclerView.Adapter<TasksViewPagerAdapter.ViewHolder>() {
+
+class TasksViewPagerAdapter(private val updatedTasksFlow: MutableSharedFlow<Task>) :
+    RecyclerView.Adapter<TasksViewPagerAdapter.ViewHolder>() {
     private var taskListNames: List<String>? = null
     private var tasks: List<Task>? = null
 
@@ -29,10 +33,14 @@ class TasksViewPagerAdapter : RecyclerView.Adapter<TasksViewPagerAdapter.ViewHol
         }
     }
 
-    class ViewHolder(private val binding: TasksViewPagerItemBinding) :
+    inner class ViewHolder(private val binding: TasksViewPagerItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         init {
             binding.tasksRecyclerView.layoutManager = LinearLayoutManager(binding.root.context)
+            binding.tasksRecyclerView.adapter = TasksListAdapter(updatedTasksFlow)
+            val itemTouchHelperCallback = TasksListAdapterItemTouchHelperCallback(binding.tasksRecyclerView.adapter as TasksListAdapter)
+            val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
+            itemTouchHelper.attachToRecyclerView(binding.tasksRecyclerView)
         }
 
         fun bind(tasks: List<Task>) {
@@ -47,10 +55,8 @@ class TasksViewPagerAdapter : RecyclerView.Adapter<TasksViewPagerAdapter.ViewHol
                 binding.tasksOnEmptyListTitle.visibility = View.GONE
                 binding.tasksOnEmptyListText.visibility = View.GONE
 
-                binding.tasksRecyclerView.apply {
-                    if (adapter == null) adapter = TasksListAdapter()
-                    (adapter as TasksListAdapter).submitTasks(tasks)
-                }
+                (binding.tasksRecyclerView.adapter as TasksListAdapter).submitTasks(tasks)
+
             }
         }
     }
@@ -65,7 +71,7 @@ class TasksViewPagerAdapter : RecyclerView.Adapter<TasksViewPagerAdapter.ViewHol
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        if (tasks != null && taskListNames!=null) {
+        if (tasks != null && taskListNames != null) {
             val list = taskListNames!![position]
             val tasks = tasks!!.filter { it.list == list }
             holder.bind(tasks)

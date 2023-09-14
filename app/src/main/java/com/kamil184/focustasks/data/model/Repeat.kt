@@ -2,34 +2,34 @@ package com.kamil184.focustasks.data.model
 
 import android.content.res.Resources
 import android.os.Parcelable
-import androidx.annotation.StringRes
+import androidx.room.ColumnInfo
 import com.kamil184.focustasks.R
-import com.kamil184.focustasks.data.model.CalendarMonthsHelper.Companion.today
 import com.kamil184.focustasks.ui.dialogs.RepeatDialogViewModel
 import com.kamil184.focustasks.util.getTodayLocalIndex
 import kotlinx.parcelize.Parcelize
-import java.util.*
 
-@Parcelize
 //TODO: make russia text normal (просколнять все)
-enum class Repeat(
-    var count: Int = 1,
-    var weekInfo: BooleanArray? = null,
-    private var _monthInfoInt: Int? = null,
-    private var _monthInfoPair: Pair<Int, Int>? = null,
+sealed class Repeat(
+    var count: Int = 1
 ) : Parcelable {
-    DAY {
+    @Parcelize
+    class Day : Repeat() {
         override fun getText(resources: Resources): String {
             return if (count == 1) resources.getString(R.string.daily)
             else
                 resources.getString(R.string.every) + " $count " + resources.getString(R.string.days)
         }
-    },
-    WEEK {
-        override fun getText(resources: Resources): String {
-            if (weekInfo == null) throw IllegalArgumentException("variable weekInfo isn't initialised!")
 
-            val days = weekInfo!!
+        override fun getNameRes() = R.string.day
+    }
+
+    @Parcelize
+    class Week(
+        @ColumnInfo(name = "week_info")
+        var weekInfo: BooleanArray = booleanArrayOf()
+    ) : Repeat() {
+        override fun getText(resources: Resources): String {
+            val days = weekInfo
             var isDaily = true
             if (count != 1) isDaily = false
             var endText = " ("
@@ -42,12 +42,38 @@ enum class Repeat(
             if (count == 1) return resources.getString(R.string.weekly) + endText
             return resources.getString(R.string.every) + " $count " + resources.getString(R.string.weeks) + endText
         }
-    },
-    MONTH {
+
+        override fun getNameRes() = R.string.week
+
+    }
+
+    @Parcelize
+    class Month(
+        @ColumnInfo(name = "month_info_int")
+        private var _monthInfoInt: Int? = null,
+        @ColumnInfo(name = "month_info_pair")
+        private var _monthInfoPair: Pair<Int, Int>? = null,
+    ) : Repeat() {
         /**
-         * if monthInfoInt, then it must be 1.32 (32 is last days index)
-         * if monthInfoPair, then first has to be in 1..5, second - in 1..7
+         * it must be 1.32 (32 is last days index)
          */
+        var monthInfoInt
+            get() = _monthInfoInt
+            set(value) {
+                _monthInfoInt = value
+                _monthInfoPair = null
+            }
+
+        /**
+         * first has to be in 1..5, second - in 1..7
+         */
+        var monthInfoPair
+            get() = _monthInfoPair
+            set(value) {
+                _monthInfoPair = value
+                _monthInfoInt = null
+            }
+
         override fun getText(resources: Resources): String {
             if (monthInfoPair == null && monthInfoInt == null)
                 throw IllegalArgumentException("one of the variables monthInfoInt or monthInfoPair has to be initialised!")
@@ -83,54 +109,31 @@ enum class Repeat(
                 return "$textBegin$textMiddle $textEnd"
             }
         }
-    },
-    YEAR {
+
+        override fun getNameRes() = R.string.month
+
+    }
+
+    @Parcelize
+    class Year : Repeat() {
         override fun getText(resources: Resources): String {
             return if (count == 1) resources.getString(R.string.yearly)
             else resources.getString(R.string.every) + " $count " + resources.getString(R.string.year)
         }
-    };
 
-    var monthInfoInt
-        get() = _monthInfoInt
-        set(value) {
-            _monthInfoInt = value
-            _monthInfoPair = null
-        }
+        override fun getNameRes() = R.string.year
 
-    var monthInfoPair
-        get() = _monthInfoPair
-        set(value) {
-            _monthInfoPair = value
-            _monthInfoInt = null
-        }
+    }
 
     abstract fun getText(resources: Resources): String
 
-    fun getNameRes() = when (ordinal) {
-        DAY.ordinal -> R.string.day
-        WEEK.ordinal -> R.string.week
-        MONTH.ordinal -> R.string.month
-        YEAR.ordinal -> R.string.year
-        else -> throw IllegalArgumentException("Repeat text must be day, week, month or year")
-    }
+    abstract fun getNameRes(): Int
 
     companion object {
         fun getBasicInstance(): Repeat {
-            val repeat = WEEK
             val info = BooleanArray(7)
             info[getTodayLocalIndex()] = true
-            repeat.weekInfo = info
-            return repeat
-        }
-
-        @StringRes
-        fun getNumberOfTheWeekInMonthStringRes() = when (today.get(Calendar.WEEK_OF_MONTH)) {
-            1 -> R.string.first
-            2 -> R.string.second
-            3 -> R.string.third
-            4 -> R.string.fourth
-            else -> R.string.last
+            return Week(info)
         }
     }
 }

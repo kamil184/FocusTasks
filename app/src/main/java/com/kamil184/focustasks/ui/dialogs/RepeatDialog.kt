@@ -211,56 +211,50 @@ class RepeatDialog(
 
     private fun buildRepeat(): Repeat {
         val repeat = when (binding.repeatDialogRepeatsTimeUnitsText.text) {
-            requireContext().getString(R.string.day) -> Repeat.DAY
-            requireContext().getString(R.string.week) -> Repeat.WEEK
-            requireContext().getString(R.string.month) -> Repeat.MONTH
-            requireContext().getString(R.string.year) -> Repeat.YEAR
+            requireContext().getString(R.string.day) -> Repeat.Day()
+            requireContext().getString(R.string.week) -> Repeat.Week(daysListChecked)
+            requireContext().getString(R.string.month) -> Repeat.Month()
+            requireContext().getString(R.string.year) -> Repeat.Year()
             else -> throw IllegalArgumentException("Repeat text must be day, week, month or year")
         }
 
-        setRepeatInfo(repeat)
+        setMonthInfo(repeat)
 
         repeat.count = binding.repeatDialogRepeatsCountEditText.text.toString().toInt()
         return repeat
     }
 
-    private fun setRepeatInfo(repeat: Repeat) {
-        when (binding.repeatDialogRepeatsTimeUnitsText.text) {
-            requireContext().getString(R.string.week) ->
-                repeat.weekInfo = daysListChecked
-
-            requireContext().getString(R.string.month) -> {
-                if (binding.repeatDialogFirstRadioBtn.isChecked) {
-                    var isInfoInitialized = false
-                    for (i in 1..31)
-                        if (binding.repeatDialogFirstRadioText.text.contains(i.toString())) {
-                            repeat.monthInfoInt = i
-                            isInfoInitialized = true
-                        }
-                    if (!isInfoInitialized) repeat.monthInfoInt = 32
-                } else {
-                    val firstInPair = when (binding.repeatDialogSecondRadioCountText.text) {
-                        requireContext().getString(R.string.first) -> 1
-                        requireContext().getString(R.string.second) -> 2
-                        requireContext().getString(R.string.third) -> 3
-                        requireContext().getString(R.string.fourth) -> 4
-                        requireContext().getString(R.string.last) -> 5
-                        else -> throw IllegalArgumentException("variable firstInPair must be in 1..5")
+    private fun setMonthInfo(repeat: Repeat) {
+        if (repeat is Repeat.Month) {
+            if (binding.repeatDialogFirstRadioBtn.isChecked) {
+                var isInfoInitialized = false
+                for (i in 1..31)
+                    if (binding.repeatDialogFirstRadioText.text.contains(i.toString())) {
+                        repeat.monthInfoInt = i
+                        isInfoInitialized = true
                     }
-                    var secondInPair = -1
-                    for (i in localeDays2LettersArray.indices)
-                        if (binding.repeatDialogSecondRadioDayText.text.equals(
-                                localeDays2LettersArray[i])
-                        ) {
-                            secondInPair = convertToNormalDay(i)
-                            break
-                        }
-                    if (secondInPair == -1) throw IllegalArgumentException("variable secondInPair must be in 0..6")
-
-                    repeat.monthInfoPair = Pair(firstInPair, secondInPair)
+                if (!isInfoInitialized) repeat.monthInfoInt = 32
+            } else {
+                val firstInPair = when (binding.repeatDialogSecondRadioCountText.text) {
+                    requireContext().getString(R.string.first) -> 1
+                    requireContext().getString(R.string.second) -> 2
+                    requireContext().getString(R.string.third) -> 3
+                    requireContext().getString(R.string.fourth) -> 4
+                    requireContext().getString(R.string.last) -> 5
+                    else -> throw IllegalArgumentException("variable firstInPair must be in 1..5")
                 }
-            }
+                var secondInPair = -1
+                for (i in localeDays2LettersArray.indices)
+                    if (binding.repeatDialogSecondRadioDayText.text.equals(
+                            localeDays2LettersArray[i])
+                    ) {
+                        secondInPair = convertToNormalDay(i)
+                        break
+                    }
+                if (secondInPair == -1) throw IllegalArgumentException("variable secondInPair must be in 0..6")
 
+                repeat.monthInfoPair = Pair(firstInPair, secondInPair)
+            }
         }
     }
 
@@ -269,8 +263,17 @@ class RepeatDialog(
             binding.repeatDialogRepeatsCountEditText.setText(count.toString())
             binding.repeatDialogRepeatsTimeUnitsText.setText(getNameRes())
             setDaysList()
-            when {
-                monthInfoPair != null -> { //MONTH
+            if (this is Repeat.Week) {
+                if (binding.repeatDialogFirstRadioText.text.isEmpty()) {
+                    binding.repeatDialogFirstRadioBtn.isChecked = true
+                    binding.repeatDialogFirstRadioText.text =
+                        calendarDaysFrom1to31[today.get(Calendar.DAY_OF_MONTH) - 1]
+                    binding.repeatDialogSecondRadioCountText.setText(viewModel.getNumberOfTheWeekInMonthStringRes())
+                    binding.repeatDialogSecondRadioDayText.text =
+                        localeDays2LettersArray[getTodayLocalIndex()]
+                }
+            } else if (this is Repeat.Month) {
+                if (monthInfoPair != null) {
                     val pairInfo = monthInfoPair!!
                     binding.repeatDialogSecondRadioBtn.isChecked = true
 
@@ -292,38 +295,28 @@ class RepeatDialog(
                         binding.repeatDialogFirstRadioText.text =
                             calendarDaysFrom1to31[today.get(Calendar.DAY_OF_MONTH) - 1]
                     return@apply
-                }
-                monthInfoInt != null -> { //MONTH
+                } else if (monthInfoInt != null) {
                     val intInfo = monthInfoInt!!
                     binding.repeatDialogFirstRadioBtn.isChecked = true
                     binding.repeatDialogFirstRadioText.text =
                         calendarDaysFrom1to31[intInfo - 1]
                     if (binding.repeatDialogSecondRadioCountText.text.isEmpty()) {
-                        binding.repeatDialogSecondRadioCountText.setText(Repeat.getNumberOfTheWeekInMonthStringRes())
+                        binding.repeatDialogSecondRadioCountText.setText(viewModel.getNumberOfTheWeekInMonthStringRes())
                         binding.repeatDialogSecondRadioDayText.text =
                             localeDays2LettersArray[getTodayLocalIndex()]
                     }
                     return@apply
                 }
-                weekInfo != null -> { //WEEK
-                    if (binding.repeatDialogFirstRadioText.text.isEmpty()) {
-                        binding.repeatDialogFirstRadioBtn.isChecked = true
-                        binding.repeatDialogFirstRadioText.text =
-                            calendarDaysFrom1to31[today.get(Calendar.DAY_OF_MONTH) - 1]
-                        binding.repeatDialogSecondRadioCountText.setText(Repeat.getNumberOfTheWeekInMonthStringRes())
-                        binding.repeatDialogSecondRadioDayText.text =
-                            localeDays2LettersArray[getTodayLocalIndex()]
-                    }
-                    return@apply
-                }
+
             }
         }
+
     }
 
     private fun setDaysList() {
-        if (viewModel.repeat.value?.weekInfo != null) {
+        if (viewModel.repeat.value is Repeat.Week) {
             val isDaysClickedArray =
-                viewModel.repeat.value?.weekInfo!!
+                (viewModel.repeat.value as Repeat.Week).weekInfo
 
             for (i in daysViewsList.indices) {
                 if (isDaysClickedArray[i]) daysViewsList[i].setClickedState()

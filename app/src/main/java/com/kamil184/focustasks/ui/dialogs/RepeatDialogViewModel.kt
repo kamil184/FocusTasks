@@ -1,6 +1,7 @@
 package com.kamil184.focustasks.ui.dialogs
 
 import android.content.Context
+import androidx.annotation.StringRes
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.kamil184.focustasks.R
@@ -33,5 +34,14 @@ class RepeatDialogViewModel : ViewModel() {
         if (!isDays2LettersArrayInitialized()) {
             days2LettersArray = context.resources.getStringArray(R.array.calendar_days_2_letters)
         }
+    }
+
+    @StringRes
+    fun getNumberOfTheWeekInMonthStringRes() = when (CalendarMonthsHelper.today.get(Calendar.WEEK_OF_MONTH)) {
+        1 -> R.string.first
+        2 -> R.string.second
+        3 -> R.string.third
+        4 -> R.string.fourth
+        else -> R.string.last
     }
 }

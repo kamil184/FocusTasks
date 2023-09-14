@@ -15,8 +15,10 @@ import com.kamil184.focustasks.data.model.Task
 import com.kamil184.focustasks.databinding.ItemCompletedTasksHeaderBinding
 import com.kamil184.focustasks.databinding.ItemTaskBinding
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.MutableSharedFlow
+import java.util.*
 
-class TasksListAdapter :
+class TasksListAdapter(private val updatedTasksFlow: MutableSharedFlow<Task>) :
     RecyclerView.Adapter<TasksListAdapter.TasksListViewHolder>() {
     private var uncompletedTasks: MutableList<Task> = mutableListOf()
     private var completedTasks: MutableList<Task> = mutableListOf()
@@ -49,8 +51,9 @@ class TasksListAdapter :
             tasksSize == 0 -> listOf()
             completedTasks.isEmpty() -> uncompletedTasks
             uncompletedTasks.isEmpty() -> {
-                completedTasksVisible = true
-                getListFromListsAndObjects(completedTasks.size, completedTasks)
+                if (completedTasksVisible)
+                    getListFromListsAndObjects(completedTasks.size, completedTasks)
+                else listOf(completedTasks.size)
             }
             else -> {
                 if (completedTasksVisible)
@@ -82,7 +85,7 @@ class TasksListAdapter :
         return when (viewType) {
             R.layout.item_task -> {
                 val binding = ItemTaskBinding.inflate(inflater, parent, false)
-                TasksListViewHolder.TaskViewHolder(binding)
+                TasksListViewHolder.TaskViewHolder(binding, updatedTasksFlow)
             }
             R.layout.item_completed_tasks_header -> {
                 val binding = ItemCompletedTasksHeaderBinding.inflate(inflater, parent, false)
@@ -107,7 +110,10 @@ class TasksListAdapter :
     override fun onBindViewHolder(holder: TasksListViewHolder, position: Int) {
         when (val element = differ.currentList[position]) {
             is Int -> (holder as TasksListViewHolder.HeaderViewHolder).bind(completedTasks.size) //differ.currentList.size - 1 - position
-            is Task -> (holder as TasksListViewHolder.TaskViewHolder).bind(element)
+            is Task -> {
+                element.positionInList = position
+                (holder as TasksListViewHolder.TaskViewHolder).bind(element)
+            }
             else -> throw IllegalArgumentException("Invalid Type. It must be Task or Int") // Int is type for header
         }
     }
@@ -116,7 +122,8 @@ class TasksListAdapter :
         return differ.currentList.size
     }
 
-    sealed class TasksListViewHolder(binding: ViewBinding) : RecyclerView.ViewHolder(binding.root) {
+    sealed class TasksListViewHolder(binding: ViewBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
         class HeaderViewHolder(
             private val binding: ItemCompletedTasksHeaderBinding,
@@ -144,21 +151,30 @@ class TasksListAdapter :
             }
         }
 
-        class TaskViewHolder(private val binding: ItemTaskBinding) :
+        class TaskViewHolder(
+            private val binding: ItemTaskBinding,
+            private val updatedTasksFlow: MutableSharedFlow<Task>,
+        ) :
             TasksListViewHolder(binding) {
             private var task: Task? = null
 
             init {
                 binding.apply {
                     itemTaskCheckbox.setOnClickListener {
-                        if (itemTaskCheckbox.isChecked) {
-                            itemTaskTitle.paintFlags =
-                                itemTaskTitle.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
-                        } else {
-                            itemTaskTitle.paintFlags =
-                                itemTaskTitle.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+                        var isEmitted = false
+                        task?.apply {
+                            isCompleted = itemTaskCheckbox.isChecked
+                            isEmitted = updatedTasksFlow.tryEmit(this)
                         }
-                        task?.isCompleted = itemTaskCheckbox.isChecked
+                        if (isEmitted) {
+                            if (itemTaskCheckbox.isChecked) {
+                                itemTaskTitle.paintFlags =
+                                    itemTaskTitle.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                            } else {
+                                itemTaskTitle.paintFlags =
+                                    itemTaskTitle.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+                            }
+                        }
                     }
                 }
             }
@@ -183,11 +199,30 @@ class TasksListAdapter :
                     itemTaskCheckbox.isChecked = task.isCompleted
                     itemTaskCheckbox.buttonTintList =
                         task.getPriorityColorList(binding.root.context)
+
+                    if (task.isCompleted) {
+                        itemTaskTitle.paintFlags =
+                            itemTaskTitle.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                    } else {
+                        itemTaskTitle.paintFlags =
+                            itemTaskTitle.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+
+                    }
                 }
             }
         }
     }
 
+    fun onItemMove(from: Int, to: Int): Boolean {
+        val list:List<Any> = differ.currentList
+        val taskFrom:Task = list.find { it is Task && it.positionInList == from } as Task
+        val taskTo:Task = list.find { it is Task && it.positionInList == to } as Task
+        taskFrom.positionInList = to
+        updatedTasksFlow.tryEmit(taskFrom)
+        taskTo.positionInList = from
+        updatedTasksFlow.tryEmit(taskTo)
+        return true
+    }
     private object DiffCallback : ItemCallback<Any>() {
         override fun areItemsTheSame(oldItem: Any, newItem: Any): Boolean {
             Log.d("BLY", "areItemsTheSame")
