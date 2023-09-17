@@ -17,7 +17,11 @@ import androidx.fragment.app.viewModels
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.kamil184.focustasks.R
 import com.kamil184.focustasks.data.model.CalendarMonthsHelper.Companion.today
+import com.kamil184.focustasks.data.model.Day
+import com.kamil184.focustasks.data.model.Month
 import com.kamil184.focustasks.data.model.Repeat
+import com.kamil184.focustasks.data.model.Week
+import com.kamil184.focustasks.data.model.Year
 import com.kamil184.focustasks.databinding.RepeatDialogBinding
 import com.kamil184.focustasks.ui.dialogs.RepeatDialogViewModel.Companion.localeDays2LettersArray
 import com.kamil184.focustasks.util.*
@@ -211,10 +215,10 @@ class RepeatDialog(
 
     private fun buildRepeat(): Repeat {
         val repeat = when (binding.repeatDialogRepeatsTimeUnitsText.text) {
-            requireContext().getString(R.string.day) -> Repeat.Day()
-            requireContext().getString(R.string.week) -> Repeat.Week(daysListChecked)
-            requireContext().getString(R.string.month) -> Repeat.Month()
-            requireContext().getString(R.string.year) -> Repeat.Year()
+            requireContext().getString(R.string.day) -> Day()
+            requireContext().getString(R.string.week) -> Week(daysListChecked)
+            requireContext().getString(R.string.month) -> Month()
+            requireContext().getString(R.string.year) -> Year()
             else -> throw IllegalArgumentException("Repeat text must be day, week, month or year")
         }
 
@@ -225,7 +229,7 @@ class RepeatDialog(
     }
 
     private fun setMonthInfo(repeat: Repeat) {
-        if (repeat is Repeat.Month) {
+        if (repeat is Month) {
             if (binding.repeatDialogFirstRadioBtn.isChecked) {
                 var isInfoInitialized = false
                 for (i in 1..31)
@@ -263,7 +267,7 @@ class RepeatDialog(
             binding.repeatDialogRepeatsCountEditText.setText(count.toString())
             binding.repeatDialogRepeatsTimeUnitsText.setText(getNameRes())
             setDaysList()
-            if (this is Repeat.Week) {
+            if (this is Week) {
                 if (binding.repeatDialogFirstRadioText.text.isEmpty()) {
                     binding.repeatDialogFirstRadioBtn.isChecked = true
                     binding.repeatDialogFirstRadioText.text =
@@ -272,7 +276,7 @@ class RepeatDialog(
                     binding.repeatDialogSecondRadioDayText.text =
                         localeDays2LettersArray[getTodayLocalIndex()]
                 }
-            } else if (this is Repeat.Month) {
+            } else if (this is Month) {
                 if (monthInfoPair != null) {
                     val pairInfo = monthInfoPair!!
                     binding.repeatDialogSecondRadioBtn.isChecked = true
@@ -314,9 +318,9 @@ class RepeatDialog(
     }
 
     private fun setDaysList() {
-        if (viewModel.repeat.value is Repeat.Week) {
+        if (viewModel.repeat.value is Week) {
             val isDaysClickedArray =
-                (viewModel.repeat.value as Repeat.Week).weekInfo
+                (viewModel.repeat.value as Week).weekInfo
 
             for (i in daysViewsList.indices) {
                 if (isDaysClickedArray[i]) daysViewsList[i].setClickedState()

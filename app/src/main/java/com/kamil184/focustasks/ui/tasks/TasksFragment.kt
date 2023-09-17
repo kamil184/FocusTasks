@@ -24,7 +24,6 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.kamil184.focustasks.R
 import com.kamil184.focustasks.databinding.EditTextDialogBinding
 import com.kamil184.focustasks.databinding.FragmentTasksBinding
-import com.kamil184.focustasks.ui.dialogs.DatePickerDialog
 import com.kamil184.focustasks.ui.dialogs.TaskCreateBottomSheet
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -101,7 +100,9 @@ class TasksFragment : Fragment() {
         binding.tasksFab.setOnClickListener {
             val taskCreateBottomSheet = TaskCreateBottomSheet()
             taskCreateBottomSheet.arguments =
-                bundleOf(BUNDLE_KEY_CURRENT_LIST to binding.tasksTabLayout.selectedTabText())
+                bundleOf(BUNDLE_KEY_CURRENT_LIST to binding.tasksTabLayout.selectedTabText(),
+                    TaskCreateBottomSheet.BUNDLE_KEY_LIST to viewModel.taskListNames.value
+                )
             taskCreateBottomSheet.show(parentFragmentManager, TaskCreateBottomSheet.TAG)
         }
 
@@ -199,6 +200,6 @@ class TasksFragment : Fragment() {
     }
 
     companion object {
-        const val BUNDLE_KEY_CURRENT_LIST = DatePickerDialog.BUNDLE_KEY_TASK
+        const val BUNDLE_KEY_CURRENT_LIST = "BundleKeyCurrentList"
     }
 }

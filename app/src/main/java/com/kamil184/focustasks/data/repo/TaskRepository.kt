@@ -1,5 +1,6 @@
 package com.kamil184.focustasks.data.repo
 
+import android.util.Log
 import androidx.annotation.WorkerThread
 import com.kamil184.focustasks.data.dao.TaskDAO
 import com.kamil184.focustasks.data.model.Task
@@ -8,7 +9,6 @@ import java.util.*
 
 class TaskRepository(private val taskDAO: TaskDAO) {
 
-    @Suppress("RedundantSuspendModifier")
     @WorkerThread
     suspend fun delete(task: Task) {
         taskDAO.delete(task)
@@ -32,13 +32,11 @@ class TaskRepository(private val taskDAO: TaskDAO) {
     val allTasks: Flow<List<Task>> = taskDAO.getAll()
 
 
-    @Suppress("RedundantSuspendModifier")
     @WorkerThread
     suspend fun update(task: Task) {
         taskDAO.update(task)
     }
 
-    @Suppress("RedundantSuspendModifier")
     @WorkerThread
     suspend fun insert(task: Task) {
         taskDAO.insert(task)

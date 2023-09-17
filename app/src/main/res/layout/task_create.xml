@@ -34,7 +34,7 @@
         android:imeOptions="actionDone"
         android:importantForAutofill="no"
         android:inputType="textCapSentences|textMultiLine"
-        android:padding="12dp"
+        android:padding="14dp"
         android:paddingStart="24dp"
         android:paddingEnd="24dp"
         android:textAppearance="@style/TextAppearance.Material3.BodyLarge"

@@ -27,6 +27,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.kamil184.focustasks.R
 import com.kamil184.focustasks.data.model.Task
 import com.kamil184.focustasks.databinding.TaskCreateBinding
+import com.kamil184.focustasks.ui.tasks.TasksFragment
 import com.kamil184.focustasks.util.parcelable
 
 
@@ -45,6 +46,7 @@ class TaskCreateBottomSheet : BottomSheetDialogFragment() {
         if (viewModel.task.value == null)
             viewModel.task.value = arguments?.parcelable(BUNDLE_KEY_TASK) ?: Task()
         viewModel.taskListNames = arguments?.getStringArrayList(BUNDLE_KEY_LIST)
+        viewModel.task.value?.list = arguments?.getString(TasksFragment.BUNDLE_KEY_CURRENT_LIST)
 
         _iconMarginPx =
             TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
@@ -125,7 +127,7 @@ class TaskCreateBottomSheet : BottomSheetDialogFragment() {
 
     private fun showTaskListNamesMenu(button: Button) {
         val popup = PopupMenu(requireContext(), button)
-        viewModel.taskListNames?.forEach {
+        viewModel.taskListNames!!.forEach {
             popup.menu.add(it)
         }
 
