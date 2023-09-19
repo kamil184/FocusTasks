@@ -5,8 +5,10 @@ import android.graphics.drawable.Drawable
 import android.graphics.drawable.InsetDrawable
 import android.os.Build
 import android.os.Bundle
+import android.os.ParcelUuid
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -29,6 +31,8 @@ import com.kamil184.focustasks.data.model.Task
 import com.kamil184.focustasks.databinding.TaskCreateBinding
 import com.kamil184.focustasks.ui.tasks.TasksFragment
 import com.kamil184.focustasks.util.parcelable
+import com.kamil184.focustasks.util.parcelableArrayList
+import java.lang.RuntimeException
 
 
 class TaskCreateBottomSheet : BottomSheetDialogFragment() {
@@ -45,8 +49,8 @@ class TaskCreateBottomSheet : BottomSheetDialogFragment() {
         super.onCreate(savedInstanceState)
         if (viewModel.task.value == null)
             viewModel.task.value = arguments?.parcelable(BUNDLE_KEY_TASK) ?: Task()
-        viewModel.taskListNames = arguments?.getStringArrayList(BUNDLE_KEY_LIST)
-        viewModel.task.value?.list = arguments?.getString(TasksFragment.BUNDLE_KEY_CURRENT_LIST)
+        viewModel.taskListNames = arguments?.parcelableArrayList(BUNDLE_KEY_LIST)
+        viewModel.task.value?.list = (arguments?.parcelable(TasksFragment.BUNDLE_KEY_CURRENT_LIST_UUID) as ParcelUuid?)?.uuid
 
         _iconMarginPx =
             TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
@@ -106,7 +110,7 @@ class TaskCreateBottomSheet : BottomSheetDialogFragment() {
             }
         })
 
-        binding.taskCreateListButton.text = viewModel.task.value?.list
+        binding.taskCreateListButton.text = viewModel.getCurrentListName()
         binding.taskCreateListButton.setOnClickListener {
             showTaskListNamesMenu(binding.taskCreateListButton)
         }
@@ -128,12 +132,12 @@ class TaskCreateBottomSheet : BottomSheetDialogFragment() {
     private fun showTaskListNamesMenu(button: Button) {
         val popup = PopupMenu(requireContext(), button)
         viewModel.taskListNames!!.forEach {
-            popup.menu.add(it)
+            popup.menu.add(it.listName)
         }
 
         popup.setOnMenuItemClickListener { menuItem ->
             button.text = menuItem.title
-            viewModel.task.value?.list = menuItem.title.toString()
+            viewModel.task.value?.list = viewModel.getUUID(menuItem.title.toString())
             true
         }
         popup.show()

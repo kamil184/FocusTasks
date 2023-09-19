@@ -2,6 +2,7 @@ package com.kamil184.focustasks.ui.tasks
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,7 +42,7 @@ class TasksFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        viewModel.fetchTaskListNames()
+        viewModel.fetchTaskListNames(requireContext().getString(R.string.base_list_name))
     }
 
     override fun onStop() {
@@ -94,13 +95,13 @@ class TasksFragment : Fragment() {
             binding.tasksTabsAppBar.menu.setGroupDividerEnabled(true)
 
         TabLayoutMediator(binding.tasksTabLayout, binding.tasksViewPager) { tab, position ->
-            tab.text = viewModel.taskListNames.value[position]
+            tab.text = viewModel.taskListNames.value[position].listName
         }.attach()
 
         binding.tasksFab.setOnClickListener {
             val taskCreateBottomSheet = TaskCreateBottomSheet()
             taskCreateBottomSheet.arguments =
-                bundleOf(BUNDLE_KEY_CURRENT_LIST to binding.tasksTabLayout.selectedTabText(),
+                bundleOf(BUNDLE_KEY_CURRENT_LIST_UUID to viewModel.findCurrentTaskListNameUUID(binding.tasksTabLayout.selectedTabText()),
                     TaskCreateBottomSheet.BUNDLE_KEY_LIST to viewModel.taskListNames.value
                 )
             taskCreateBottomSheet.show(parentFragmentManager, TaskCreateBottomSheet.TAG)
@@ -200,6 +201,6 @@ class TasksFragment : Fragment() {
     }
 
     companion object {
-        const val BUNDLE_KEY_CURRENT_LIST = "BundleKeyCurrentList"
+        const val BUNDLE_KEY_CURRENT_LIST_UUID = "BundleKeyCurrentList"
     }
 }

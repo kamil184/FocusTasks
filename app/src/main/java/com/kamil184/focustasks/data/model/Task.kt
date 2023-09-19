@@ -3,6 +3,7 @@ package com.kamil184.focustasks.data.model
 import android.content.Context
 import android.content.res.ColorStateList
 import android.content.res.Resources
+import android.os.ParcelUuid
 import android.os.Parcelable
 import android.text.format.DateFormat
 import androidx.core.content.ContextCompat
@@ -19,7 +20,11 @@ data class Task(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     var title: String = "",
     var description: String? = null,
-    var list: String? = null,
+    // UUID of TaskListName
+    // Only UUID will be saved.
+    // This was did for the case when listName changed,
+    // so we don't have to change listName in every Task
+    var list: UUID? = null,
     var calendar: Calendar? = null,
     @ColumnInfo(name = "is_there_a_time") var isThereATime: Boolean = false,
     var priority: Priority = Priority.NO,
@@ -27,6 +32,7 @@ data class Task(
     @ColumnInfo(name = "is_completed") var isCompleted: Boolean = false,
     @ColumnInfo(name = "position_in_list") var positionInList: Int = 0,
 ) : Parcelable {
+
 
     fun getChipText(resources: Resources, isSystem24Hour: Boolean): CharSequence? =
         if (repeat == null) {

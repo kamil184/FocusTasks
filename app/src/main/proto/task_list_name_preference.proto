@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+option java_package = "com.kamil184.focustasks";
+option java_multiple_files = true;
+
+message TaskListNamePreference {
+  string uuid = 1;
+  string name = 2;
+}
+message TaskListNamesPreference {
+  repeated TaskListNamePreference taskListNamePreference = 1;
+}

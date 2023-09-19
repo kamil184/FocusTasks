@@ -225,26 +225,21 @@ class TasksListAdapter(private val updatedTasksFlow: MutableSharedFlow<Task>) :
     }
     private object DiffCallback : ItemCallback<Any>() {
         override fun areItemsTheSame(oldItem: Any, newItem: Any): Boolean {
-            Log.d("BLY", "areItemsTheSame")
             val res = when (oldItem) {
                 is Int -> newItem is Int
                 is Task -> if (newItem is Task) oldItem.id == newItem.id else false
                 else -> throw IllegalArgumentException("Invalid Type. It must be Task or Int") // Int is type for header
             }
-            Log.d("BLY", "areItemsTheSame: $res")
             return res
         }
 
         @SuppressLint("DiffUtilEquals")
         override fun areContentsTheSame(oldItem: Any, newItem: Any): Boolean {
-            Log.d("BLY", "areContentsTheSame")
-
             val res = when (oldItem) {
                 is Int -> if (newItem is Int) oldItem == newItem else false
                 is Task -> if (newItem is Task) oldItem == newItem else false
                 else -> throw IllegalArgumentException("Invalid Type. It must be Task or Int") // Int is type for header
             }
-            Log.d("BLY", "areContentsTheSame: $res")
             return res
         }
     }

@@ -8,17 +8,18 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kamil184.focustasks.data.model.Task
+import com.kamil184.focustasks.data.model.TaskListName
 import com.kamil184.focustasks.databinding.TasksViewPagerItemBinding
 import kotlinx.coroutines.flow.MutableSharedFlow
 
 
 class TasksViewPagerAdapter(private val updatedTasksFlow: MutableSharedFlow<Task>) :
     RecyclerView.Adapter<TasksViewPagerAdapter.ViewHolder>() {
-    private var taskListNames: List<String>? = null
+    private var taskListNames: List<TaskListName>? = null
     private var tasks: List<Task>? = null
 
     @SuppressLint("NotifyDataSetChanged")
-    fun submitTaskListNames(taskListNames: List<String>) {
+    fun submitTaskListNames(taskListNames: List<TaskListName>) {
         this.taskListNames = taskListNames
         if (tasks != null) {
             notifyDataSetChanged()
@@ -73,7 +74,7 @@ class TasksViewPagerAdapter(private val updatedTasksFlow: MutableSharedFlow<Task
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (tasks != null && taskListNames != null) {
             val list = taskListNames!![position]
-            val tasks = tasks!!.filter { it.list == list }
+            val tasks = tasks!!.filter { it.list == list.uuid.uuid}
             holder.bind(tasks)
         }
     }

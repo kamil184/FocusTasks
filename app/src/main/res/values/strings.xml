@@ -42,7 +42,7 @@
     <string name="repeat">Повторять</string>
     <string name="set_time">Выбрать время</string>
     <string name="at_time">в</string>
-    <string name="base_list_tab">Задачи</string>
+    <string name="base_list_name">Задачи</string>
     <string name="add_a_list">Добавить список</string>
     <string name="this_list_already_exists">Такой список уже существует</string>
     <string name="rename_list">Переименовать список</string>
