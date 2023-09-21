@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.os.ParcelUuid
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -32,8 +31,6 @@ import com.kamil184.focustasks.databinding.TaskCreateBinding
 import com.kamil184.focustasks.ui.tasks.TasksFragment
 import com.kamil184.focustasks.util.parcelable
 import com.kamil184.focustasks.util.parcelableArrayList
-import java.lang.RuntimeException
-
 
 class TaskCreateBottomSheet : BottomSheetDialogFragment() {
     private var _binding: TaskCreateBinding? = null

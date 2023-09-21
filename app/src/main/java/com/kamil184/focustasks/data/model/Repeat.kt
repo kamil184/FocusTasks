@@ -85,7 +85,7 @@ data class Week(override var count: Int = 1, override var info: String = "") : R
 }
 
 @Parcelize
-data class Month(override var count: Int = 1, override var info: String = "") : Repeat()  {
+data class Month(override var count: Int = 1, override var info: String = "", @IgnoredOnParcel var shouldInitializeFromInfo: Boolean = true) : Repeat()  {
     /**
      * it has to be in 1.32 (32 is last days index)
      */
@@ -112,9 +112,11 @@ data class Month(override var count: Int = 1, override var info: String = "") : 
         }
 
     init {
-        val monthInfo = stringToMonthInfo(info)
-        if (monthInfo is Int) monthInfoInt = monthInfo
-        else if (monthInfo is Pair<*, *>) monthInfoPair = _monthInfoPair
+        if(shouldInitializeFromInfo) {
+            val monthInfo = stringToMonthInfo(info)
+            if (monthInfo is Int) monthInfoInt = monthInfo
+            else if (monthInfo is Pair<*, *>) monthInfoPair = _monthInfoPair
+        }
     }
 
     override fun getText(resources: Resources): String {

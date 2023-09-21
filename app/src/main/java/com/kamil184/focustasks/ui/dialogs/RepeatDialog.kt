@@ -217,7 +217,7 @@ class RepeatDialog(
         val repeat = when (binding.repeatDialogRepeatsTimeUnitsText.text) {
             requireContext().getString(R.string.day) -> Day()
             requireContext().getString(R.string.week) -> Week(daysListChecked)
-            requireContext().getString(R.string.month) -> Month()
+            requireContext().getString(R.string.month) -> Month(shouldInitializeFromInfo = false)
             requireContext().getString(R.string.year) -> Year()
             else -> throw IllegalArgumentException("Repeat text must be day, week, month or year")
         }
