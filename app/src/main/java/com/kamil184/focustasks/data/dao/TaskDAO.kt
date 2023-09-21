@@ -20,6 +20,14 @@ interface TaskDAO {
     @Query("DELETE FROM $TABLE_NAME WHERE list=:list")
     suspend fun deleteAllFromList(list: UUID)
 
+    @Query("DELETE FROM $TABLE_NAME WHERE list=:list AND is_completed=1")
+    suspend fun deleteCompletedTasksFromList(list: UUID)
+
+    @Query("SELECT CASE WHEN EXISTS (" +
+            "  SELECT * FROM $TABLE_NAME WHERE list=:list AND is_completed=1 )"
+        +" THEN 1 ELSE 0 END AS Integer")
+    suspend fun isThereCompletedTasksInList(list: UUID):Int
+
     @Update
     suspend fun update(task: Task)
 

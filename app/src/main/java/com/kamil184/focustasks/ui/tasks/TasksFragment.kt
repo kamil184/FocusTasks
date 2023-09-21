@@ -23,6 +23,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.kamil184.focustasks.R
+import com.kamil184.focustasks.data.model.TaskListName
 import com.kamil184.focustasks.databinding.EditTextDialogBinding
 import com.kamil184.focustasks.databinding.FragmentTasksBinding
 import com.kamil184.focustasks.ui.dialogs.TaskCreateBottomSheet
@@ -152,6 +153,11 @@ class TasksFragment : Fragment() {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                         editText.windowInsetsController?.show(WindowInsets.Type.ime())
                     }
+                    true
+                }
+                R.id.tasks_menu_delete_completed_tasks -> {
+                    val taskListNameUUID = TaskListName.getUUID(binding.tasksTabLayout.selectedTabText(), viewModel.taskListNames.value)
+                    viewModel.deleteCompletedTasksFromList(taskListNameUUID)
                     true
                 }
                 else -> false

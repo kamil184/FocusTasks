@@ -16,7 +16,9 @@ import com.kamil184.focustasks.data.repo.TaskRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
+import java.util.UUID
 
 class TasksViewModel(
     private val taskListNamesManager: TaskListNamesManager,
@@ -113,6 +115,12 @@ class TasksViewModel(
         mutableList[id] = mutableList[id].copy(listName = s)
         _taskListNames.compareAndSet(_taskListNames.value, mutableList)
         return true
+    }
+
+    fun deleteCompletedTasksFromList(list: UUID) {
+        viewModelScope.launch(Dispatchers.IO) {
+                taskRepository.deleteCompletedTasksFromList(list)
+        }
     }
 
     suspend fun updateTask(task: Task) {
