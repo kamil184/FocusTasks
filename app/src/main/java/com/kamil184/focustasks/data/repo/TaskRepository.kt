@@ -14,9 +14,8 @@ class TaskRepository(private val taskDAO: TaskDAO) {
         taskDAO.delete(task)
     }
 
-    @Suppress("RedundantSuspendModifier")
     @WorkerThread
-    suspend fun deleteAllFromList(list: String) {
+    suspend fun deleteAllFromList(list: UUID) {
         taskDAO.deleteAllFromList(list)
     }
 
@@ -24,7 +23,7 @@ class TaskRepository(private val taskDAO: TaskDAO) {
     fun getById(id: Int) = taskDAO.get(id)
 
     @WorkerThread
-    fun getAllFromList(list: String) = taskDAO.getAllFromList(list)
+    fun getAllFromList(list: UUID) = taskDAO.getAllFromList(list)
 
     @WorkerThread
     fun getAll() = taskDAO.getAll()

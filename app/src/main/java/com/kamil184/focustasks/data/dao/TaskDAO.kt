@@ -4,6 +4,7 @@ import androidx.room.*
 import com.kamil184.focustasks.data.model.Task
 import com.kamil184.focustasks.data.model.Task.Companion.TABLE_NAME
 import kotlinx.coroutines.flow.Flow
+import java.util.UUID
 
 @Dao
 interface TaskDAO {
@@ -11,13 +12,13 @@ interface TaskDAO {
     fun get(id: Int): Flow<Task>
 
     @Query("SELECT * FROM $TABLE_NAME WHERE list=:list ORDER BY position_in_list ASC")
-    fun getAllFromList(list: String): Flow<List<Task>>
+    fun getAllFromList(list: UUID): Flow<List<Task>>
 
     @Query("SELECT * FROM $TABLE_NAME ORDER BY position_in_list ASC")
     fun getAll(): Flow<List<Task>>
 
     @Query("DELETE FROM $TABLE_NAME WHERE list=:list")
-    fun deleteAllFromList(list: String)
+    suspend fun deleteAllFromList(list: UUID)
 
     @Update
     suspend fun update(task: Task)

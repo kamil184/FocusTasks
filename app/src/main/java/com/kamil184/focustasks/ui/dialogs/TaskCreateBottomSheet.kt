@@ -27,6 +27,7 @@ import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.kamil184.focustasks.R
 import com.kamil184.focustasks.data.model.Task
+import com.kamil184.focustasks.data.model.TaskListName.Companion.getUUID
 import com.kamil184.focustasks.databinding.TaskCreateBinding
 import com.kamil184.focustasks.ui.tasks.TasksFragment
 import com.kamil184.focustasks.util.parcelable
@@ -134,7 +135,7 @@ class TaskCreateBottomSheet : BottomSheetDialogFragment() {
 
         popup.setOnMenuItemClickListener { menuItem ->
             button.text = menuItem.title
-            viewModel.task.value?.list = viewModel.getUUID(menuItem.title.toString())
+            viewModel.task.value?.list = getUUID(menuItem.title.toString(), viewModel.taskListNames)
             true
         }
         popup.show()

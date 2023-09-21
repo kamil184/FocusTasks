@@ -106,15 +106,15 @@ class TaskListNamesManager(private val context: Context) {
 
     suspend fun saveTaskListNames(taskListNames: List<TaskListName>) {
         context.taskListNamesProto.updateData {
-            val builder = it.toBuilder()
-            taskListNames.forEachIndexed { i, _ ->
+            val builder = TaskListNamesPreference.newBuilder()
+            taskListNames.forEach { taskListName->
                 val taskListNamePreference =
                     TaskListNamePreference.newBuilder()
-                        .setUuid(taskListNames[i].uuid.toString())
-                        .setName(taskListNames[i].listName)
+                        .setUuid(taskListName.uuid.toString())
+                        .setName(taskListName.listName)
                         .build()
 
-                builder.setTaskListNamePreference(i, taskListNamePreference)
+                builder.addTaskListNamePreference(taskListNamePreference)
             }
             builder.build()
         }

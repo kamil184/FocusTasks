@@ -9,6 +9,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.kamil184.focustasks.App
 import com.kamil184.focustasks.data.model.Task
 import com.kamil184.focustasks.data.model.TaskListName
+import com.kamil184.focustasks.data.model.TaskListName.Companion.getListName
 import com.kamil184.focustasks.data.repo.TaskRepository
 import kotlinx.coroutines.launch
 import java.util.UUID
@@ -35,19 +36,5 @@ class TaskCreateViewModel(val taskRepository: TaskRepository) : ViewModel() {
         }
     }
 
-    fun getListName(uuid: UUID?):String{
-        taskListNames?.forEach {
-            if(it.uuid.uuid.equals(uuid)) return it.listName
-        }
-        throw IllegalArgumentException("taskListNames doesn't contain uuid: $uuid")
-    }
-
-    fun getCurrentListName() = getListName(task.value?.list)
-
-    fun getUUID(listName:String):UUID{
-        taskListNames?.forEach {
-            if(it.uuid.equals(listName)) return it.uuid.uuid
-        }
-        throw IllegalArgumentException("taskListNames doesn't contain listName: $listName")
-    }
+    fun getCurrentListName() = getListName(task.value?.list, taskListNames)
 }

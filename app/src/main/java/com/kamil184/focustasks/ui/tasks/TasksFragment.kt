@@ -178,7 +178,7 @@ class TasksFragment : Fragment() {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     val text = textView.text.toString()
                     val isSuccess = viewModel.addTaskListName(text)
-                    if (isSuccess) showSnackbar(R.string.this_list_already_exists)
+                    if (!isSuccess) showSnackbar(R.string.this_list_already_exists)
                     else dialog.cancel()
                     return@setOnEditorActionListener true
                 }
