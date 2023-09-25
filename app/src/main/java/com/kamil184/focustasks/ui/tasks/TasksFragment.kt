@@ -146,10 +146,13 @@ class TasksFragment : Fragment() {
                     builder.setView(editTextDialogBinding.root)
                     builder.setPositiveButton(R.string.dialog_positive_button_text) { dialogInterface, i ->
                         val text = editText.text.toString()
-                        val position = binding.tasksTabLayout.selectedTabPosition
-                        val isSuccess = viewModel.setTaskListName(position, text)
-                        if (!isSuccess)
-                            showSnackbar(R.string.this_list_already_exists)
+                        if (text.isBlank()){
+                            showSnackbar(R.string.list_cant_have_a_blank_name)
+                        }else {
+                            val position = binding.tasksTabLayout.selectedTabPosition
+                            val isSuccess = viewModel.setTaskListName(position, text)
+                            if (!isSuccess) showSnackbar(R.string.this_list_already_exists)
+                        }
                     }
 
                     builder.setNegativeButton(R.string.dialog_negative_button_text, null)
@@ -158,10 +161,14 @@ class TasksFragment : Fragment() {
                     editText.setOnEditorActionListener { textView, actionId, keyEvent ->
                         if (actionId == EditorInfo.IME_ACTION_DONE) {
                             val text = editText.text.toString()
-                            val position = binding.tasksTabLayout.selectedTabPosition
-                            val isSuccess = viewModel.setTaskListName(position, text)
-                            if (isSuccess) dialog.cancel()
-                            else showSnackbar(R.string.this_list_already_exists)
+                            if (text.isBlank()){
+                                showSnackbar(R.string.list_cant_have_a_blank_name)
+                            }else {
+                                val position = binding.tasksTabLayout.selectedTabPosition
+                                val isSuccess = viewModel.setTaskListName(position, text)
+                                if (!isSuccess) showSnackbar(R.string.this_list_already_exists)
+                            }
+                            dialog.cancel()
                             return@setOnEditorActionListener true
                         }
                         false
@@ -195,7 +202,7 @@ class TasksFragment : Fragment() {
             builder.setView(editTextDialogBinding.root)
             builder.setPositiveButton(R.string.dialog_positive_button_text) { dialogInterface, i ->
                 val text = editText.text.toString()
-                if(text.isBlank()) showSnackbar(R.string.you_cant_create_a_list_with_blank_name)
+                if (text.isBlank()) showSnackbar(R.string.list_cant_have_a_blank_name)
                 else {
                     val isSuccess = viewModel.addTaskListName(text)
                     if (!isSuccess) showSnackbar(R.string.this_list_already_exists)
@@ -209,7 +216,7 @@ class TasksFragment : Fragment() {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
 
                     val text = editText.text.toString()
-                    if(text.isBlank()) showSnackbar(R.string.you_cant_create_a_list_with_blank_name)
+                    if (text.isBlank()) showSnackbar(R.string.list_cant_have_a_blank_name)
                     else {
                         val isSuccess = viewModel.addTaskListName(text)
                         if (!isSuccess) showSnackbar(R.string.this_list_already_exists)
