@@ -1,7 +1,6 @@
 package com.kamil184.focustasks.ui.tasks
 
 import android.os.ParcelUuid
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
@@ -16,7 +15,7 @@ import com.kamil184.focustasks.data.repo.TaskRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.util.UUID
 
@@ -25,10 +24,20 @@ class TasksViewModel(
     private val taskRepository: TaskRepository,
 ) : ViewModel() {
 
-    private val _taskListNames = MutableStateFlow(listOf<TaskListName>())
-    val taskListNames get() = _taskListNames
+    val taskListNames = MutableStateFlow(listOf<TaskListName>())
 
-    val tasks = taskRepository.allTasks
+    private var _tasks: MutableStateFlow<List<Task>> = MutableStateFlow(listOf())
+    val tasks:StateFlow<List<Task>> get() = _tasks
+
+
+    init {
+        viewModelScope.launch(Dispatchers.IO) {
+            taskRepository.allTasks.collect{
+                _tasks.value = it
+            }
+        }
+    }
+
     val updatedTasksFlow = MutableSharedFlow<Task>(3)
 
     fun findCurrentTaskListNameUUID(listName: String): ParcelUuid {
@@ -54,7 +63,7 @@ class TasksViewModel(
     fun fetchTaskListNames(defaultName: String) = viewModelScope.launch(Dispatchers.IO) {
         taskListNamesManager.taskListNamesFlow.collect {
             if (it.size == 1 && it[0].listName.isEmpty()) it[0].listName = defaultName
-            _taskListNames.value = it
+            taskListNames.value = it
         }
     }
 
@@ -72,7 +81,7 @@ class TasksViewModel(
         val mutableList = mutableListOf<TaskListName>()
         mutableList.addAll(taskListNames.value)
         mutableList.add(TaskListName(s))
-        _taskListNames.value = mutableList
+        taskListNames.value = mutableList
         return true
     }
 
@@ -93,7 +102,7 @@ class TasksViewModel(
                     taskRepository.deleteAllFromList(listName)
                 }
                 mutableList.removeAt(i)
-                _taskListNames.value = mutableList
+                taskListNames.value = mutableList
                 //_taskListNames.compareAndSet(_taskListNames.value, mutableList)
                 return true
             }
@@ -113,15 +122,28 @@ class TasksViewModel(
         val mutableList = mutableListOf<TaskListName>()
         mutableList.addAll(taskListNames.value)
         mutableList[id] = mutableList[id].copy(listName = s)
-        _taskListNames.compareAndSet(_taskListNames.value, mutableList)
+        taskListNames.compareAndSet(taskListNames.value, mutableList)
         return true
     }
 
-    fun deleteCompletedTasksFromList(list: UUID) {
-        viewModelScope.launch(Dispatchers.IO) {
+    fun deleteCompletedTasksFromList(list: UUID): Boolean {
+        if (containsCompletedTasksInList(list)) {
+            viewModelScope.launch(Dispatchers.IO) {
                 taskRepository.deleteCompletedTasksFromList(list)
+            }
+            return true
         }
+        return false
     }
+
+    fun containsCompletedTasksInList(list: UUID) =
+        !tasks.value.none { it.list?.equals(list) == true && it.isCompleted }
+
+    fun containsTasksInList(list: UUID) =
+        !tasks.value.none { it.list?.equals(list) == true }
+
+    fun containsTasksInList(list: String) = containsTasksInList(TaskListName.getUUID(list, taskListNames.value))
+
 
     suspend fun updateTask(task: Task) {
         taskRepository.update(task)

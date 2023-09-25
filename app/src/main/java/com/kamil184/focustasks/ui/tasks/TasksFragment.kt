@@ -2,7 +2,6 @@ package com.kamil184.focustasks.ui.tasks
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,7 +26,6 @@ import com.kamil184.focustasks.data.model.TaskListName
 import com.kamil184.focustasks.databinding.EditTextDialogBinding
 import com.kamil184.focustasks.databinding.FragmentTasksBinding
 import com.kamil184.focustasks.ui.dialogs.TaskCreateBottomSheet
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 
@@ -71,21 +69,25 @@ class TasksFragment : Fragment() {
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
-                    viewModel.taskListNames.collectLatest { taskListNames ->
+                    viewModel.taskListNames.collect { taskListNames ->
                         val tabCount = binding.tasksTabLayout.tabCount
                         val isAdded = tabCount < taskListNames.size && tabCount != 0
                         binding.tasksCreateTabButton.visibility = View.VISIBLE
                         viewPagerAdapter.submitTaskListNames(taskListNames)
-                        if(isAdded) binding.tasksTabLayout.selectTab(binding.tasksTabLayout.getTabAt(tabCount))
+                        if (isAdded) binding.tasksTabLayout.selectTab(
+                            binding.tasksTabLayout.getTabAt(
+                                tabCount
+                            )
+                        )
                     }
                 }
                 launch {
-                    viewModel.tasks.collectLatest {
+                    viewModel.tasks.collect {
                         viewPagerAdapter.submitTasks(it)
                     }
                 }
                 launch {
-                    viewModel.updatedTasksFlow.collectLatest {
+                    viewModel.updatedTasksFlow.collect {
                         viewModel.updateTask(it)
                     }
                 }
@@ -102,7 +104,8 @@ class TasksFragment : Fragment() {
         binding.tasksFab.setOnClickListener {
             val taskCreateBottomSheet = TaskCreateBottomSheet()
             taskCreateBottomSheet.arguments =
-                bundleOf(BUNDLE_KEY_CURRENT_LIST_UUID to viewModel.findCurrentTaskListNameUUID(binding.tasksTabLayout.selectedTabText()),
+                bundleOf(
+                    BUNDLE_KEY_CURRENT_LIST_UUID to viewModel.findCurrentTaskListNameUUID(binding.tasksTabLayout.selectedTabText()),
                     TaskCreateBottomSheet.BUNDLE_KEY_LIST to viewModel.taskListNames.value
                 )
             taskCreateBottomSheet.show(parentFragmentManager, TaskCreateBottomSheet.TAG)
@@ -112,12 +115,25 @@ class TasksFragment : Fragment() {
             when (menuItem.itemId) {
                 R.id.tasks_menu_delete_list -> {
                     if (viewModel.taskListNames.value.size != 1) {
-                        val text = binding.tasksTabLayout.selectedTabText()
-                        val isSuccess = viewModel.removeTaskListName(text)
-                        if (!isSuccess) showSnackbar(R.string.something_went_wrong)
+                        val listName = binding.tasksTabLayout.selectedTabText()
+                        if (viewModel.containsTasksInList(listName)) {
+                            MaterialAlertDialogBuilder(requireContext())
+                                .setTitle(resources.getString(R.string.are_you_sure_you_want_to_delete_the_list))
+                                .setMessage(resources.getString(R.string.all_tasks_in_the_list_will_be_permanently_deleted))
+                                .setNegativeButton(resources.getString(R.string.dialog_negative_button_text)) { _, _ -> }
+                                .setPositiveButton(resources.getString(R.string.delete)) { dialog, which ->
+                                    val isSuccess = viewModel.removeTaskListName(listName)
+                                    if (!isSuccess) showSnackbar(R.string.something_went_wrong)
+                                }
+                                .show()
+                        } else {
+                            val isSuccess = viewModel.removeTaskListName(listName)
+                            if (!isSuccess) showSnackbar(R.string.something_went_wrong)
+                        }
                     } else showSnackbar(R.string.the_only_existing_list_cannot_be_deleted)
                     true
                 }
+
                 R.id.tasks_menu_rename_list -> {
                     val builder = MaterialAlertDialogBuilder(requireContext())
                     val editTextDialogBinding =
@@ -155,11 +171,17 @@ class TasksFragment : Fragment() {
                     }
                     true
                 }
+
                 R.id.tasks_menu_delete_completed_tasks -> {
-                    val taskListNameUUID = TaskListName.getUUID(binding.tasksTabLayout.selectedTabText(), viewModel.taskListNames.value)
-                    viewModel.deleteCompletedTasksFromList(taskListNameUUID)
+                    val taskListNameUUID = TaskListName.getUUID(
+                        binding.tasksTabLayout.selectedTabText(),
+                        viewModel.taskListNames.value
+                    )
+                    val isSuccess = viewModel.deleteCompletedTasksFromList(taskListNameUUID)
+                    if (!isSuccess) showSnackbar(R.string.there_is_no_completed_tasks)
                     true
                 }
+
                 else -> false
             }
         }
@@ -198,8 +220,10 @@ class TasksFragment : Fragment() {
     }
 
     private fun showSnackbar(@StringRes textRes: Int) =
-        Snackbar.make(binding.root, getString(textRes),
-            Snackbar.LENGTH_SHORT).show()
+        Snackbar.make(
+            binding.root, getString(textRes),
+            Snackbar.LENGTH_SHORT
+        ).show()
 
     override fun onDestroyView() {
         super.onDestroyView()
