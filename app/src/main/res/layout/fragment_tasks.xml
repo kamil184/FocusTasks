@@ -47,7 +47,7 @@
                     app:tabRippleColor="@null" />
 
                 <Button
-                    android:id="@+id/tasks_create_tab_button"
+                    android:id="@+id/tasks_create_new_list_tab_button"
                     style="@style/Widget.Material3.Button.TextButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

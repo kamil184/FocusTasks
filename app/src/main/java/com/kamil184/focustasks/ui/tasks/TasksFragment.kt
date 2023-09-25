@@ -72,7 +72,7 @@ class TasksFragment : Fragment() {
                     viewModel.taskListNames.collect { taskListNames ->
                         val tabCount = binding.tasksTabLayout.tabCount
                         val isAdded = tabCount < taskListNames.size && tabCount != 0
-                        binding.tasksCreateTabButton.visibility = View.VISIBLE
+                        binding.tasksCreateNewListTabButton.visibility = View.VISIBLE
                         viewPagerAdapter.submitTaskListNames(taskListNames)
                         if (isAdded) binding.tasksTabLayout.selectTab(
                             binding.tasksTabLayout.getTabAt(
@@ -186,7 +186,7 @@ class TasksFragment : Fragment() {
             }
         }
 
-        binding.tasksCreateTabButton.setOnClickListener {
+        binding.tasksCreateNewListTabButton.setOnClickListener {
             val builder = MaterialAlertDialogBuilder(requireContext())
             val editTextDialogBinding = EditTextDialogBinding.inflate(inflater, container, false)
             val editText = editTextDialogBinding.editTextDialogEditText
@@ -195,8 +195,11 @@ class TasksFragment : Fragment() {
             builder.setView(editTextDialogBinding.root)
             builder.setPositiveButton(R.string.dialog_positive_button_text) { dialogInterface, i ->
                 val text = editText.text.toString()
-                val isSuccess = viewModel.addTaskListName(text)
-                if (!isSuccess) showSnackbar(R.string.this_list_already_exists)
+                if(text.isBlank()) showSnackbar(R.string.you_cant_create_a_list_with_blank_name)
+                else {
+                    val isSuccess = viewModel.addTaskListName(text)
+                    if (!isSuccess) showSnackbar(R.string.this_list_already_exists)
+                }
             }
 
             builder.setNegativeButton(R.string.dialog_negative_button_text, null)
@@ -204,10 +207,14 @@ class TasksFragment : Fragment() {
             dialog.show()
             editText.setOnEditorActionListener { textView, actionId, keyEvent ->
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    val text = textView.text.toString()
-                    val isSuccess = viewModel.addTaskListName(text)
-                    if (!isSuccess) showSnackbar(R.string.this_list_already_exists)
-                    else dialog.cancel()
+
+                    val text = editText.text.toString()
+                    if(text.isBlank()) showSnackbar(R.string.you_cant_create_a_list_with_blank_name)
+                    else {
+                        val isSuccess = viewModel.addTaskListName(text)
+                        if (!isSuccess) showSnackbar(R.string.this_list_already_exists)
+                    }
+                    dialog.cancel()
                     return@setOnEditorActionListener true
                 }
                 false

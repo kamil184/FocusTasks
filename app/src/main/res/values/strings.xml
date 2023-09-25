@@ -62,6 +62,7 @@
     <string name="are_you_sure_you_want_to_delete_the_list">Вы уверены, что хотите удалить список?</string>
     <string name="delete">Удалить</string>
     <string name="all_tasks_in_the_list_will_be_permanently_deleted">Все задачи в списке будут безвозвратно удалены</string>
+    <string name="you_cant_create_a_list_with_blank_name">Вы не можете создать список с пустым названием</string>
 
     <!--first day is sunday, last day is saturday-->
     <string-array name="calendar_days_1_letter">
