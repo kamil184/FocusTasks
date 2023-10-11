@@ -161,12 +161,11 @@ class TasksListAdapter(private val updatedTasksFlow: MutableSharedFlow<Task>) :
             init {
                 binding.apply {
                     itemTaskCheckbox.setOnClickListener {
-                        var isEmitted = false
-                        task?.apply {
-                            isCompleted = itemTaskCheckbox.isChecked
-                            isEmitted = updatedTasksFlow.tryEmit(this)
-                        }
-                        if (isEmitted) {
+                        val isEmitted =
+                            task?.copy(isCompleted = itemTaskCheckbox.isChecked)
+                                ?.let { it1 -> updatedTasksFlow.tryEmit(it1) }
+
+                        if (isEmitted == true) {
                             if (itemTaskCheckbox.isChecked) {
                                 itemTaskTitle.paintFlags =
                                     itemTaskTitle.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG

@@ -38,7 +38,7 @@ class TasksViewModel(
         }
     }
 
-    val updatedTasksFlow = MutableSharedFlow<Task>(3)
+    val updatedTasksFlow = MutableSharedFlow<Task>(extraBufferCapacity = 3)
 
     fun findCurrentTaskListNameUUID(listName: String): ParcelUuid {
         taskListNames.value.forEach {

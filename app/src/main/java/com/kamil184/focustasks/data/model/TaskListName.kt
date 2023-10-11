@@ -3,6 +3,7 @@ package com.kamil184.focustasks.data.model
 import android.os.ParcelUuid
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import java.util.Arrays
 import java.util.UUID
 
 @Parcelize
@@ -14,7 +15,7 @@ data class TaskListName(val uuid: ParcelUuid, var listName: String) : Parcelable
             taskListNames?.forEach {
                 if(it.uuid.uuid.equals(uuid)) return it.listName
             }
-            throw IllegalArgumentException("taskListNames doesn't contain uuid: $uuid")
+            throw IllegalArgumentException("taskListNames: ${Arrays.toString(taskListNames?.toTypedArray())} doesn't contain uuid: $uuid")
         }
 
         fun getUUID(listName:String, taskListNames:List<TaskListName>?):UUID{
