@@ -2,13 +2,13 @@ package com.kamil184.focustasks.ui.tasks
 
 import android.os.Build
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowInsets
 import android.view.inputmethod.EditorInfo
 import androidx.annotation.StringRes
-import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
@@ -103,11 +103,10 @@ class TasksFragment : Fragment() {
 
         binding.tasksFab.setOnClickListener {
             val taskCreateBottomSheet = TaskCreateBottomSheet()
-            taskCreateBottomSheet.arguments =
-                bundleOf(
-                    BUNDLE_KEY_CURRENT_LIST_UUID to viewModel.findCurrentTaskListNameUUID(binding.tasksTabLayout.selectedTabText()),
-                    TaskCreateBottomSheet.BUNDLE_KEY_LIST to viewModel.taskListNames.value
-                )
+            val arguments = Bundle()
+            arguments.putParcelableArrayList(TaskCreateBottomSheet.BUNDLE_KEY_LIST, viewModel.taskListNames.value as ArrayList<out Parcelable>)
+            arguments.putParcelable(BUNDLE_KEY_CURRENT_LIST_UUID, viewModel.findCurrentTaskListNameUUID(binding.tasksTabLayout.selectedTabText()),)
+            taskCreateBottomSheet.arguments = arguments
             taskCreateBottomSheet.show(parentFragmentManager, TaskCreateBottomSheet.TAG)
         }
 
