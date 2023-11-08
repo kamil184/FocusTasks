@@ -9,7 +9,7 @@ class TasksListAdapterItemTouchHelperCallback(private val adapter: TasksListAdap
         recyclerView: RecyclerView,
         viewHolder: RecyclerView.ViewHolder,
     ): Int {
-        if (viewHolder is TasksListAdapter.TasksListViewHolder.HeaderViewHolder) return 0
+        if (viewHolder is TasksListViewHolder.HeaderViewHolder) return 0
         val dragFlags = ItemTouchHelper.UP or ItemTouchHelper.DOWN
         return makeMovementFlags(dragFlags, 0)
     }
@@ -23,5 +23,10 @@ class TasksListAdapterItemTouchHelperCallback(private val adapter: TasksListAdap
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
 
+    }
+
+    override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
+        super.clearView(recyclerView, viewHolder)
+        adapter.onClearView(viewHolder.adapterPosition)
     }
 }

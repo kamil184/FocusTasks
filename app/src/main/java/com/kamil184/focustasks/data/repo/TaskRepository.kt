@@ -49,4 +49,9 @@ class TaskRepository(private val taskDAO: TaskDAO) {
     suspend fun insert(task: Task) {
         taskDAO.insert(task)
     }
+
+    @WorkerThread
+    suspend fun insertAll(tasks:List<Task>) {
+        taskDAO.insertAll(tasks)
+    }
 }

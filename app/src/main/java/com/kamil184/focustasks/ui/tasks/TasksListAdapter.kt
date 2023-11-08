@@ -1,37 +1,32 @@
 package com.kamil184.focustasks.ui.tasks
 
-import android.annotation.SuppressLint
-import android.graphics.Paint
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.AsyncListDiffer
-import androidx.recyclerview.widget.DiffUtil.ItemCallback
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewbinding.ViewBinding
 import com.kamil184.focustasks.R
 import com.kamil184.focustasks.data.model.Task
 import com.kamil184.focustasks.databinding.ItemCompletedTasksHeaderBinding
 import com.kamil184.focustasks.databinding.ItemTaskBinding
-import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableSharedFlow
-import java.util.*
+import java.util.Collections
 
-class TasksListAdapter(private val updatedTasksFlow: MutableSharedFlow<Task>) :
-    RecyclerView.Adapter<TasksListAdapter.TasksListViewHolder>() {
+class TasksListAdapter(private val updatedTasksFlow: MutableSharedFlow<Task>, private val insertTasks: (List<Task>) -> Unit) :
+    RecyclerView.Adapter<TasksListViewHolder>() {
     private var uncompletedTasks: MutableList<Task> = mutableListOf()
     private var completedTasks: MutableList<Task> = mutableListOf()
 
-    private val differ = AsyncListDiffer(this, DiffCallback)
+    private var list: MutableList<Any> = mutableListOf()
+
+    private val diffCallback = TasksDiffCallback(list, listOf())
 
     private var completedTasksVisible = false
 
     init {
-        submitListDiffer()
+        submitList()
     }
 
-    private fun filterTasks(tasks: List<Task>) {
+    private fun filterTasksByCompleteness(tasks: List<Task>) {
         completedTasks = mutableListOf()
         uncompletedTasks = mutableListOf()
         tasks.forEach {
@@ -41,32 +36,43 @@ class TasksListAdapter(private val updatedTasksFlow: MutableSharedFlow<Task>) :
     }
 
     fun submitTasks(tasks: List<Task>) {
-        filterTasks(tasks)
-        submitListDiffer()
+        filterTasksByCompleteness(tasks)
+        submitList()
+        diffCallback.updateData(list)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
+        diffResult.dispatchUpdatesTo(this)
     }
 
-    private fun submitListDiffer() {
+    private fun onCompletedTasksVisibleChange() {
+        submitList()
+        diffCallback.updateData(list)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
+        diffResult.dispatchUpdatesTo(this)
+    }
+
+    private fun submitList() {
         val tasksSize = completedTasks.size + uncompletedTasks.size
-        val list = when {
-            tasksSize == 0 -> listOf()
-            completedTasks.isEmpty() -> uncompletedTasks
-            uncompletedTasks.isEmpty() -> {
-                if (completedTasksVisible)
-                    getListFromListsAndObjects(completedTasks.size, completedTasks)
-                else listOf(completedTasks.size)
+        list =
+            when {
+                tasksSize == 0 -> mutableListOf()
+                completedTasks.isEmpty() -> uncompletedTasks.toMutableList()
+                uncompletedTasks.isEmpty() -> {
+                    if (completedTasksVisible)
+                        getListFromListsAndObjects(completedTasks.size, completedTasks)
+                    else mutableListOf(completedTasks.size)
+                }
+                else -> {
+                    if (completedTasksVisible)
+                        getListFromListsAndObjects(uncompletedTasks,
+                            completedTasks.size,
+                            completedTasks)
+                    else getListFromListsAndObjects(uncompletedTasks, completedTasks.size)
+                }
             }
-            else -> {
-                if (completedTasksVisible)
-                    getListFromListsAndObjects(uncompletedTasks,
-                        completedTasks.size,
-                        completedTasks)
-                else getListFromListsAndObjects(uncompletedTasks, completedTasks.size)
-            }
-        }
-        differ.submitList(list)
+
     }
 
-    private fun getListFromListsAndObjects(vararg objects: Any): List<Any> {
+    private fun getListFromListsAndObjects(vararg objects: Any): MutableList<Any> {
         val mutableList = mutableListOf<Any>()
         objects.forEach { obj ->
             if (obj is Collection<*>)
@@ -92,7 +98,7 @@ class TasksListAdapter(private val updatedTasksFlow: MutableSharedFlow<Task>) :
                 TasksListViewHolder.HeaderViewHolder(binding,
                     completedTasksVisible) { completedTasksVisible ->
                     this.completedTasksVisible = completedTasksVisible
-                    submitListDiffer()
+                    onCompletedTasksVisibleChange()
                 }
             }
             else -> throw IllegalArgumentException("Invalid ViewType Provided")
@@ -100,15 +106,15 @@ class TasksListAdapter(private val updatedTasksFlow: MutableSharedFlow<Task>) :
     }
 
     override fun getItemViewType(position: Int): Int {
-        return when (differ.currentList[position]) {
+        return when (list[position]) {
             is Task -> R.layout.item_task
             is Int -> R.layout.item_completed_tasks_header
-            else -> throw IllegalArgumentException("Invalid Class Provided: ${differ.currentList[position].javaClass.simpleName}")
+            else -> throw IllegalArgumentException("Invalid Class Provided: ${list[position].javaClass.simpleName}")
         }
     }
 
     override fun onBindViewHolder(holder: TasksListViewHolder, position: Int) {
-        when (val element = differ.currentList[position]) {
+        when (val element = list[position]) {
             is Int -> (holder as TasksListViewHolder.HeaderViewHolder).bind(completedTasks.size) //differ.currentList.size - 1 - position
             is Task -> {
                 element.positionInList = position
@@ -119,127 +125,34 @@ class TasksListAdapter(private val updatedTasksFlow: MutableSharedFlow<Task>) :
     }
 
     override fun getItemCount(): Int {
-        return differ.currentList.size
-    }
-
-    sealed class TasksListViewHolder(binding: ViewBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-
-        class HeaderViewHolder(
-            private val binding: ItemCompletedTasksHeaderBinding,
-            private var areCompletedTasksVisible: Boolean,
-            private val onExpandImageClicked: (Boolean) -> Unit,
-        ) :
-            TasksListViewHolder(binding) {
-
-            init {
-                binding.itemCompletedTasksHeaderExpandImage.setOnClickListener {
-                    areCompletedTasksVisible = areCompletedTasksVisible.not()
-                    onExpandImageClicked.invoke(areCompletedTasksVisible)
-                    val rotationAngle = if (areCompletedTasksVisible) 180F else 0F
-                    it.animate().apply {
-                        rotation(rotationAngle)
-                        duration = 200
-                        start()
-                    }
-                }
-            }
-
-            fun bind(size: Int) {
-                binding.itemCompletedTasksHeaderText.text =
-                    binding.root.context.getString(R.string.completed, size)
-            }
-        }
-
-        class TaskViewHolder(
-            private val binding: ItemTaskBinding,
-            private val updatedTasksFlow: MutableSharedFlow<Task>,
-        ) :
-            TasksListViewHolder(binding) {
-            private var task: Task? = null
-
-            init {
-                binding.apply {
-                    itemTaskCheckbox.setOnClickListener {
-                        val isEmitted =
-                            task?.copy(isCompleted = itemTaskCheckbox.isChecked)
-                                ?.let { it1 -> updatedTasksFlow.tryEmit(it1) }
-
-                        if (isEmitted == true) {
-                            if (itemTaskCheckbox.isChecked) {
-                                itemTaskTitle.paintFlags =
-                                    itemTaskTitle.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
-                            } else {
-                                itemTaskTitle.paintFlags =
-                                    itemTaskTitle.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
-                            }
-                        }
-                    }
-                }
-            }
-
-            fun bind(task: Task) {
-                this.task = task
-                binding.apply {
-                    itemTaskTitle.text = task.title
-
-                    if (task.description.isNullOrEmpty()) itemTaskDescription.visibility = View.GONE
-                    else {
-                        itemTaskDescription.text = task.description
-                        itemTaskDescription.visibility = View.VISIBLE
-                    }
-
-                    if (task.calendar != null) {
-                        itemTaskChip.text = task.getChipText(binding.root.context)
-                        itemTaskChip.visibility = View.VISIBLE
-                    } else itemTaskChip.visibility = View.GONE
-
-                    itemTaskChip.isChipIconVisible = task.repeat != null
-                    itemTaskCheckbox.isChecked = task.isCompleted
-                    itemTaskCheckbox.buttonTintList =
-                        task.getPriorityColorList(binding.root.context)
-
-                    if (task.isCompleted) {
-                        itemTaskTitle.paintFlags =
-                            itemTaskTitle.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
-                    } else {
-                        itemTaskTitle.paintFlags =
-                            itemTaskTitle.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
-
-                    }
-                }
-            }
-        }
+        return list.size
     }
 
     fun onItemMove(from: Int, to: Int): Boolean {
-        val list:List<Any> = differ.currentList
-        val taskFrom:Task = list.find { it is Task && it.positionInList == from } as Task
-        val taskTo:Task = list.find { it is Task && it.positionInList == to } as Task
+        val temporaryList = list.toMutableList()
+        val headerId = temporaryList.indexOf(temporaryList.find { it is Int })
+        if (headerId in (from + 1)..to) return false
+        if (headerId in to until from) return false
+
+        val taskFrom = (temporaryList[from] as Task)
         taskFrom.positionInList = to
-        updatedTasksFlow.tryEmit(taskFrom)
+        val taskTo = (temporaryList[to] as Task)
         taskTo.positionInList = from
-        updatedTasksFlow.tryEmit(taskTo)
+
+        Collections.swap(temporaryList, from, to)
+        notifyItemMoved(from, to)
+
+        list.clear()
+        list.addAll(temporaryList)
         return true
     }
-    private object DiffCallback : ItemCallback<Any>() {
-        override fun areItemsTheSame(oldItem: Any, newItem: Any): Boolean {
-            val res = when (oldItem) {
-                is Int -> newItem is Int
-                is Task -> if (newItem is Task) oldItem.id == newItem.id else false
-                else -> throw IllegalArgumentException("Invalid Type. It must be Task or Int") // Int is type for header
-            }
-            return res
-        }
 
-        @SuppressLint("DiffUtilEquals")
-        override fun areContentsTheSame(oldItem: Any, newItem: Any): Boolean {
-            val res = when (oldItem) {
-                is Int -> if (newItem is Int) oldItem == newItem else false
-                is Task -> if (newItem is Task) oldItem == newItem else false
-                else -> throw IllegalArgumentException("Invalid Type. It must be Task or Int") // Int is type for header
-            }
-            return res
+    fun onClearView(position: Int) {
+        val headerId = list.indexOf(list.find { it is Int })
+        if (position < headerId)
+            insertTasks(list.subList(0, headerId).map { it as Task })
+        else for (i in headerId + 1 until list.size) {
+            insertTasks(list.subList(headerId + 1, list.size).map { it as Task })
         }
     }
 }

@@ -13,9 +13,11 @@
         app:dividerColor="?colorSurfaceVariant" />
 
     <LinearLayout
+        android:id="@+id/item_completed_tasks_header_selectable_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:background="?attr/selectableItemBackground"
         tools:ignore="UseCompoundDrawables">
 
         <TextView

@@ -13,7 +13,7 @@ import com.kamil184.focustasks.databinding.TasksViewPagerItemBinding
 import kotlinx.coroutines.flow.MutableSharedFlow
 
 
-class TasksViewPagerAdapter(private val updatedTasksFlow: MutableSharedFlow<Task>) :
+class TasksViewPagerAdapter(private val updatedTasksFlow: MutableSharedFlow<Task>, val insertTasks: (List<Task>) -> Unit) :
     RecyclerView.Adapter<TasksViewPagerAdapter.ViewHolder>() {
     private var taskListNames: List<TaskListName>? = null
     private var tasks: List<Task>? = null
@@ -38,7 +38,9 @@ class TasksViewPagerAdapter(private val updatedTasksFlow: MutableSharedFlow<Task
         RecyclerView.ViewHolder(binding.root) {
         init {
             binding.tasksRecyclerView.layoutManager = LinearLayoutManager(binding.root.context)
-            binding.tasksRecyclerView.adapter = TasksListAdapter(updatedTasksFlow)
+            binding.tasksRecyclerView.adapter = TasksListAdapter(updatedTasksFlow){ tasks ->
+                insertTasks(tasks)
+            }
             val itemTouchHelperCallback = TasksListAdapterItemTouchHelperCallback(binding.tasksRecyclerView.adapter as TasksListAdapter)
             val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
             itemTouchHelper.attachToRecyclerView(binding.tasksRecyclerView)

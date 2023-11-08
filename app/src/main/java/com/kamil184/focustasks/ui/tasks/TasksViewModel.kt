@@ -38,7 +38,7 @@ class TasksViewModel(
         }
     }
 
-    val updatedTasksFlow = MutableSharedFlow<Task>(extraBufferCapacity = 3)
+    val updatedTasksFlow = MutableSharedFlow<Task>(extraBufferCapacity = 64)
 
     fun findCurrentTaskListNameUUID(listName: String): ParcelUuid {
         taskListNames.value.forEach {
@@ -147,6 +147,12 @@ class TasksViewModel(
 
     suspend fun updateTask(task: Task) {
         taskRepository.update(task)
+    }
+
+    fun insertAllTasks(tasks:List<Task>){
+        viewModelScope.launch {
+            taskRepository.insertAll(tasks)
+        }
     }
 
     override fun onCleared() {

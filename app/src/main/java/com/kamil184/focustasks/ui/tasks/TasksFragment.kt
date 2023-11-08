@@ -28,7 +28,6 @@ import com.kamil184.focustasks.databinding.FragmentTasksBinding
 import com.kamil184.focustasks.ui.dialogs.TaskCreateBottomSheet
 import kotlinx.coroutines.launch
 
-
 class TasksFragment : Fragment() {
 
     private val viewModel: TasksViewModel by viewModels { TasksViewModel.Factory }
@@ -62,7 +61,9 @@ class TasksFragment : Fragment() {
                 insets
             }
 
-        viewPagerAdapter = TasksViewPagerAdapter(viewModel.updatedTasksFlow)
+        viewPagerAdapter = TasksViewPagerAdapter(viewModel.updatedTasksFlow){tasks ->
+            viewModel.insertAllTasks(tasks)
+        }
         binding.tasksViewPager.adapter = viewPagerAdapter
         binding.tasksViewPager.offscreenPageLimit = 1
 
@@ -145,9 +146,9 @@ class TasksFragment : Fragment() {
                     builder.setView(editTextDialogBinding.root)
                     builder.setPositiveButton(R.string.dialog_positive_button_text) { dialogInterface, i ->
                         val text = editText.text.toString()
-                        if (text.isBlank()){
+                        if (text.isBlank()) {
                             showSnackbar(R.string.list_cant_have_a_blank_name)
-                        }else {
+                        } else {
                             val position = binding.tasksTabLayout.selectedTabPosition
                             val isSuccess = viewModel.setTaskListName(position, text)
                             if (!isSuccess) showSnackbar(R.string.this_list_already_exists)
@@ -160,9 +161,9 @@ class TasksFragment : Fragment() {
                     editText.setOnEditorActionListener { textView, actionId, keyEvent ->
                         if (actionId == EditorInfo.IME_ACTION_DONE) {
                             val text = editText.text.toString()
-                            if (text.isBlank()){
+                            if (text.isBlank()) {
                                 showSnackbar(R.string.list_cant_have_a_blank_name)
-                            }else {
+                            } else {
                                 val position = binding.tasksTabLayout.selectedTabPosition
                                 val isSuccess = viewModel.setTaskListName(position, text)
                                 if (!isSuccess) showSnackbar(R.string.this_list_already_exists)

@@ -34,6 +34,10 @@ interface TaskDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(task: Task)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @JvmSuppressWildcards
+    suspend fun insertAll(tasks:List<Task>)
+
     @Delete
     suspend fun delete(task: Task)
 }
